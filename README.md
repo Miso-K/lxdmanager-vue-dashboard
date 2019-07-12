@@ -2,6 +2,7 @@
 
 This application provide frontend for lxdmanager.
 You can read more details and try **demo** on https://lxdmanager.com
+
 **1.0.0-RC** — *Possible run it in production*
 
 ## Why ?
