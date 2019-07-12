@@ -5,6 +5,12 @@ You can read more details and try **demo** on https://lxdmanager.com
 
 **1.0.0-RC** — *Possible run it in production*
 
+![dashboard](https://user-images.githubusercontent.com/45683353/61130070-1f70cc80-a4b6-11e9-9bd8-2166abad5988.png)
+![dashboard2](https://user-images.githubusercontent.com/45683353/61130071-1f70cc80-a4b6-11e9-928d-696e86bb8469.png)
+![servers](https://user-images.githubusercontent.com/45683353/61130072-20096300-a4b6-11e9-81b1-9a8a367dc89d.png)
+![users](https://user-images.githubusercontent.com/45683353/61130074-20096300-a4b6-11e9-9f7e-456d6fe33069.png)
+![groups](https://user-images.githubusercontent.com/45683353/61130075-20096300-a4b6-11e9-95da-e69deb3ccdc0.png)
+
 ## Why ?
 
 The purpose of this application is to provide web gui manager for LXD with additional features and user based management.
