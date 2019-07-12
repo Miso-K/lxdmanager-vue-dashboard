@@ -1,0 +1,162 @@
+{
+  "dates": {
+    "day": "day | days"
+  },
+  "host": {
+    "name": "Host",
+    "actions": {
+      "reboot": "Reboot"
+    },
+    "messages": {
+      "deny_stats": "Sorry, you don't have access to host's stats.",
+      "reboot_dialog_headline": "Reboot the host?",
+      "reboot_dialog_subheadline": "You will be disconnected!",
+      "reboot_dialog_body": "You'll have to log back in once reboot is complete. Give it a minute or two :)"
+    }
+  },
+  "containers": {
+    "name": "Servers",
+    "actions": {
+      "clone": "Clone",
+      "create": "Create VPS",
+      "freeze": "Freeze",
+      "restart": "Restart",
+      "stopforce": "Force stop",
+      "start": "Start",
+      "stop": "Stop",
+      "unfreeze": "Unfreeze"
+    },
+    "states": {
+      "ALL": "All",
+      "FREEZING": "Freezing...",
+      "FROZEN": "Frozen",
+      "RESTARTING": "Restarting...",
+      "RUNNING": "Running",
+      "SHUTTING_DOWN": "Shutting down...",
+      "STARTING": "Starting...",
+      "STOPPED": "Stopped",
+      "STOPPING": "Stopping...",
+      "UNFREEZING": "Unfreezing..."
+    },
+    "form": {
+      "name": "Name",
+      "target": "Target",
+      "container_name": {
+        "label": "Container Name",
+        "help": "Something to help the user about container's name."
+      },
+      "template": {
+        "label": "Template",
+        "help": "Something to help the user about container's template."
+      },
+      "target_container": {
+        "label": "Target Container",
+        "help": "Something to help the user about the container about to be cloned."
+      },
+      "cpu": {
+        "label": "CPU·s",
+        "help": "Something to help the user about CPU",
+        "hint": "Which core·s the container will be run on?"
+      },
+      "memory": {
+        "label": "Memory",
+        "help": "Something to help the user about memory and swap.",
+        "hint": "Set to 0 for unlimited."
+      },
+      "shutdown_target_container": {
+        "label": "Shut down target container?",
+        "will": "Target container <b>will be</b> shut down before being cloned.",
+        "will_not": "Target container <b>will NOT be</b> shut down before being cloned."
+      },
+      "network_card": {
+        "add": "Add Network Card",
+        "simple": {
+          "label": "Simple",
+          "help": "Something to help the user about simple network settings."
+        },
+        "advanced": {
+          "label": "Advanced",
+          "help": "Something to help the user about advanced network settings."
+        },
+        "ips": {
+          "label": "IP Address·es",
+          "hint": "IPV4 and IPV6 allowed: one IP address per line"
+        },
+        "link": {
+          "label": "Link",
+          "hint": "i.e. lxcbr0"
+        },
+        "name": {
+          "label": "Name",
+          "hint": "i.e. eth0"
+        },
+        "vlan": {
+          "label": "VLAN"
+        },
+        "mtu": {
+          "label": "MTU"
+        },
+        "hw_address": {
+          "label": "HW Address"
+        }
+      }
+    }
+  },
+  "stats": {
+    "state": "State",
+    "uptime": "Uptime",
+    "total": "Total",
+    "used": "Used",
+    "memory_used": "Used",
+    "cached": "Cached",
+    "free": "Free",
+    "name": "Name",
+    "logical_core": "Logical Core | Logical Cores",
+    "physical_core": "Physical Core | Physical Cores",
+    "model": "Model",
+    "disk": "Disk",
+    "memory": "Memory",
+    "swap": "Swap",
+    "cpu": "CPU | CPUs",
+    "lxc_version": "LXC Version",
+    "network": "Network",
+    "unlimited": "Unlimited",
+    "swap_limit": "Swap Limit",
+    "memory_limit": "Memory Limit",
+    "file_system": "File System",
+    "settings": "Settings",
+    "network_card": "Network Card"
+  },
+  "and" : "and",
+  "to": "to",
+  "unlimited": "Unlimited",
+  "general": "General",
+  "messages": {
+    "no_containers": "Sorry, you don't have any containers.",
+    "logged_out": "Successfully logged out!"
+  },
+  "actions": {
+    "cancel": "Cancel",
+    "search": "Search",
+    "confirm": "Confirm",
+    "back": "Back",
+    "continue": "Continue",
+    "clone": "Clone",
+    "create": "Create"
+  },
+  "form": {
+    "optional": "Optional",
+    "errors": {
+      "containerName": "{0} must respect 'containerName' format.",
+      "email": "{0} must be an email.",
+      "hostname": "{0} must respect 'hostname' format.",
+      "ip": "{0} must contains valid {1} addresses.",
+      "macAddress": "{0} must respect 'MAC address' format.",
+      "maxLength": "{0} can't be longer than {1} characters.",
+      "minLength": "{0} must be at least {1} characters long.",
+      "network": "{0} must respect 'network' format.",
+      "numeric": "{0} must be a numeric value.",
+      "required": "{0} is required."
+    }
+  }
+}
