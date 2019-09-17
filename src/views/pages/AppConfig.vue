@@ -193,9 +193,12 @@
       }
     },
     mounted() {
-      this.$store.dispatch('fetchAppConfig');
-      // console.log(this.$store.state.appconfig);
-      this.data = this.$store.getters.appconfig;
+      setTimeout(() => {
+        this.$store.dispatch('fetchAppConfig').then(() => {
+          this.data = this.$store.getters.appconfig;
+        });
+        console.log(this.$store.getters.appconfig);
+      }, 500);
     }
   };
 </script>

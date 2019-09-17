@@ -114,6 +114,8 @@
     },
     computed: {
       me() {
+        // this.$store.dispatch('fetchMe');
+        console.log(this.$store.getters['auth/me']);
         return this.$store.getters['auth/me'];
       },
       avatar() {
@@ -122,6 +124,14 @@
       loading() {
         return this.$store.state.containers.loading;
       }
+    },
+    mounted() {
+      setTimeout(() => {
+        this.$store.dispatch('fetchMe').then(() => {
+          this.me = this.$store.getters['auth/me'];
+          console.log(this.me);
+        });
+      }, 500);
     }
   };
 </script>
