@@ -47,9 +47,11 @@ export default function container(ct) {
       limits_cpu: ct.attributes.expanded_config['limits.cpu'],
       limits_memory: ct.attributes.expanded_config['limits.memory'],
       limits_memory_raw: limitsMemoryRaw,
+      limits_memory_mb: limitsMemoryRaw / (1024 ** 2),
 // eslint-disable-next-line max-len,no-nested-ternary
       limits_disk: diskSize,
-      limits_disk_raw: limitsDiskRaw
+      limits_disk_raw: limitsDiskRaw,
+      limits_disk_gb: limitsDiskRaw / (1024 ** 3)
     },
     groups: _map([], group => group)
   };

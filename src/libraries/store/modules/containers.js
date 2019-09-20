@@ -200,8 +200,81 @@ const containersActions = {
           },
           source: {
             type: 'image',
+            mode: 'pull',
+            server: 'https://uk.images.linuxcontainers.org',
+            protocol: 'simplestreams',
             alias: data.os
+          },
+          devices: {}
+        },
+        relationships: {
+          users: {
+            data: data.users ? data.users.map(u => ({
+              type: 'users',
+              id: u
+            })) : []
           }
+        }
+      }
+    };
+    // console.log(obj);
+    return ContainersService.post(obj).then((res) => {
+      // console.log(res);
+      commit(CONTAINERS_SUCCESS, res.data);
+    }).catch((err) => {
+      commit(CONTAINERS_FAILURE, err);
+    });
+  },
+
+  upgradeContainer({ commit }, data) {
+    commit(CONTAINERS_REQUEST);
+    // console.log('create log:');
+    console.log(data);
+
+    const obj = {
+      data: {
+        type: 'containers',
+        attributes: {
+          name: data.name,
+          config: {
+            limits_cpu: data.cpu,
+            limits_memory: [data.memory, 'MB'].join(''),
+            limits_disk: data.disk
+          },
+          devices: {}
+        }
+      }
+    };
+    // console.log(obj);
+    return ContainersService.put(data.id, obj).then((res) => {
+      // console.log(res);
+      commit(CONTAINERS_SUCCESS, res.data);
+    }).catch((err) => {
+      commit(CONTAINERS_FAILURE, err);
+    });
+  },
+
+  cloneContainer({ commit }, data) {
+    commit(CONTAINERS_REQUEST);
+    // console.log('create log:');
+    console.log(data);
+
+    const obj = {
+      data: {
+        type: 'containers',
+        attributes: {
+          name: data.containerClone,
+          config: {
+            limits_cpu: data.cpu,
+            limits_memory: [data.memory, 'MB'].join(''),
+            limits_disk: data.disk
+          },
+          source: {
+            type: 'copy',
+            container_only: true,
+            source: data.containerName
+          },
+          devices: {}
         },
         relationships: {
           users: {
