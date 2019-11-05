@@ -1,6 +1,18 @@
 <template>
   <v-container grid-list-md>
   <v-card>
+    <v-btn
+              absolute
+              dark
+              fab
+              top
+              right
+              small
+              color="blue"
+              @click="refreshData"
+            >
+              <v-icon>refresh</v-icon>
+            </v-btn>
     <v-card-title>
       <v-dialog v-model="dialogDelete" max-width="490">
         <v-card>
@@ -267,6 +279,11 @@
           }
           this.close();
         }
+      },
+      refreshData() {
+        // this.fetchContainer(this.id);
+        this.$store.dispatch('fetchGroups');
+        this.$store.dispatch('fetchAbilities');
       }
     },
     mounted() {

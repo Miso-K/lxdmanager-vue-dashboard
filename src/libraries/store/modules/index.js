@@ -7,7 +7,7 @@ import notifications from './notifications';
 import users from './users';
 import stats from './stats';
 import host from './host';
-import request from './request';
+import requests from './requests';
 import appconfig from './appconfig';
 
-export default { abilities, auth, containers, groups, notifications, users, stats, host, request, appconfig };
+export default { abilities, auth, containers, groups, notifications, users, stats, host, requests, appconfig };

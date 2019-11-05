@@ -41,12 +41,23 @@
                 ></v-select>
                 <v-text-field
                   :disabled="!isEditing"
+                  v-model="data.production_name"
+                  label="APP production name"
+                  required
+                  placeholder="LXDmanager.com"
+                ></v-text-field>
+                <v-btn color="orange" :disabled="!isEditing" small @click="dialog = true">Add LXD connection certificates</v-btn>
+                <v-checkbox :disabled="!isEditing" v-model="email" label="Configure and enable email"></v-checkbox>
+                <v-text-field
+                  v-if="email"
+                  :disabled="!isEditing"
                   v-model="data.sender"
                   label="SMTP sender"
                    placeholder="app@lxdmanager.com"
                   required
                 ></v-text-field>
                 <v-text-field
+                  v-if="email"
                   :disabled="!isEditing"
                   v-model="data.recipient"
                   label="SMTP recipient (eg. support mail)"
@@ -54,6 +65,7 @@
                   placeholder="support@lxdmanager.com"
                 ></v-text-field>
                 <v-text-field
+                  v-if="email"
                   :disabled="!isEditing"
                   v-model="data.server"
                   label="SMTP server"
@@ -61,6 +73,7 @@
                   placeholder="mail.lxdmanager.com"
                 ></v-text-field>
                 <v-text-field
+                  v-if="email"
                   :disabled="!isEditing"
                   v-model="data.port"
                   label="SMTP port"
@@ -68,6 +81,7 @@
                   placeholder="587"
                 ></v-text-field>
                 <v-text-field
+                  v-if="email"
                   :disabled="!isEditing"
                   v-model="data.login"
                   label="SMTP login"
@@ -75,6 +89,7 @@
                   placeholder="app@lxdmanager.com"
                 ></v-text-field>
                 <v-text-field
+                  v-if="email"
                   :disabled="!isEditing"
                   :append-icon="show1 ? 'visibility' : 'visibility_off'"
                   v-model="data.password"
@@ -84,18 +99,10 @@
                   :type="show1 ? 'text' : 'password'"
                   @click:append="show1 = !show1"
                 ></v-text-field>
-                <v-text-field
-                  :disabled="!isEditing"
-                  v-model="data.production_name"
-                  label="APP production name"
-                  required
-                  placeholder="LXDmanager.com"
-                ></v-text-field>
-                <v-btn color="orange" :disabled="!isEditing" small dark @click="dialog = true">Add LXD connection certificates</v-btn>
                 <v-btn color="info" disabled small dark >Test LXD connection</v-btn>
                 <v-btn color="info" disabled small dark >Test email</v-btn>
               </v-card-text>
-              <v-divider class="mt-5"></v-divider>
+              <v-divider class="mt-1"></v-divider>
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="success" :disabled="!isEditing" @click="save">Save</v-btn>
@@ -157,6 +164,7 @@
         show1: false,
         verify: ['True', 'False'],
         dialog: false,
+        email: false,
         data: {
           endpoint: '',
           verify: '',

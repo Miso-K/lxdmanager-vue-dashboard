@@ -103,6 +103,7 @@
           { title: 'Servers', icon: 'storage', to: { name: 'servers' }, user: true },
           { title: 'Users', icon: 'group', to: { name: 'users' }, user: false },
           { title: 'Groups', icon: 'people_outline', to: { name: 'groups' }, user: false },
+          { title: 'Requests', icon: 'list', to: { name: 'requests' }, user: true },
           { title: 'Settings', icon: 'settings', to: { name: 'settings' }, user: true },
           { title: 'Help', icon: 'help', to: { name: 'help' }, user: true },
           { title: 'AppConfig', icon: 'settings', to: { name: 'appconfig' }, user: false }

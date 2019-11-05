@@ -195,7 +195,7 @@ const containersActions = {
           name: data.name,
           config: {
             limits_cpu: data.cpu,
-            limits_memory: [data.memory, 'MB'].join(''),
+            limits_memory: data.memory,
             limits_disk: data.disk
           },
           source: {
@@ -204,8 +204,7 @@ const containersActions = {
             server: 'https://uk.images.linuxcontainers.org',
             protocol: 'simplestreams',
             alias: data.os
-          },
-          devices: {}
+          }
         },
         relationships: {
           users: {
@@ -217,9 +216,9 @@ const containersActions = {
         }
       }
     };
-    // console.log(obj);
+    console.log(obj);
     return ContainersService.post(obj).then((res) => {
-      // console.log(res);
+      console.log(res);
       commit(CONTAINERS_SUCCESS, res.data);
     }).catch((err) => {
       commit(CONTAINERS_FAILURE, err);
@@ -238,7 +237,7 @@ const containersActions = {
           name: data.name,
           config: {
             limits_cpu: data.cpu,
-            limits_memory: [data.memory, 'MB'].join(''),
+            limits_memory: data.memory,
             limits_disk: data.disk
           },
           devices: {}
@@ -266,15 +265,14 @@ const containersActions = {
           name: data.containerClone,
           config: {
             limits_cpu: data.cpu,
-            limits_memory: [data.memory, 'MB'].join(''),
+            limits_memory: data.memory,
             limits_disk: data.disk
           },
           source: {
             type: 'copy',
             container_only: true,
             source: data.containerName
-          },
-          devices: {}
+          }
         },
         relationships: {
           users: {
@@ -286,7 +284,7 @@ const containersActions = {
         }
       }
     };
-    // console.log(obj);
+    console.log(obj);
     return ContainersService.post(obj).then((res) => {
       // console.log(res);
       commit(CONTAINERS_SUCCESS, res.data);

@@ -154,6 +154,7 @@
         dialog_clone: false,
         dialog_destroy: false,
         dialog_upgrade: false,
+        name: '',
         cpu: '',
         memory: '',
         disk: '',
@@ -191,6 +192,7 @@
     methods: {
       getContainerConfig() {
         const config = this.container.config;
+        this.name = this.containerName;
         console.log(config);
         this.cpu = config.limits_cpu > 1 ? config.limits_cpu : 1;
         this.memory = config.limits_memory_mb > 512 ? config.limits_memory_mb : 512;
@@ -202,28 +204,34 @@
           this.$store.dispatch('notify', { id: 0, message: 'Your container was upgraded', color: '' });
         } else {
           const data = {
-            subject: 'Upgrade lxd container',
-            message: `New request of upgrade container: ${this.containerName}
-            with ${this.cpu} CPU, ${this.memory}MB RAM and ${this.disk}GB Disk`,
-            copy: false
+            id: this.id,
+            os: this.os,
+            cpu: this.cpu,
+            memory: `${this.memory}MB`,
+            disk: `${this.disk}GB`
           };
-          this.$store.dispatch('sendRequest', data);
-          this.$store.dispatch('notify', { id: 0, message: 'Your request was upgraded', color: '' });
+          console.log(data);
+          this.$store.dispatch('createRequests', { action: 'upgrade', message: `Upgrade container ${this.name}`, status: 'waiting', meta_data: data });
+          this.$store.dispatch('notify', { id: 0, message: 'Your request was created', color: '' });
+          this.active = false;
         }
       },
       sendRequestClone() {
+        const data = {
+          containerName: this.containerName,
+          containerClone: this.containerClone,
+          cpu: this.container.config.limits_cpu,
+          memory: `${this.container.config.limits_memory_mb}MB`,
+          disk: this.container.config.limits_disk ? `${this.container.config.limits_disk}GB` : '0GB'
+        };
+        console.log(data);
         if (this.canClone) {
-          this.$store.dispatch('cloneContainer', { containerName: this.containerName, containerClone: this.containerClone, cpu: this.container.config.limits_cpu, memory: this.container.config.limits_memory_mb, disk: this.disk });
+          this.$store.dispatch('cloneContainer', data);
           this.$store.dispatch('notify', { id: 0, message: 'Your container was cloned', color: '' });
         } else {
-          const data = {
-            subject: 'Clone lxd container',
-            message: `New request of clone container: ${this.containerName}
-            to new server ${this.containerClone} for time ${this.period}`,
-            copy: false
-          };
-          this.$store.dispatch('sendRequest', data);
+          this.$store.dispatch('createRequests', { action: 'clone', message: `Clone container ${this.name}`, status: 'waiting', meta_data: data });
           this.$store.dispatch('notify', { id: 0, message: 'Your request was created', color: '' });
+          this.active = false;
         }
       },
       sendRequestDestroy() {
@@ -232,12 +240,11 @@
           this.$store.dispatch('notify', { id: 0, message: 'Your container was deleted', color: '' });
         } else {
           const data = {
-            subject: 'Delete lxd container',
-            message: `New request of destroying lxd container: ${this.containerName}`,
-            copy: false
+            id: this.id
           };
-          this.$store.dispatch('sendRequest', data);
+          this.$store.dispatch('createRequests', { action: 'delete', message: `Delete container ${this.name}`, status: 'waiting', meta_data: data });
           this.$store.dispatch('notify', { id: 0, message: 'Your request was created', color: '' });
+          this.active = false;
         }
       }
     },

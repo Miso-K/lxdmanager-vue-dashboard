@@ -2,6 +2,18 @@
   <v-container grid-list-md>
   <v-card>
     <v-card-title>
+      <v-btn
+              absolute
+              dark
+              fab
+              top
+              right
+              small
+              color="blue"
+              @click="refreshData"
+            >
+              <v-icon>refresh</v-icon>
+            </v-btn>
       <v-dialog v-model="dialogDelete" max-width="490">
         <v-card>
           <v-card-title class="headline">Are you sure to delete user {{ editedItem.username }}?</v-card-title>
@@ -388,6 +400,10 @@
         }
         // console.log(retVal);
         this.editedItem.password = retVal;
+      },
+      refreshData() {
+        // this.fetchContainer(this.id);
+        this.$store.dispatch('fetchUsers');
       }
     },
     mounted() {

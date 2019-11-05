@@ -84,11 +84,11 @@
         memory: '512',
         disk: '10',
         templates: [
-          { text: 'Ubuntu 16.04', value: 'ubuntu-16.04' },
-          { text: 'Debian 9.5', value: 'debian-9.5' },
-          { text: 'CentOS 7', value: 'centos-7' },
-          { text: 'Fedora 28', value: 'fedora-28' },
-          { text: 'Alpine 3.8', value: 'alpine-3.8' }
+          { text: 'Ubuntu 16.04', value: 'ubuntu/16.04' },
+          { text: 'Debian 9', value: 'debian/9' },
+          { text: 'CentOS 7', value: 'centos/7' },
+          { text: 'Fedora 29', value: 'fedora/29' },
+          { text: 'Alpine 3.9', value: 'alpine/3.9' }
         ]
       };
     },
@@ -149,19 +149,15 @@
 
         if (this.name !== '') {
           const data = {
-            subject: 'Order of new container',
-            message: `New request for creating container:
-          from: ${this.me.name}
-          With requests:
-          Name: ${this.name},
-          OS: ${this.os},
-          CPU: ${this.cpu},
-          RAM: ${this.memory}MB,
-          DISK: ${this.disk}GB`,
-            copy: false
+            name: this.name,
+            os: this.os,
+            cpu: this.cpu,
+            memory: `${this.memory}MB`,
+            disk: `${this.disk}GB`
           };
-          this.$store.dispatch('sendRequest', data);
-          this.$store.dispatch('notify', { id: 0, message: 'Your order was created', color: '' });
+          console.log(data);
+          this.$store.dispatch('createRequests', { action: 'create', message: 'Create new container', status: 'waiting', meta_data: data });
+          this.$store.dispatch('notify', { id: 0, message: 'Your request was created', color: '' });
           this.active = false;
         }
       }

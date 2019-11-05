@@ -1,10 +1,10 @@
 /**
- * Request service
+ * Requests service
  */
 
 import { axios } from '../utils';
 
-class Request {
+class Requests {
   constructor(base) {
     this.base = base;
   }
@@ -17,6 +17,11 @@ class Request {
     // console.log(this.base);
     return axios.post(`/${this.base}`, options);
   }
+
+  put(id, options) {
+    const url = `/${this.base}/${id}`;
+    return axios.put(url, options);
+  }
 }
 
-export default new Request('lgw/request');
+export default new Requests('lgw/requests');

@@ -41,7 +41,7 @@ export default [
     meta: { auth: true },
     component: resolve => require.ensure([], () => resolve(require('../../views/pages/Machine')), 'machine')
   },
-  // - Containers
+  // - Help
   {
     name: 'help',
     path: '/help',
@@ -54,5 +54,12 @@ export default [
     path: '/appconfig',
     meta: { auth: 'lxd_config' },
     component: resolve => require.ensure([], () => resolve(require('../../views/pages/AppConfig')), 'appconfig')
+  },
+  // - Requests
+  {
+    name: 'requests',
+    path: '/requests',
+    meta: { auth: true },
+    component: resolve => require.ensure([], () => resolve(require('../../views/pages/Requests')), 'help')
   }
 ];

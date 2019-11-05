@@ -39,15 +39,6 @@
           Send
         </v-btn>
       </v-card-actions>
-      <v-snackbar
-        v-model="hasSent"
-        :timeout="2000"
-        absolute
-        bottom
-        center
-      >
-        Your message has been sucessfully sent
-      </v-snackbar>
       </v-form>
     </v-card>
   </v-container>
@@ -74,12 +65,9 @@
       },
       save() {
         this.hasSent = true;
-        const data = {
-          subject: this.subject,
-          message: this.message,
-          copy: false
-        };
-        this.$store.dispatch('sendRequest', data);
+        this.$store.dispatch('createRequests', { action: 'help', message: this.subject, status: 'waiting', meta_data: { text: this.message } });
+        this.$store.dispatch('notify', { id: 0, message: 'Your request was created', color: '' });
+        this.active = false;
         this.subject = '';
         this.message = '';
       }

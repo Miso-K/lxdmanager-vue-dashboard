@@ -50,7 +50,7 @@ if (module.hot) {
     './modules/users',
     './modules/stats',
     './modules/host',
-    './modules/request',
+    './modules/requests',
     './modules/appconfig'
   ], () => {
     store.hotUpdate({
@@ -64,7 +64,7 @@ if (module.hot) {
         groups: require('./modules/groups'),
         notifications: require('./modules/notifications'),
         users: require('./modules/users'),
-        request: require('./modules/request'),
+        requests: require('./modules/requests'),
         host: require('./modules/host'),
         appconfig: require('./modules/appconfig'),
         stats: require('./modules/stats').default

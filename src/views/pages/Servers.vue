@@ -2,17 +2,18 @@
   <v-container grid-list-md>
   <v-card>
     <v-card-title>
-      <v-dialog v-model="dialogDelete" max-width="490">
-        <v-card>
-          <v-card-title class="headline">Are you sure to delete user {{ editedItem.username }}?</v-card-title>
-          <v-card-text>This action cannot by undo.</v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="green darken-1" flat @click="dialogDelete = false">Disagree</v-btn>
-            <v-btn color="red darken-1" flat @click.native="deleteItem" @click="dialogDelete = false">Agree</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
+      <v-btn
+              absolute
+              dark
+              fab
+              top
+              right
+              small
+              color="blue"
+              @click="refreshData"
+            >
+              <v-icon>refresh</v-icon>
+            </v-btn>
       <v-dialog v-model="dialog" max-width="700px">
       <v-btn color="primary" dark slot="activator" class="mb-1">New container</v-btn>
       <v-card>
@@ -304,6 +305,8 @@
             console.log('send request');
             this.sendRequest();
           } else {
+            this.editedItem.memory = `${this.editedItem.memory}MB`;
+            this.editedItem.disk = `${this.editedItem.disk}GB`;
             this.$store.dispatch('createContainer', this.editedItem);
             setTimeout(() => {
               this.$store.dispatch('fetchContainers');
@@ -319,23 +322,23 @@
         console.log(this.memory);
         console.log(this.disk);
 
-        if (this.name !== '') {
+        if (this.editedItem.name !== '') {
           const data = {
-            subject: 'Order of new container',
-            message: `New request for creating container:
-          from: ${this.me.name}
-          With requests:
-          Name: ${this.name},
-          OS: ${this.os},
-          CPU: ${this.cpu},
-          RAM: ${this.memory}MB,
-          DISK: ${this.disk}GB`,
-            copy: false
+            name: this.editedItem.name,
+            os: this.editedItem.os,
+            cpu: this.editedItem.cpu,
+            memory: `${this.editedItem.memory}MB`,
+            disk: `${this.editedItem.disk}GB`
           };
-          this.$store.dispatch('sendRequest', data);
-          this.$store.dispatch('notify', { id: 0, message: 'Your order was created', color: '' });
+          console.log(data);
+          this.$store.dispatch('createRequests', { action: 'create', message: 'Create new container', status: 'waiting', meta_data: data });
+          this.$store.dispatch('notify', { id: 0, message: 'Your request was created', color: '' });
           this.active = false;
         }
+      },
+      refreshData() {
+        // this.fetchContainer(this.id);
+        this.$store.dispatch('fetchContainers');
       }
     },
     mounted() {

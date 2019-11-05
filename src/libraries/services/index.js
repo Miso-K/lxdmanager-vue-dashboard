@@ -7,7 +7,7 @@ import AuthService from './auth';
 import ContainersService from './containers';
 import MeService from './me';
 import UsersService from './users';
-import RequestService from './request';
+import RequestsService from './requests';
 import GroupsService from './groups';
 import StatsService from './stats';
 import HostService from './host';
@@ -18,7 +18,7 @@ export {
   AuthService,
   ContainersService,
   GroupsService,
-  RequestService,
+  RequestsService,
   MeService,
   UsersService,
   StatsService,

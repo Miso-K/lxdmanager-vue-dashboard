@@ -76,6 +76,7 @@
     data() {
       return {
         notifications: false,
+        name: '',
         cpu: '1',
         memory: '512',
         disk: '10',
@@ -108,7 +109,7 @@
         return '';
       },
       containerName() {
-        return this.$store.getters.containerData(this.selectedContainer + 1).name;
+        return this.$store.getters.containerData(this.selectedContainer).name;
       },
       isValid() {
         return !!this.form.name.invalid;
@@ -151,7 +152,9 @@
         return containers.map(x => findName(inventory, x));
       },
       getContainerConfig() {
-        const config = this.$store.getters.containerData(this.selectedContainer + 1).config;
+        console.log(this.selectedContainer);
+        this.name = this.containerName;
+        const config = this.$store.getters.containerData(this.selectedContainer).config;
         // console.log(config);
         this.cpu = config.limits_cpu > 1 ? config.limits_cpu : 1;
         this.memory = config.limits_memory_mb > 512 ? config.limits_memory_mb : 512;
@@ -162,18 +165,22 @@
         this.$store.dispatch('closeContainerUpgradeDialog');
       },
       sendRequest() {
-        // console.log(this.form.general.name.value);
-        // console.log(this.form.general.template.value);
-        // console.log(this.form.cpuMemory.cpus.value);
-        if (this.selectedContainer !== '') {
+        console.log(this.name);
+        console.log(this.cpu);
+        console.log(this.memory);
+        console.log(this.disk);
+
+        if (this.name !== '') {
           const data = {
-            subject: 'Upgrade of lxd container',
-            message: `New request of upgrade container: ${this.containerName}
-          with ${this.cpu} CPU, ${this.memory}MB RAM and ${this.disk}GB Disk`,
-            copy: false
+            id: this.selectedContainer,
+            os: this.os,
+            cpu: this.cpu,
+            memory: `${this.memory}MB`,
+            disk: `${this.disk}GB`
           };
-          this.$store.dispatch('sendRequest', data);
-          this.$store.dispatch('notify', { id: 0, message: 'Your order was created', color: '' });
+          console.log(data);
+          this.$store.dispatch('createRequests', { action: 'upgrade', message: `Upgrade container ${this.name}`, status: 'waiting', meta_data: data });
+          this.$store.dispatch('notify', { id: 0, message: 'Your request was created', color: '' });
           this.active = false;
         }
       }

@@ -23,6 +23,7 @@ const usersState = {
  */
 const usersGetters = {
   users: state => state.users,
+  user: state => id => state.users[id],
   usersTableData(state, getters) {
     if (Object.keys(getters.users).length === 0) return false;
     return _map(getters.users, user => formatUser(user)); // eslint-disable-line max-len
