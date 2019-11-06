@@ -10,7 +10,7 @@
   };
 </script>
 
-<style lang="scss">
+<style-loader lang="scss">
   .stats-card-progress {
     position: absolute;
     bottom: 0;
@@ -27,4 +27,4 @@
       background-color: white;
     }
   }
-</style>
+</style-loader>

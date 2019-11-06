@@ -180,7 +180,3 @@
     }
 };
 </script>
-
-<style scoped>
-
-</style>
