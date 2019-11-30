@@ -63,7 +63,7 @@
           this.interval2 = setInterval(() => {
             if (this.countdown === 0) {
               this.$router.push('logout');
-              this.countdown = 60;
+              this.countdown = 30;
             }
             this.value = 0;
             this.countdown -= 1;

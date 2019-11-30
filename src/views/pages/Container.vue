@@ -5,10 +5,10 @@
 </template>
 
 <script>
-  import Tabs from '../../components/Machine/Tabs';
+  import Tabs from '../../components/Container/Tabs';
 
   export default {
-    name: 'machine',
+    name: 'container',
     components: {
       tabs: Tabs
     },

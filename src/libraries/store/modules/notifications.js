@@ -49,6 +49,7 @@ const notificationsMutations = {
  */
 const notificationsActions = {
   notify({ state, commit }, msg) {
+    // console.log('NOTIFY');
     commit(ADD_NOTIFICATION, msg);
 
     commit(OPEN_SNACKBAR);

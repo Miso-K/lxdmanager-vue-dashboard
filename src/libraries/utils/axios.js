@@ -1,7 +1,8 @@
 import axios from 'axios';
 import normalize from 'json-api-normalizer';
 import storage from './storage';
-import { STORAGE_TOKEN_KEY } from '../store/modules/auth';
+import { STORAGE_TOKEN_KEY, STORAGE_REFRESH_TOKEN_KEY } from '../store/modules/auth';
+// import { STORAGE_REQUEST_TOKEN_KEY } from '../store/modules/auth';
 import router from '../router';
 
 const instance = axios.create({
@@ -28,9 +29,10 @@ instance.interceptors.response.use((response) => {
     console.log('⛔️  Unauthorized');
 
     storage.remove(STORAGE_TOKEN_KEY);
+    storage.remove(STORAGE_REFRESH_TOKEN_KEY);
 
-    router.replace({ name: 'login', query: { redirect: router.currentRoute.fullPath } });
-    // router.replace({ name: 'login' });
+    // router.replace({ name: 'login', query: { redirect: router.currentRoute.fullPath } });
+    router.replace({ name: 'login' });
   }
 
   return Promise.reject(err);

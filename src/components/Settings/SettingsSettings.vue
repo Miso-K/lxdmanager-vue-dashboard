@@ -7,7 +7,7 @@
       height="50px"
     >
       <v-icon>mdi-account</v-icon>
-      <v-toolbar-title class="font-weight-light subheading">User Settings</v-toolbar-title>
+      <v-toolbar-title class="font-weight-light subheading">{{ $t('settings.settings.title') }}</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn
         fab
@@ -22,19 +22,19 @@
       <v-select
         :disabled="!isEditing"
         :items="lang"
-        label="Language"
+        :label="$t('settings.settings.language')"
         value="English"
       ></v-select>
       <v-select
         :disabled="!isEditing"
         v-model="data.otp_type"
         :items="auths"
-        label="Two factor auth"
+        :label="$t('settings.settings.two_factor')"
       ></v-select>
-      <span v-if="data.otp_type === 'none'">It is strongly recomended to use two factor authorization.</span>
-      <span v-if="data.otp_type === 'email'">This is default option for two factor authorization.<br>E-mail with secret key will be send to user email.</span>
-      <span v-if="data.otp_type === 'totp'">Time based authentication require smart device with application.<br>(eg. Authenticator)<br>
-      <v-tooltip bottom>
+      <span v-if="data.otp_type === 'none'">{{ $t('settings.settings.hint') }}</span>
+      <span v-if="data.otp_type === 'email'">{{ $t('settings.settings.hint_email') }}</span>
+      <span v-if="data.otp_type === 'totp'">{{ $t('settings.settings.hint_totp') }}
+        <v-tooltip bottom>
         <v-btn
           :disabled="dialog || data.otp_enabled"
           :loading="dialog"
@@ -44,9 +44,9 @@
           slot="activator"
           small
         >
-          Generate secure key
+          {{ $t('settings.settings.generate') }}
         </v-btn>
-        <span>Please prepare your device. You will have 90 seconds for setting your totp authorization.</span>
+        <span>{{ $t('settings.settings.help') }}</span>
       </v-tooltip>
       </span>
       <v-spacer></v-spacer>
@@ -59,7 +59,7 @@
         color="success"
         @click="save"
       >
-        Save
+        {{ $t('actions.save') }}
       </v-btn>
     </v-card-actions>
     <v-dialog
@@ -102,11 +102,6 @@
         lang: [
           { text: 'English' }
         ],
-        auths: [
-          { text: 'None', value: 'none' },
-          { text: 'E-mail', value: 'email' },
-          { text: 'TOTP', value: 'totp' }
-        ],
         isEditing: null,
         model: null,
         dialog: false,
@@ -125,6 +120,23 @@
     computed: {
       loading() {
         return this.$store.state.loading;
+      },
+      emailEnabled() {
+        return this.$store.getters.appconfig.smtp.enabled === 'True';
+      },
+      auths() {
+        // console.log(this.emailEnabled);
+        if (this.emailEnabled) {
+          return [
+          { text: 'None', value: 'none' },
+          { text: 'E-mail', value: 'email' },
+          { text: 'TOTP', value: 'totp' }
+          ];
+        }
+        return [
+          { text: 'None', value: 'none' },
+          { text: 'TOTP', value: 'totp' }
+        ];
       }
     },
     watch: {

@@ -2,16 +2,16 @@ export default [
   // - Dashboard
   {
     name: 'dashboard',
-    path: '',
+    path: '/',
     meta: { auth: true },
     component: resolve => require.ensure([], () => resolve(require('../../views/pages/Dashboard')), 'dashboard')
   },
   // - Containers
   {
-    name: 'servers',
-    path: '/servers',
+    name: 'containers',
+    path: '/containers',
     meta: { auth: true },
-    component: resolve => require.ensure([], () => resolve(require('../../views/pages/Servers')), 'servers')
+    component: resolve => require.ensure([], () => resolve(require('../../views/pages/Containers')), 'containers')
   },
   // - Users
   {
@@ -36,10 +36,10 @@ export default [
   },
   // - Settings
   {
-    name: 'machine',
-    path: '/machine/:id',
+    name: 'container',
+    path: '/container/:id',
     meta: { auth: true },
-    component: resolve => require.ensure([], () => resolve(require('../../views/pages/Machine')), 'machine')
+    component: resolve => require.ensure([], () => resolve(require('../../views/pages/Container')), 'container')
   },
   // - Help
   {

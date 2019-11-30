@@ -9,7 +9,7 @@
       height="50px"
     >
       <v-icon>mdi-account</v-icon>
-      <v-toolbar-title class="font-weight-light subheading">User Profile</v-toolbar-title>
+      <v-toolbar-title class="font-weight-light subheading">{{ $t('settings.profile.title') }}</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn
         fab
@@ -26,14 +26,14 @@
       <v-flex xs12 md6>
         <v-text-field
           disabled
-          label="Username"
+          :label="$t('settings.profile.username')"
           v-model="data.username"
         ></v-text-field>
       </v-flex>
       <v-flex xs12 md6>
         <v-text-field
           :disabled="!isEditing"
-          label="Email"
+          :label="$t('settings.profile.email')"
           v-model="data.email"
           :rules="emailRules"
         ></v-text-field>
@@ -41,7 +41,7 @@
       <v-flex xs12 md12>
         <v-text-field
           :disabled="!isEditing"
-          label="Name"
+          :label="$t('settings.profile.name')"
           v-model="data.name"
           :rules="nameRules"
         ></v-text-field>
@@ -49,35 +49,35 @@
       <v-flex xs12 md4>
         <v-text-field
           :disabled="!isEditing"
-          label="Phone"
+          :label="$t('settings.profile.phone')"
           v-model="data.phone"
         ></v-text-field>
       </v-flex>
       <v-flex xs12 md8>
         <v-text-field
           :disabled="!isEditing"
-          label="Address"
+          :label="$t('settings.profile.address')"
           v-model="data.address"
         ></v-text-field>
       </v-flex>
       <v-flex xs12 md4>
         <v-text-field
           :disabled="!isEditing"
-          label="City"
+          :label="$t('settings.profile.city')"
           v-model="data.city"
         ></v-text-field>
       </v-flex>
       <v-flex xs12 md4>
         <v-text-field
           :disabled="!isEditing"
-          label="Contry"
+          :label="$t('settings.profile.country')"
           v-model="data.country"
         ></v-text-field>
       </v-flex>
       <v-flex xs12 md4>
         <v-text-field
           :disabled="!isEditing"
-          label="Postal code"
+          :label="$t('settings.profile.postal_code')"
           v-model="data.postal_code"
         ></v-text-field>
       </v-flex>
@@ -85,21 +85,21 @@
       <v-flex xs12 md4>
         <v-text-field
           :disabled="!isEditing"
-          label="ICO"
+          :label="$t('settings.profile.ico')"
           v-model="data.ico"
         ></v-text-field>
       </v-flex>
       <v-flex xs12 md4>
         <v-text-field
           :disabled="!isEditing"
-          label="IC DPH"
+          :label="$t('settings.profile.icdph')"
           v-model="data.ic_dph"
         ></v-text-field>
       </v-flex>
       <v-flex xs12 md4>
         <v-text-field
           :disabled="!isEditing"
-          label="DIC"
+          :label="$t('settings.profile.dic')"
           v-model="data.dic"
         ></v-text-field>
       </v-flex>
@@ -114,7 +114,7 @@
         color="success"
         @click="save"
       >
-        Save
+        {{ $t('actions.save') }}
       </v-btn>
     </v-card-actions>
     </v-form>

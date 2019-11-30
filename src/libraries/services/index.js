@@ -12,6 +12,7 @@ import GroupsService from './groups';
 import StatsService from './stats';
 import HostService from './host';
 import AppConfigService from './appconfig';
+import CheckconfigService from './checkconfig';
 
 export {
   AbilitiesService,
@@ -23,5 +24,6 @@ export {
   UsersService,
   StatsService,
   HostService,
-  AppConfigService
+  AppConfigService,
+  CheckconfigService
 };

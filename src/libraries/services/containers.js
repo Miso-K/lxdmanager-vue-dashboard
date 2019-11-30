@@ -37,6 +37,31 @@ class ContainerResource extends Resource {
   fetch(id) { // eslint-disable-line class-methods-use-this
     return axios.get(`/${this.base}/${id}`);
   }
+
+  snapshots(id) { // eslint-disable-line class-methods-use-this
+    return axios.get(`/${this.base}/${id}/snapshots`);
+  }
+
+  snapshot(id, name) { // eslint-disable-line class-methods-use-this
+    return axios.get(`/${this.base}/${id}/snapshots/${name}`);
+  }
+
+  snapshotDelete(id, name) { // eslint-disable-line class-methods-use-this
+    return axios.delete(`/${this.base}/${id}/snapshots/${name}`);
+  }
+
+  snapshotRestore(id, name) { // eslint-disable-line class-methods-use-this
+    return axios.post(`/${this.base}/${id}/snapshots/${name}/restore`);
+  }
+
+  snapshotCreate(id, options) { // eslint-disable-line class-methods-use-this
+    return axios.post(`/${this.base}/${id}/snapshots`, options);
+  }
+
+  operation(id) {
+    console.log(this.base);
+    return axios.get(`/operations/${id}/wait`);
+  }
 }
 
 export default new ContainerResource('lxc/containers');

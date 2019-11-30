@@ -8,6 +8,7 @@
     -->
     <v-layout justify-center row>
         <v-btn
+            :disabled="isRunning"
             fab
             class="grey lighten-2 black--text"
             style="bottom: 1px;"
@@ -56,6 +57,10 @@
       },
       status() {
         return this.container.status;
+      },
+      isRunning() {
+        // console.log(this.container.status);
+        return this.container.status !== 'RUNNING';
       },
       getButtonState() {
         if (!this.disableButton && !this.openedTerminal) {
@@ -153,7 +158,7 @@
             // comment this lines to protect sending data on demo.lxdmanager.com
             xterm.on('data', (data) => {
               // console.log('Send data');
-              console.log(data);
+              // console.log(data);
               ws.send(new Blob([data]));
             });
             //

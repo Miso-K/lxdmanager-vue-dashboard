@@ -8,7 +8,7 @@
       @click.stop="dialog_upgrade = true"
       :disabled="loading"
     >
-      Upgrade VPS
+      {{ $t('containers.actions.upgrade') }}
     </v-btn>
 
     <v-btn
@@ -18,7 +18,7 @@
       color="blue-grey"
       class="white--text"
     >
-      Clone VPS
+      {{ $t('containers.actions.clone') }}
       <v-icon right dark>cloud_upload</v-icon>
     </v-btn>
     <v-btn
@@ -28,7 +28,7 @@
       color="red"
       class="white--text"
     >
-      Destroy VPS
+      {{ $t('containers.actions.destroy') }}
       <v-icon right dark>delete</v-icon>
     </v-btn>
   </v-flex>
@@ -36,10 +36,10 @@
   <v-layout row justify-center>
     <v-dialog v-model="dialog_destroy" max-width="500">
       <v-card>
-        <v-card-title class="headline">Destroy server?</v-card-title>
+        <v-card-title class="headline">{{$t('containers.actions.destroy')}}</v-card-title>
 
         <v-card-text>
-          Send request for destroying your vps server.
+          {{$t('containers.order.destroy_container.label')}}
         </v-card-text>
 
         <v-card-actions>
@@ -50,7 +50,7 @@
             flat="flat"
             @click="dialog_destroy = false"
           >
-            Disagree
+            {{$t('actions.disagree')}}
           </v-btn>
 
           <v-btn
@@ -59,7 +59,7 @@
             @click.native="dialog_destroy = false"
             @click="sendRequestDestroy"
           >
-            Agree
+            {{$t('actions.agree')}}
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -69,33 +69,33 @@
     <v-dialog v-model="dialog_clone" max-width="500px">
       <v-card>
         <v-card-title>
-          <span class="headline">Clone machine</span>
+          <span class="headline">{{$t('containers.actions.clone')}}</span>
         </v-card-title>
         <v-card-text>
           <v-container grid-list-md>
             <v-layout wrap>
               <v-flex xs12>
-                <v-text-field label="Name" disabled :value=containerName></v-text-field>
+                <v-text-field :label="$t('containers.order.container_name.label')" disabled :value=containerName></v-text-field>
               </v-flex>
               <v-flex xs12>
-                <v-text-field label="Clone name" v-model="containerClone"></v-text-field>
+                <v-text-field :label="$t('containers.order.container_clone_name.label')" v-model="containerClone"></v-text-field>
               </v-flex>
-              <v-flex xs12 sm6>
+              <!---<v-flex xs12 sm6>
                 <v-select
                   :items="['week', 'month', 'unlimited']"
-                  v-model="period"
+                  v-model="cperiod"
                   label="Time period"
                   required
                 ></v-select>
-              </v-flex>
+              </v-flex>-->
             </v-layout>
           </v-container>
           <small>*indicates required field</small>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" flat @click.native="dialog_clone = false">Close</v-btn>
-          <v-btn color="blue darken-1" flat @click.native="dialog_clone = false" @click="sendRequestClone">Create</v-btn>
+          <v-btn color="blue darken-1" flat @click.native="dialog_clone = false">{{$t('actions.close')}}</v-btn>
+          <v-btn color="blue darken-1" flat @click.native="dialog_clone = false" @click="sendRequestClone">{{$t('actions.create')}}</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -104,13 +104,13 @@
     <v-dialog v-model="dialog_upgrade" max-width="500px">
       <v-card>
         <v-card-title>
-          <span class="headline">Upgrade machine</span>
+          <span class="headline">{{$t('containers.actions.upgrade')}}</span>
         </v-card-title>
         <v-card-text>
           <v-container grid-list-md>
             <v-layout wrap>
               <v-flex xs12>
-                <v-text-field label="Server name" disabled :value=containerName></v-text-field>
+                <v-text-field :label="$t('containers.order.container_name.label')" disabled :value=containerName></v-text-field>
               </v-flex>
               <v-flex xs10>
                 <v-slider min="1" max="4" step="1" v-model="cpu" label="CPUs"></v-slider>
@@ -125,19 +125,41 @@
                 <v-text-field v-model="memory" type="MB" suffix="MB"></v-text-field>
               </v-flex>
               <v-flex xs10>
-                <v-slider min="10" max="160" step="10" v-model="disk" label="Disk"></v-slider>
+                <v-slider v-if="diskEnabled" min="10" max="160" step="10" v-model="disk" label="Disk"></v-slider>
               </v-flex>
               <v-flex xs2>
-                <v-text-field v-model="disk" type="Disk" suffix="GB"></v-text-field>
+                <v-text-field v-if="diskEnabled" v-model="disk" type="Disk" suffix="GB"></v-text-field>
               </v-flex>
+              <template v-if="showPrice">
+                <v-flex xs3>
+                  <v-subheader>{{ $t('containers.order.payment_period.label') }}</v-subheader>
+                </v-flex>
+                <v-flex xs3>
+                  <v-select
+                    :items=periodes
+                    v-model="period"
+                    label="Period"
+                  ></v-select>
+                </v-flex>
+                <v-flex xs4>
+                  <v-subheader>{{ $t('containers.order.calculated_price.label') }}</v-subheader>
+                </v-flex>
+                <v-flex xs2>
+                  <v-text-field
+                    label="Price"
+                    :value="price"
+                    suffix="€"
+                  ></v-text-field>
+                </v-flex>
+              </template>
             </v-layout>
           </v-container>
         </v-card-text>
         <v-card-actions>
           <v-btn color="blue darken-1" flat @click="getContainerConfig">Reset</v-btn>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" flat @click.native="dialog_upgrade = false">Close</v-btn>
-          <v-btn color="blue darken-1" flat @click.native="dialog_upgrade = false" @click="sendRequestUpgrade">Create</v-btn>
+          <v-btn color="blue darken-1" flat @click.native="dialog_upgrade = false">{{$t('actions.close')}}</v-btn>
+          <v-btn color="blue darken-1" flat @click.native="dialog_upgrade = false" @click="sendRequestUpgrade">{{$t('actions.create')}}</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -154,12 +176,20 @@
         dialog_clone: false,
         dialog_destroy: false,
         dialog_upgrade: false,
+        period: 1,
         name: '',
         cpu: '',
         memory: '',
         disk: '',
         containerClone: '',
-        period: ''
+        cperiod: '',
+        periodes: [
+          { text: '1 Month', value: 1 },
+          { text: '3 Months', value: 1 },
+          { text: '6 Months', value: 0.95 },
+          { text: '12 Months', value: 0.90 },
+          { text: '24 Months', value: 0.80 }
+        ]
       };
     },
     computed: {
@@ -179,6 +209,18 @@
       me() {
         return this.$store.getters['auth/me'];
       },
+      showPrice() {
+        return this.$store.getters.appconfig.price.enabled === 'True';
+      },
+      getPrice() {
+        return this.$store.getters.appconfig.price;
+      },
+      getStorage() {
+        return this.$store.getters.appconfig.storage;
+      },
+      diskEnabled() {
+        return this.$store.getters.appconfig.storage.enabled === 'True';
+      },
       canDelete() {
         return this.me.abilities.includes('ct_delete');
       },
@@ -187,13 +229,21 @@
       },
       canUpdate() {
         return this.me.abilities.includes('ct_update');
+      },
+      price() {
+        const cpu = this.getPrice.cpu * this.cpu; // 1
+        const memory = this.getPrice.memory * this.memory; // 0.048
+        const disk = this.getPrice.disk * this.disk; // 0.150
+        const period = this.period;
+        const cmemory = (cpu + memory + disk) * period;
+        return cmemory.toFixed(2);
       }
     },
     methods: {
       getContainerConfig() {
         const config = this.container.config;
         this.name = this.containerName;
-        console.log(config);
+        // console.log(config);
         this.cpu = config.limits_cpu > 1 ? config.limits_cpu : 1;
         this.memory = config.limits_memory_mb > 512 ? config.limits_memory_mb : 512;
         this.disk = config.limits_disk_gb > 10 ? config.limits_disk_gb : 10;
@@ -208,7 +258,9 @@
             os: this.os,
             cpu: this.cpu,
             memory: `${this.memory}MB`,
-            disk: `${this.disk}GB`
+            disk: `${this.disk}GB`,
+            period: this.period,
+            price: this.price
           };
           console.log(data);
           this.$store.dispatch('createRequests', { action: 'upgrade', message: `Upgrade container ${this.name}`, status: 'waiting', meta_data: data });

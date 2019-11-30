@@ -7,14 +7,14 @@
             <v-card color="blue" dark class="elevation-12">
               <form action="#" autocomplete="off" @submit.prevent="submit">
               <v-toolbar dark color="blue darken-3">
-                <v-toolbar-title>Sign in</v-toolbar-title>
+                <v-toolbar-title>{{ $t('sign_in.name') }}</v-toolbar-title>
               </v-toolbar>
               <v-card-text>
                   <v-text-field
                     prepend-icon="person"
                     color="grey lighten-1"
                     name="login"
-                    label="Username"
+                    :label="$t('sign_in.username')"
                     type="text"
                     v-model="username"
                     :error="errors.username"
@@ -23,7 +23,7 @@
                     id="password"
                     color="grey lighten-1"
                     name="password"
-                    label="Password"
+                    :label="$t('sign_in.password')"
                     v-model="password"
                     prepend-icon="lock"
                     autocomplete="off"
@@ -46,7 +46,7 @@
                   type="submit"
                   secondary
                   :loading="loading"
-                  :disabled="loading">Login</v-btn>
+                  :disabled="loading">{{ $t('sign_in.login') }}</v-btn>
               </v-card-actions>
               </form>
             </v-card>
@@ -127,11 +127,11 @@
 
         this.$store.dispatch('auth/token', data)
           .then(() => {
-            console.log(this.$store.getters['auth/otp_token']);
+            // console.log(this.$store.getters['auth/otp_token']);
             // console.log(this.$store.getters['auth/otpConfirmed']);
             if (!this.$store.getters['auth/token']) {
               this.errors.message = 'Unvalid credentials. Please try again.';
-              console.log('⛔️  Unauthorized');
+              // console.log('⛔️  Unauthorized');
               this.password = '';
               this.username = '';
               this.loading = false;

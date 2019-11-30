@@ -3,7 +3,7 @@
     <v-dialog v-model="active" max-width="800px">
       <v-card>
         <v-card-title>
-          <span class="headline">Upgrade VPS</span>
+          <span class="headline">{{ $t('containers.order.upgrade') }}</span>
         </v-card-title>
         <v-card-text>
           <v-container grid-list-md>
@@ -12,7 +12,7 @@
                 <v-select
                   v-model="selectedContainer"
                   :items=containersId
-                  label="Select VPS"
+                  :label="$t('containers.order.select_container.label')"
                   @change="getContainerConfig"
                   required
                 ></v-select>
@@ -38,29 +38,51 @@
                   </v-btn>
               </v-flex>
               <v-flex xs10>
-                <v-slider min="1" max="4" step="1" v-model="cpu" label="CPUs"></v-slider>
+                <v-slider min="1" max="4" step="1" v-model="cpu" :label="$t('containers.order.cpu.label')"></v-slider>
               </v-flex>
               <v-flex xs2>
                 <v-text-field v-model="cpu" type="CPUs" suffix="CPUs"></v-text-field>
               </v-flex>
               <v-flex xs10>
-                <v-slider min="512" max="8172" step="512" v-model="memory" label="RAM"></v-slider>
+                <v-slider min="512" max="8172" step="512" v-model="memory" :label="$t('containers.order.memory.label')"></v-slider>
               </v-flex>
               <v-flex xs2>
                 <v-text-field v-model="memory" type="MB" suffix="MB"></v-text-field>
               </v-flex>
               <v-flex xs10>
-                <v-slider min="10" max="160" step="10" v-model="disk" label="Disk"></v-slider>
+                <v-slider v-if="diskEnabled" min="10" max="160" step="10" v-model="disk" :label="$t('containers.order.disk.label')"></v-slider>
               </v-flex>
               <v-flex xs2>
-                <v-text-field v-model="disk" type="Disk" suffix="GB"></v-text-field>
+                <v-text-field v-if="diskEnabled" v-model="disk" type="Disk" suffix="GB"></v-text-field>
               </v-flex>
+              <template v-if="showPrice">
+                <v-flex xs3>
+                  <v-subheader>{{ $t('containers.order.payment_period.label') }}</v-subheader>
+                </v-flex>
+                <v-flex xs3>
+                  <v-select
+                    :items=periodes
+                    v-model="period"
+                    label="Period"
+                  ></v-select>
+                </v-flex>
+                <v-flex xs4>
+                  <v-subheader>{{ $t('containers.order.calculated_price.label') }}</v-subheader>
+                </v-flex>
+                <v-flex xs2>
+                  <v-text-field
+                    label="Price"
+                    :value="price"
+                    suffix="€"
+                  ></v-text-field>
+                </v-flex>
+              </template>
             </v-layout>
           </v-container>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" flat @click.native="active = false">Close</v-btn>
+          <v-btn color="blue darken-1" flat @click.native="active = false">{{ $t('actions.close') }}</v-btn>
           <v-btn color="green darken-1" flat @click="sendRequest">{{ $t('actions.create') }}</v-btn>
         </v-card-actions>
       </v-card>
@@ -76,11 +98,19 @@
     data() {
       return {
         notifications: false,
+        period: 1,
         name: '',
         cpu: '1',
         memory: '512',
         disk: '10',
-        selectedContainer: ''
+        selectedContainer: '',
+        periodes: [
+          { text: '1 Month', value: 1 },
+          { text: '3 Months', value: 1 },
+          { text: '6 Months', value: 0.95 },
+          { text: '12 Months', value: 0.90 },
+          { text: '24 Months', value: 0.80 }
+        ]
       };
     },
     computed: {
@@ -93,6 +123,15 @@
             this.closeDialog();
           }
         }
+      },
+      showPrice() {
+        return this.$store.getters.appconfig.price.enabled === 'True';
+      },
+      getPrice() {
+        return this.$store.getters.appconfig.price;
+      },
+      diskEnabled() {
+        return this.$store.getters.appconfig.storage.enabled === 'True';
       },
       id() {
         return this.$store.state.containers.dialogs.upgrade;
@@ -113,6 +152,14 @@
       },
       isValid() {
         return !!this.form.name.invalid;
+      },
+      price() {
+        const cpu = this.getPrice.cpu * this.cpu; // 1
+        const memory = this.getPrice.memory * this.memory; // 0.048
+        const disk = this.getPrice.disk * this.disk; // 0.150
+        const period = this.period;
+        const cmemory = (cpu + memory + disk) * period;
+        return cmemory.toFixed(2);
       }
     },
     methods: {
@@ -176,7 +223,9 @@
             os: this.os,
             cpu: this.cpu,
             memory: `${this.memory}MB`,
-            disk: `${this.disk}GB`
+            disk: `${this.disk}GB`,
+            period: this.period,
+            price: this.price
           };
           console.log(data);
           this.$store.dispatch('createRequests', { action: 'upgrade', message: `Upgrade container ${this.name}`, status: 'waiting', meta_data: data });

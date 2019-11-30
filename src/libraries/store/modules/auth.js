@@ -4,6 +4,7 @@ import { getUserAbilities, getUserGroups, getUserContainers } from '../../utils/
 import storage from '../../utils/storage';
 
 export const STORAGE_TOKEN_KEY = 'lwp_token';
+export const STORAGE_REFRESH_TOKEN_KEY = 'lwp_token2';
 export const STORAGE_ME_KEY = 'lwp_me';
 
 export const TOKEN_REQUEST = 'TOKEN_REQUEST';
@@ -17,6 +18,7 @@ export const CHECK_TOKEN_FAILURE = 'CHECK_TOKEN_FAILURE';
 export const LOGOUT = 'LOGOUT';
 
 const storedToken = storage.get(STORAGE_TOKEN_KEY);
+const storedRefreshToken = storage.get(STORAGE_REFRESH_TOKEN_KEY);
 
 /**
  * Initial state
@@ -24,6 +26,7 @@ const storedToken = storage.get(STORAGE_TOKEN_KEY);
  */
 const authState = {
   token: storedToken || null,
+  refresh_token: storedRefreshToken || null,
   otp_token: null,
   otp_confirmed: null
 };
@@ -34,6 +37,7 @@ const authState = {
  */
 const authGetters = {
   token: state => state.token,
+  refresh_token: state => state.refresh_token,
   otp_token: state => state.otp_token,
   otpConfirmed: state => state.otp_confirmed,
   identity: ({ token }) => token ? jwtDecode(token).identity : null, // eslint-disable-line no-confusing-arrow,max-len
@@ -62,21 +66,26 @@ const authMutations = {
   [TOKEN_SUCCESS]: (state, data) => {
     Object.assign(state, {
       token: data.access_token,
-      request_token: data.request_token ? data.request_token : null,
+// eslint-disable-next-line max-len
+      refresh_token: data.refresh_token ? data.refresh_token : storage.get(STORAGE_REFRESH_TOKEN_KEY),
       otp_confirmed: jwtDecode(data.access_token).user_claims.otp_confirmed,
       me: jwtDecode(data.access_token).identity
     });
 // eslint-disable-next-line max-len
     storage.set(STORAGE_TOKEN_KEY, data.access_token);
+// eslint-disable-next-line max-len
+    storage.set(STORAGE_REFRESH_TOKEN_KEY, data.refresh_token ? data.refresh_token : storage.get(STORAGE_REFRESH_TOKEN_KEY));
   },
   [TOKEN_FAILURE]: (state, err) => {
     console.log(TOKEN_FAILURE, err);
     Object.assign(state, { token: null, me: null });
     storage.remove(STORAGE_TOKEN_KEY);
+    storage.remove(STORAGE_REFRESH_TOKEN_KEY);
   },
   [LOGOUT]: (state) => {
     Object.assign(state, { token: null, me: null });
     storage.remove(STORAGE_TOKEN_KEY);
+    storage.remove(STORAGE_REFRESH_TOKEN_KEY);
   }
 };
 
@@ -126,18 +135,18 @@ const authActions = {
       // console.log(res.data);
       commit(TOKEN_SUCCESS, res.data);
     }).catch((err) => {
-      console.log('error');
-      console.log(err);
+      // console.log(err);
       commit(TOKEN_FAILURE, err);
     });
   },
 
   refreshToken({ commit }) {
     commit(TOKEN_REQUEST);
-
+    // send refresh token as token
+    storage.set(STORAGE_TOKEN_KEY, storage.get(STORAGE_REFRESH_TOKEN_KEY));
     return AuthService.refresh({}).then((res) => {
-      // console.log(res);
-      commit(TOKEN_SUCCESS, res.data.access_token);
+      console.log(res);
+      commit(TOKEN_SUCCESS, res.data);
     }).catch((err) => {
       commit(TOKEN_FAILURE, err);
     });

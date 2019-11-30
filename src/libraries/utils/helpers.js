@@ -1,5 +1,5 @@
 const humanFileSize = (bytes) => {
-  if (!bytes) return null;
+  if (!bytes) return 0;
 
   const i = Math.floor(Math.log(bytes) / Math.log(1024));
   return `${((bytes / (1024 ** i)).toFixed(2) * 1)} ${['B', 'kB', 'MB', 'GB', 'TB', 'PB'][i]}`;

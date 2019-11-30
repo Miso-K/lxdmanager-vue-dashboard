@@ -2,20 +2,20 @@
   <div v-if="!me.admin">
       <v-container grid-list-md>
         <v-layout row wrap>
-          <v-flex md6 sm6 xs12 class="mb-2">
+          <v-flex md6 sm6 xs12 class="mb-1">
             <v-btn
               large
               block
               color="blue"
               dark
               class="elevation-3"
-              @click.native="$store.dispatch('openContainerCreateDialog')"
+              @click="$store.dispatch('openContainerCreateDialog')"
             >
-              Request new VPS
+              {{ $t('containers.actions.new') }}
               <v-icon large right dark>plus_one</v-icon>
             </v-btn>
-                  </v-flex>
-                  <v-flex md6 sm6 xs12 class="mb-2">
+          </v-flex>
+          <v-flex md6 sm6 xs12 class="mb-1">
             <v-btn
               large
               block
@@ -24,7 +24,7 @@
               class="elevation-3"
               @click.native="$store.dispatch('openContainerUpgradeDialog')"
             >
-              Request upgrade VPS
+              {{ $t('containers.actions.upgrade') }}
               <v-icon large right dark>build</v-icon>
             </v-btn>
           </v-flex>

@@ -51,7 +51,8 @@ if (module.hot) {
     './modules/stats',
     './modules/host',
     './modules/requests',
-    './modules/appconfig'
+    './modules/appconfig',
+    './modules/checkconfig'
   ], () => {
     store.hotUpdate({
       getters: require('./getters'),
@@ -67,6 +68,7 @@ if (module.hot) {
         requests: require('./modules/requests'),
         host: require('./modules/host'),
         appconfig: require('./modules/appconfig'),
+        checkconfig: require('./modules/checkconfig'),
         stats: require('./modules/stats').default
       }
     });

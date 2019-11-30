@@ -31,13 +31,18 @@ export default function container(ct) {
   // ? ct.attributes.config['limits.memory'].match(/\d+/g)[0] : null;
   // const limitsDiskRaw = ct.attributes.config.limits_memory.match(/\d+/g);
 
+  let ips = '';
+  if (ct.attributes.state.network) {
+    ips = !ct.attributes.state.network.eth0 || status === 'STOPPED' ? '' : ct.attributes.state.network.eth0.addresses;
+  }
+
   return {
     state: ct.attributes.state,
     status,
     id: ct.id,
     name: ct.attributes.name,
     created_at: ct.attributes.created_at,
-    ips: ct.attributes.state.network && status !== 'STOPPED' ? ct.attributes.state.network.eth0.addresses : '',
+    ips,
     config: {
       image_description: ct.attributes.expanded_config['image.description'],
       image_architecture: ct.attributes.expanded_config['image.architecture'],
@@ -51,7 +56,8 @@ export default function container(ct) {
 // eslint-disable-next-line max-len,no-nested-ternary
       limits_disk: diskSize,
       limits_disk_raw: limitsDiskRaw,
-      limits_disk_gb: limitsDiskRaw / (1024 ** 3)
+      limits_disk_gb: limitsDiskRaw / (1024 ** 3),
+      user_price: ct.attributes.config['user.price']
     },
     groups: _map([], group => group)
   };

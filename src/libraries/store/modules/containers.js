@@ -23,6 +23,14 @@ export const CONTAINER_REQUEST = 'CONTAINER_REQUEST';
 export const CONTAINER_SUCCESS = 'CONTAINER_SUCCESS';
 export const CONTAINER_FAILURE = 'CONTAINER_FAILURE';
 
+export const SNAPSHOTS_REQUEST = 'SNAPSHOTS_REQUEST';
+export const SNAPSHOTS_SUCCESS = 'SNAPSHOTS_SUCCESS';
+export const SNAPSHOTS_FAILURE = 'SNAPSHOTS_FAILURE';
+
+export const SNAPSHOT_REQUEST = 'SNAPSHOT_REQUEST';
+export const SNAPSHOT_SUCCESS = 'SNAPSHOT_SUCCESS';
+export const SNAPSHOT_FAILURE = 'SNAPSHOT_FAILURE';
+
 export const CONTAINER_INFO_DIALOG_OPEN = 'CONTAINER_INFO_DIALOG_OPEN';
 export const CONTAINER_INFO_DIALOG_CLOSE = 'CONTAINER_INFO_DIALOG_CLOSE';
 export const CONTAINER_CREATE_DIALOG_OPEN = 'CONTAINER_CREATE_DIALOG_OPEN';
@@ -39,6 +47,7 @@ export const SET_CONTAINER_TERMINAL = 'SET_CONTAINER_TERMINAL';
  */
 const containersState = {
   containers: {},
+  snapshots: {},
   loading: false,
   dialogs: {
     info: null,
@@ -68,6 +77,11 @@ const containersGetters = {
     if (Object.keys(getters.containers).length === 0) return false;
     // console.log(getters.hostTotalMemory);
     return _map(getters.containers, container => formatContainer(container, 1024)); // eslint-disable-line max-len
+  },
+  snapshots: state => state.snapshots,
+  snapshotsTableData(state, getters) {
+    if (Object.keys(getters.snapshots).length === 0) return false;
+    return _map(getters.snapshots, snapshot => snapshot.attributes); // eslint-disable-line max-len
   }
 };
 
@@ -144,6 +158,47 @@ const containersMutations = {
   [SET_CONTAINER_TERMINAL]: (state, terminal) => {
     state.loading = false;
     state.terminal = terminal;
+  },
+
+  [SNAPSHOTS_REQUEST]: (state) => {
+    Object.assign(state, { loading: true });
+  },
+  [SNAPSHOTS_SUCCESS]: (state, snapshots) => {
+    Object.assign(state, { ...snapshots, loading: false });
+  },
+  [SNAPSHOTS_FAILURE]: (state, err) => {
+    console.log(SNAPSHOTS_FAILURE, err);
+    Object.assign(state, { loading: false });
+  },
+
+  [SNAPSHOT_REQUEST]: (state, { id, attributes }) => {
+    state.snapshots[id] = {
+      ...state.snapshots[id],
+      loading: true,
+      attributes: {
+        ...state.snapshots[id].snapshots,
+        ...attributes
+      }
+    };
+  },
+  [SNAPSHOT_SUCCESS]: (state, { id, attributes }) => {
+    state.loading = false;
+    state.snapshots[id] = {
+      ...state.snapshots[id],
+      loading: false,
+      attributes: {
+        ...state.snapshots[id].attributes,
+        ...attributes
+      }
+    };
+  },
+  [SNAPSHOT_FAILURE]: (state, err, id) => {
+    console.log(SNAPSHOT_FAILURE, err);
+    state.loading = false;
+    state.snapshots[id] = {
+      ...state.snapshots[id],
+      loading: false
+    };
   }
 };
 /* eslint-enable no-param-reassign */
@@ -183,10 +238,10 @@ const containersActions = {
     });
   },
 
-  createContainer({ commit }, data) {
+  createContainer({ dispatch, commit }, data) {
     commit(CONTAINERS_REQUEST);
     // console.log('create log:');
-    console.log(data);
+    // console.log(data);
 
     const obj = {
       data: {
@@ -196,7 +251,9 @@ const containersActions = {
           config: {
             limits_cpu: data.cpu,
             limits_memory: data.memory,
-            limits_disk: data.disk
+            limits_disk: data.disk,
+            pool_name: data.pool_name,
+            price: data.price
           },
           source: {
             type: 'image',
@@ -216,9 +273,9 @@ const containersActions = {
         }
       }
     };
-    console.log(obj);
+    // console.log(obj);
     return ContainersService.post(obj).then((res) => {
-      console.log(res);
+      // console.log(res);
       commit(CONTAINERS_SUCCESS, res.data);
     }).catch((err) => {
       commit(CONTAINERS_FAILURE, err);
@@ -228,7 +285,7 @@ const containersActions = {
   upgradeContainer({ commit }, data) {
     commit(CONTAINERS_REQUEST);
     // console.log('create log:');
-    console.log(data);
+    // console.log(data);
 
     const obj = {
       data: {
@@ -256,7 +313,7 @@ const containersActions = {
   cloneContainer({ commit }, data) {
     commit(CONTAINERS_REQUEST);
     // console.log('create log:');
-    console.log(data);
+    // console.log(data);
 
     const obj = {
       data: {
@@ -284,7 +341,7 @@ const containersActions = {
         }
       }
     };
-    console.log(obj);
+    // console.log(obj);
     return ContainersService.post(obj).then((res) => {
       // console.log(res);
       commit(CONTAINERS_SUCCESS, res.data);
@@ -296,7 +353,7 @@ const containersActions = {
   deleteContainer({ commit }, id) {
     commit(CONTAINERS_REQUEST);
     ContainersService.delete(id).then((res) => {
-      console.log(res);
+      // console.log(res);
       commit(CONTAINERS_SUCCESS, res);
     }).catch((err) => {
       commit(CONTAINERS_FAILURE, err);
@@ -408,6 +465,93 @@ const containersActions = {
         commit(SET_CONTAINER_TERMINAL, res.terminal[id].attributes);
         // console.log('this');
         // console.log(res.terminal[id].attributes);
+      }, 1000);
+    }).catch((err) => {
+      commit(CONTAINER_FAILURE, err, id);
+    });
+  },
+
+  fetchSnapshots({ commit }, id) {
+    commit(SNAPSHOTS_REQUEST);
+
+    ContainersService.snapshots(id).then((res) => {
+      // console.log(res);
+      setTimeout(() => {
+        commit(SNAPSHOTS_SUCCESS, res);
+        // console.log(res);
+      }, 500);
+    }).catch((err) => {
+      commit(CONTAINERS_FAILURE, err);
+    });
+  },
+
+  fetchSnapshot({ commit }, id, name) {
+    commit(SNAPSHOTS_REQUEST);
+
+    ContainersService.snapshot(id, name).then((res) => {
+      // console.log(res);
+      setTimeout(() => {
+        commit(SNAPSHOT_SUCCESS, { id, attributes: res.snapshots[id].attributes });
+      }, 1000);
+    }).catch((err) => {
+      commit(CONTAINER_FAILURE, err, id);
+    });
+  },
+
+  deleteSnapshot({ commit }, { id, name }) {
+    // console.log(name);
+    commit(SNAPSHOTS_REQUEST);
+    ContainersService.snapshotDelete(id, name).then((res) => {
+      // console.log(res);
+      commit(SNAPSHOTS_SUCCESS, res);
+    }).catch((err) => {
+      commit(SNAPSHOTS_FAILURE, err);
+    });
+  },
+
+  restoreSnapshot({ commit }, { id, name }) {
+    // console.log(name);
+    commit(SNAPSHOTS_REQUEST);
+    ContainersService.snapshotRestore(id, name).then((res) => {
+      // console.log(res);
+      commit(SNAPSHOTS_SUCCESS, res);
+    }).catch((err) => {
+      commit(SNAPSHOTS_FAILURE, err);
+    });
+  },
+
+  createSnapshot({ commit }, { id, data }) {
+    commit(SNAPSHOTS_REQUEST);
+    // console.log('create snapshot log:');
+    // console.log(id);
+    // console.log(data);
+
+    const obj = {
+      data: {
+        type: 'snapshots',
+        attributes: {
+          name: data.name,
+          stateful: data.stateful
+        }
+      }
+    };
+    // console.log(obj);
+    return ContainersService.snapshotCreate(id, obj).then((res) => {
+      // console.log(res);
+      commit(SNAPSHOTS_SUCCESS, res.data);
+    }).catch((err) => {
+      commit(SNAPSHOTS_FAILURE, err);
+    });
+  },
+
+  fetchOperation({ dispatch, commit }, id) {
+    // commit(SNAPSHOTS_REQUEST);
+
+    ContainersService.operation(id).then((res) => {
+      console.log(res);
+      setTimeout(() => {
+        // commit(SNAPSHOT_SUCCESS, { id, attributes: res.snapshots[id].attributes });
+        dispatch('notify', { id: 0, message: 'Your container was created', color: '' });
       }, 1000);
     }).catch((err) => {
       commit(CONTAINER_FAILURE, err, id);

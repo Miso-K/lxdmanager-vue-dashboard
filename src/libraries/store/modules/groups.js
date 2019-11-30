@@ -61,8 +61,8 @@ const groupsActions = {
 
   createGroup({ commit }, data) {
     commit(GROUPS_REQUEST);
-    console.log('create log:');
-    console.log(data);
+    // console.log('create log:');
+    // console.log(data);
 
     const obj = {
       data: {
@@ -80,7 +80,7 @@ const groupsActions = {
         }
       }
     };
-    console.log(obj);
+    // console.log(obj);
     return GroupsService.post(obj).then((res) => {
       // console.log(res);
       commit(GROUPS_SUCCESS, res.data);
@@ -91,8 +91,8 @@ const groupsActions = {
 
   updateGroup({ commit }, data) {
     commit(GROUPS_REQUEST);
-    console.log('update log:');
-    console.log(data);
+    // console.log('update log:');
+    // console.log(data);
 
     const obj = {
       data: {

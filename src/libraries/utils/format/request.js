@@ -2,6 +2,7 @@
 
 export default function request(data) {
   return {
+    id: data.id,
     action: data.attributes.action,
     message: data.attributes.message,
     status: data.attributes.status,

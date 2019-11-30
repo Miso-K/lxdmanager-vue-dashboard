@@ -1,30 +1,74 @@
 {
-  "dates": {
-    "day": "day | days"
+  "sign_in": {
+    "name": "Sign in",
+    "username": "Username",
+    "password": "Password",
+    "login": "Login"
   },
-  "host": {
-    "name": "Host",
-    "actions": {
-      "reboot": "Reboot"
-    },
-    "messages": {
-      "deny_stats": "Sorry, you don't have access to host's stats.",
-      "reboot_dialog_headline": "Reboot the host?",
-      "reboot_dialog_subheadline": "You will be disconnected!",
-      "reboot_dialog_body": "You'll have to log back in once reboot is complete. Give it a minute or two :)"
-    }
+  "menu": {
+    "dashboard": "Dashboard",
+    "containers": "Containers",
+    "requests": "Requests",
+    "settings": "Settings",
+    "help": "Help",
+    "users": "Users",
+    "groups": "Groups",
+    "app_config": "App Config",
+    "sign_out": "Sign Out"
+  },
+  "requests": {
+    "name": "Requests",
+    "user": "User",
+    "action": "Requested action",
+    "status": "Status",
+    "message": "Message",
+    "changed": "Changed",
+    "actions": "Actions"
   },
   "containers": {
-    "name": "Servers",
+    "name": "Containers",
+    "tabs": {
+      "info": "Info",
+      "console": "Console",
+      "settings": "Settings",
+      "snapshots": "Snapshots"
+    },
     "actions": {
-      "clone": "Clone",
-      "create": "Create VPS",
+      "manage": "Manage",
+      "clone": "Clone container",
+      "new": "New container",
+      "upgrade": "Upgrade container",
+      "destroy": "Destroy container",
       "freeze": "Freeze",
       "restart": "Restart",
       "stopforce": "Force stop",
       "start": "Start",
       "stop": "Stop",
-      "unfreeze": "Unfreeze"
+      "unfreeze": "Unfreeze",
+      "restore": "Restore",
+      "delete": "Delete"
+    },
+    "config":{
+      "general": "General",
+      "system": "System",
+      "limits": "Limits",
+      "network": "Network",
+      "name": "Name",
+      "created": "Created",
+      "status": "Status",
+      "os": "OS",
+      "os_release": "OS release",
+      "os_version": "OS version",
+      "cpu": "CPU",
+      "memory": "Memory",
+      "disk": "Disk",
+      "price": "Price"
+    },
+    "snapshots": {
+      "create": "Create snapshot",
+      "name": "Snapshot name",
+      "date": "Date created",
+      "action": "Action"
     },
     "states": {
       "ALL": "All",
@@ -38,125 +82,125 @@
       "STOPPING": "Stopping...",
       "UNFREEZING": "Unfreezing..."
     },
-    "form": {
-      "name": "Name",
-      "target": "Target",
-      "container_name": {
-        "label": "Container Name",
+    "order": {
+      "new": "New container",
+      "upgrade": "Upgrade container",
+      "select_container": {
+        "label": "Select contajner",
         "help": "Something to help the user about container's name."
       },
-      "template": {
-        "label": "Template",
-        "help": "Something to help the user about container's template."
+      "container_name": {
+        "label": "Container name",
+        "help": "Something to help the user about container's name."
       },
-      "target_container": {
-        "label": "Target Container",
-        "help": "Something to help the user about the container about to be cloned."
+      "container_clone_name": {
+        "label": "Contajner clone",
+        "help": "Something to help the user about container's name."
+      },
+      "destroy_container": {
+        "label": "Create request to destroy container",
+        "help": "Send request for destroying your vps server."
+      },
+      "os": {
+        "label": "OS",
+        "help": "Something to help the user about container's os."
       },
       "cpu": {
-        "label": "CPU·s",
-        "help": "Something to help the user about CPU",
-        "hint": "Which core·s the container will be run on?"
+        "label": "CPU",
+        "help": "Something to help the user about CPU"
       },
       "memory": {
-        "label": "Memory",
-        "help": "Something to help the user about memory and swap.",
-        "hint": "Set to 0 for unlimited."
+        "label": "RAM",
+        "help": "Something to help the user about memory and swap."
       },
-      "shutdown_target_container": {
-        "label": "Shut down target container?",
-        "will": "Target container <b>will be</b> shut down before being cloned.",
-        "will_not": "Target container <b>will NOT be</b> shut down before being cloned."
+      "disk": {
+        "label": "Disk",
+        "help": "Something to help the user about memory and swap."
       },
-      "network_card": {
-        "add": "Add Network Card",
-        "simple": {
-          "label": "Simple",
-          "help": "Something to help the user about simple network settings."
-        },
-        "advanced": {
-          "label": "Advanced",
-          "help": "Something to help the user about advanced network settings."
-        },
-        "ips": {
-          "label": "IP Address·es",
-          "hint": "IPV4 and IPV6 allowed: one IP address per line"
-        },
-        "link": {
-          "label": "Link",
-          "hint": "i.e. lxcbr0"
-        },
-        "name": {
-          "label": "Name",
-          "hint": "i.e. eth0"
-        },
-        "vlan": {
-          "label": "VLAN"
-        },
-        "mtu": {
-          "label": "MTU"
-        },
-        "hw_address": {
-          "label": "HW Address"
-        }
+      "payment_period": {
+        "label": "Payment period",
+        "help": "Something to help the user about memory and swap."
+      },
+      "calculated_price": {
+        "label": "Calculated price",
+        "help": "Something to help the user about memory and swap."
+      },
+      "restore_snapshot": {
+        "title": "Restore this snapshot?",
+        "text": "This action is not reversible."
+      },
+      "delete_snapshot": {
+        "title": "Delete this snapshot?",
+        "text": "This action is not reversible."
       }
     }
   },
   "stats": {
-    "state": "State",
+    "containers": "Containers count",
+    "total_cpu": "Allocated CPUs",
+    "total_memory": "Allocated memory",
+    "total_disk": "Allocated disk space",
+    "total_price": "Total price monthly",
+    "units": "units",
+    "cpu": "CPU | CPUs",
+    "status": "Status",
     "uptime": "Uptime",
     "total": "Total",
-    "used": "Used",
-    "memory_used": "Used",
-    "cached": "Cached",
-    "free": "Free",
     "name": "Name",
-    "logical_core": "Logical Core | Logical Cores",
-    "physical_core": "Physical Core | Physical Cores",
-    "model": "Model",
-    "disk": "Disk",
-    "memory": "Memory",
-    "swap": "Swap",
-    "cpu": "CPU | CPUs",
-    "lxc_version": "LXC Version",
-    "network": "Network",
     "unlimited": "Unlimited",
-    "swap_limit": "Swap Limit",
-    "memory_limit": "Memory Limit",
-    "file_system": "File System",
-    "settings": "Settings",
-    "network_card": "Network Card"
-  },
-  "and" : "and",
-  "to": "to",
-  "unlimited": "Unlimited",
-  "general": "General",
-  "messages": {
-    "no_containers": "Sorry, you don't have any containers.",
-    "logged_out": "Successfully logged out!"
+    "swap_limit": "Swap limit",
+    "memory_limit": "Memory limit",
+    "disk_limit": "Disk limit"
   },
   "actions": {
+    "name": "Actions",
     "cancel": "Cancel",
+    "close": "Close",
     "search": "Search",
     "confirm": "Confirm",
     "back": "Back",
     "continue": "Continue",
     "clone": "Clone",
-    "create": "Create"
+    "create": "Create",
+    "save": "Save",
+    "disagree": "Disagree",
+    "agree": "Agree"
   },
-  "form": {
-    "optional": "Optional",
-    "errors": {
-      "containerName": "{0} must respect 'containerName' format.",
-      "email": "{0} must be an email.",
-      "hostname": "{0} must respect 'hostname' format.",
-      "ip": "{0} must contains valid {1} addresses.",
-      "macAddress": "{0} must respect 'MAC address' format.",
-      "maxLength": "{0} can't be longer than {1} characters.",
-      "minLength": "{0} must be at least {1} characters long.",
-      "network": "{0} must respect 'network' format.",
-      "numeric": "{0} must be a numeric value.",
-      "required": "{0} is required."
+  "settings": {
+    "profile": {
+      "title": "User profile",
+      "username": "username",
+      "email": "email",
+      "name": "Name",
+      "phone": "Phone",
+      "address": "Address",
+      "city": "City",
+      "country": "Country",
+      "postal_code": "Postal code",
+      "ico": "ICO",
+      "icdph": "IC DPH",
+      "dic": "DIC"
+    },
+    "password": {
+      "title": "Change password",
+      "current": "Current password",
+      "new": "New password",
+      "confirm": "Confirm new password"
+    },
+    "settings": {
+      "title": "Settings",
+      "language": "Language",
+      "two_factor": "Two factor authorization",
+      "hint": "It is strongly recomended to use two factor authorization.",
+      "hint_email": "This is default option for two factor authorization.<br>E-mail with secret key will be send to user email.",
+      "hint_totp": "Time based authentication require smart device with application.<br>(eg. Authenticator)",
+      "generate": "Generate secure key",
+      "help": "Please prepare your device. You will have 90 seconds for setting your totp authorization."
     }
+  },
+  "help": {
+    "title": "Contact",
+    "subject": "Subject",
+    "message": "Message"
   }
 }

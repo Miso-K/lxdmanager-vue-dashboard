@@ -15,22 +15,22 @@
     <v-layout row>
       <v-flex xl3 lg3 md3 sm6 xs12>
         <v-list two-line subheader>
-          <v-subheader>General</v-subheader>
-          <v-list-tile avatar>
+          <v-subheader>{{ $t('containers.config.general') }}</v-subheader>
+          <v-list-tile>
             <v-list-tile-content>
-              <v-list-tile-title>Name</v-list-tile-title>
+              <v-list-tile-title>{{ $t('containers.config.name') }}</v-list-tile-title>
               <v-list-tile-sub-title>{{ container.name }}</v-list-tile-sub-title>
             </v-list-tile-content>
           </v-list-tile>
-          <v-list-tile avatar>
+          <v-list-tile>
             <v-list-tile-content>
-              <v-list-tile-title>Created</v-list-tile-title>
+              <v-list-tile-title>{{ $t('containers.config.created') }}</v-list-tile-title>
               <v-list-tile-sub-title>{{ formatDate(container.created_at) }}</v-list-tile-sub-title>
             </v-list-tile-content>
           </v-list-tile>
-          <v-list-tile avatar>
+          <v-list-tile>
             <v-list-tile-content>
-              <v-list-tile-title>Status</v-list-tile-title>
+              <v-list-tile-title>{{ $t('containers.config.status') }}</v-list-tile-title>
               <v-list-tile-sub-title>{{ container.status }}</v-list-tile-sub-title>
             </v-list-tile-content>
           </v-list-tile>
@@ -38,24 +38,24 @@
       </v-flex>
       <v-flex xl3 lg3 md3 sm6 xs12>
         <v-list two-line subheader>
-          <v-subheader>System</v-subheader>
-          <v-list-tile avatar>
+          <v-subheader>{{ $t('containers.config.system') }}</v-subheader>
+          <v-list-tile>
             <v-list-tile-content>
-              <v-list-tile-title>OS</v-list-tile-title>
+              <v-list-tile-title>{{ $t('containers.config.os') }}</v-list-tile-title>
               <v-list-tile-sub-title v-if="config.image_os">{{ config.image_os }}</v-list-tile-sub-title>
               <v-list-tile-sub-title v-else>-</v-list-tile-sub-title>
             </v-list-tile-content>
           </v-list-tile>
-          <v-list-tile avatar>
+          <v-list-tile>
             <v-list-tile-content>
-              <v-list-tile-title>Os release</v-list-tile-title>
+              <v-list-tile-title>{{ $t('containers.config.os_release') }}</v-list-tile-title>
               <v-list-tile-sub-title v-if="config.image_release">{{ config.image_release }}</v-list-tile-sub-title>
               <v-list-tile-sub-title v-else>-</v-list-tile-sub-title>
             </v-list-tile-content>
           </v-list-tile>
-          <v-list-tile avatar>
+          <v-list-tile>
             <v-list-tile-content>
-              <v-list-tile-title>Os version</v-list-tile-title>
+              <v-list-tile-title>{{ $t('containers.config.os_version') }}</v-list-tile-title>
               <v-list-tile-sub-title v-if="config.image_version">{{ config.image_version }}</v-list-tile-sub-title>
               <v-list-tile-sub-title v-else>-</v-list-tile-sub-title>
             </v-list-tile-content>
@@ -64,24 +64,24 @@
       </v-flex>
       <v-flex xl3 lg3 md3 sm6 xs12>
         <v-list two-line subheader>
-          <v-subheader>Limits</v-subheader>
-          <v-list-tile avatar>
+          <v-subheader>{{ $t('containers.config.limits') }}</v-subheader>
+          <v-list-tile>
             <v-list-tile-content>
-              <v-list-tile-title>CPU</v-list-tile-title>
+              <v-list-tile-title>{{ $t('containers.config.cpu') }}</v-list-tile-title>
                 <v-list-tile-sub-title v-if="config.limits_cpu">{{ config.limits_cpu }}</v-list-tile-sub-title>
                 <v-list-tile-sub-title v-else>No limit set</v-list-tile-sub-title>
             </v-list-tile-content>
           </v-list-tile>
-          <v-list-tile avatar>
+          <v-list-tile>
             <v-list-tile-content>
-              <v-list-tile-title>Memory</v-list-tile-title>
+              <v-list-tile-title>{{ $t('containers.config.memory') }}</v-list-tile-title>
                 <v-list-tile-sub-title v-if="config.limits_memory">{{ config.limits_memory }}</v-list-tile-sub-title>
                 <v-list-tile-sub-title v-else>No limit set</v-list-tile-sub-title>
             </v-list-tile-content>
           </v-list-tile>
-          <v-list-tile avatar>
+          <v-list-tile v-if="showDisk">
             <v-list-tile-content>
-              <v-list-tile-title>Disk</v-list-tile-title>
+              <v-list-tile-title>{{ $t('containers.config.disk') }}</v-list-tile-title>
                 <v-list-tile-sub-title v-if="config.limits_disk !== '0'">{{ config.limits_disk }}</v-list-tile-sub-title>
                 <v-list-tile-sub-title v-else>No limit set</v-list-tile-sub-title>
             </v-list-tile-content>
@@ -90,18 +90,25 @@
       </v-flex>
       <v-flex xl3 lg3 md3 sm6 xs12>
         <v-list two-line subheader>
-          <v-subheader>Network</v-subheader>
-          <v-list-tile avatar>
+          <v-subheader>{{ $t('containers.config.network') }}</v-subheader>
+          <v-list-tile>
             <v-list-tile-content>
               <v-list-tile-title>IPv4</v-list-tile-title>
                 <v-list-tile-sub-title v-if="ips[0]">{{ ips[0].address }}</v-list-tile-sub-title>
                 <v-list-tile-sub-title v-else>-</v-list-tile-sub-title>
             </v-list-tile-content>
           </v-list-tile>
-          <v-list-tile avatar>
+          <v-list-tile>
             <v-list-tile-content>
               <v-list-tile-title>IPv6</v-list-tile-title>
               <v-list-tile-sub-title v-if="ips[1]">{{ ips[1].address }}</v-list-tile-sub-title>
+                <v-list-tile-sub-title v-else>-</v-list-tile-sub-title>
+            </v-list-tile-content>
+          </v-list-tile>
+          <v-list-tile v-if="showPrice">
+            <v-list-tile-content>
+              <v-list-tile-title>{{ $t('containers.config.price') }}</v-list-tile-title>
+              <v-list-tile-sub-title v-if="config.user_price">{{ config.user_price }}</v-list-tile-sub-title>
                 <v-list-tile-sub-title v-else>-</v-list-tile-sub-title>
             </v-list-tile-content>
           </v-list-tile>
@@ -205,7 +212,7 @@
       },
       id() {
         // console.log(this.$route);
-        return this.$route.params.id;
+        return Number(this.$route.params.id);
       },
       container() {
         // console.log(this.$store.getters.containerDataId(this.id));
@@ -223,6 +230,12 @@
       },
       loading() {
         return this.$store.getters.containerIsLoading(this.id);
+      },
+      showPrice() {
+        return this.$store.getters.appconfig.price.enabled === 'True';
+      },
+      showDisk() {
+        return this.$store.getters.appconfig.storage.enabled === 'True';
       }
     },
     methods: {

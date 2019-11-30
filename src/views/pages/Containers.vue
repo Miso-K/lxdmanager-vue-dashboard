@@ -1,16 +1,16 @@
 <template>
   <div>
-    <help></help>
+    <containers></containers>
   </div>
 </template>
 
 <script>
-  import Help from '../../components/Help/Help';
+  import Containers from '../../components/Containers/Containers';
 
   export default {
     name: 'container',
     components: {
-      help: Help
+      containers: Containers
     },
     data() {
       return {

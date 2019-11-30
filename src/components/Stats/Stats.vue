@@ -3,32 +3,50 @@
    <v-container grid-list-md>
       <v-layout row wrap>
         <stats-card
+          flex="md4"
           icon="layers"
           color="red"
           :value="machines"
-          unit=" units"
-          label="Virtual Servers"
+          :unit="$t('stats.units')"
+          :label="$t('stats.containers')"
         ></stats-card>
         <stats-card
+          flex="md4"
           icon="data_usage"
           color="green"
           :value="vcpus"
-          unit=" units"
-          label="Allocated CPUs"
+          :unit="$t('stats.units')"
+          :label="$t('stats.total_cpu')"
         ></stats-card>
         <stats-card
+          flex="md4"
           icon="memory"
           color="blue"
           :value="memory"
-          unit=" GB"
-          label="Memory"
+          unit="GB"
+          :label="$t('stats.total_memory')"
         ></stats-card>
+      </v-layout>
+   </v-container>
+   <v-container grid-list-md>
+      <v-layout>
         <stats-card
+          flex="md6"
+          v-if="showDisk"
           icon="storage"
           color="orange"
           :value="disk"
-          unit=" GB"
-          label="Disk"
+          unit="GB"
+          :label="$t('stats.total_disk')"
+        ></stats-card>
+        <stats-card
+          flex="md6"
+          v-if="showPrice"
+          icon="account_balance"
+          color="purple"
+          :value="price"
+          unit="€"
+          :label="$t('stats.total_price')"
         ></stats-card>
       </v-layout>
    </v-container>
@@ -61,11 +79,21 @@
       },
       disk() {
         return this.stats.disk && this.stats.disk.disk_count;
+      },
+      price() {
+        return this.stats.price && this.stats.price.price_count;
+      },
+      showPrice() {
+        return this.$store.getters.appconfig.price.enabled === 'True';
+      },
+      showDisk() {
+        return this.$store.getters.appconfig.storage.enabled === 'True';
       }
     },
     mounted() {
-      // console.log(this.$store.getters.stats);
+      console.log(this.$store.getters.appconfig);
       this.$store.dispatch('fetchStats');
+      this.$store.dispatch('fetchAppConfig');
     },
     created() {
       // this.$store.registerModule('stats', Stats);

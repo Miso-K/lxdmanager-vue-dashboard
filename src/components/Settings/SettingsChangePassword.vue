@@ -8,7 +8,7 @@
       height="50px"
     >
       <v-icon>mdi-account</v-icon>
-      <v-toolbar-title class="font-weight-light subheading">Change Password</v-toolbar-title>
+      <v-toolbar-title class="font-weight-light subheading">{{ $t('settings.password.title') }}</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn
         fab
@@ -22,7 +22,7 @@
     <v-card-text>
       <v-text-field
         :disabled="!isEditing"
-        label="Current password"
+        :label="$t('settings.password.current')"
         :append-icon="show3 ? 'visibility_off' : 'visibility'"
         :rules="[oldPasswordRules]"
         :type="show3 ? 'text' : 'password'"
@@ -32,7 +32,7 @@
       ></v-text-field>
       <v-text-field
         :disabled="!isEditing"
-        label="New password"
+        :label="$t('settings.password.new')"
         :append-icon="show3 ? 'visibility_off' : 'visibility'"
         :rules="newPasswordRules"
         :type="show3 ? 'text' : 'password'"
@@ -42,7 +42,7 @@
       ></v-text-field>
       <v-text-field
         :disabled="!isEditing"
-        label="Confirm password"
+        :label="$t('settings.password.confirm')"
         :append-icon="show3 ? 'visibility_off' : 'visibility'"
         :rules="newPasswordRules"
         :type="show3 ? 'text' : 'password'"
@@ -59,7 +59,7 @@
         color="success"
         @click="save"
       >
-        Save
+        {{ $t('actions.save') }}
       </v-btn>
     </v-card-actions>
     </v-form>

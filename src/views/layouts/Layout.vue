@@ -1,7 +1,7 @@
 <template>
   <transition name="fade">
     <v-app>
-      <v-navigation-drawer app :mini-variant="mini" v-model="drawer">
+      <v-navigation-drawer stateless app :mini-variant="mini" v-model="drawer">
         <v-list class="pa-0">
           <v-list-item>
             <v-list-tile avatar tag="div">
@@ -33,7 +33,7 @@
                 <v-icon>exit_to_app</v-icon>
               </v-list-tile-action>
               <v-list-tile-content>
-                <v-list-tile-title>Sign Out</v-list-tile-title>
+                <v-list-tile-title>{{ $t('menu.sign_out') }}</v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
           </v-list-item>
@@ -99,14 +99,14 @@
       return {
         drawer: true,
         items: [
-          { title: 'Dashboard', icon: 'dashboard', to: { name: 'dashboard' }, user: true },
-          { title: 'Servers', icon: 'storage', to: { name: 'servers' }, user: true },
-          { title: 'Users', icon: 'group', to: { name: 'users' }, user: false },
-          { title: 'Groups', icon: 'people_outline', to: { name: 'groups' }, user: false },
-          { title: 'Requests', icon: 'list', to: { name: 'requests' }, user: true },
-          { title: 'Settings', icon: 'settings', to: { name: 'settings' }, user: true },
-          { title: 'Help', icon: 'help', to: { name: 'help' }, user: true },
-          { title: 'AppConfig', icon: 'settings', to: { name: 'appconfig' }, user: false }
+          { title: this.$t('menu.dashboard'), icon: 'dashboard', to: { name: 'dashboard' }, user: true },
+          { title: this.$t('menu.containers'), icon: 'storage', to: { name: 'containers' }, user: true },
+          { title: this.$t('menu.users'), icon: 'group', to: { name: 'users' }, user: false },
+          { title: this.$t('menu.groups'), icon: 'people_outline', to: { name: 'groups' }, user: false },
+          { title: this.$t('menu.requests'), icon: 'list', to: { name: 'requests' }, user: true },
+          { title: this.$t('menu.settings'), icon: 'settings', to: { name: 'settings' }, user: true },
+          { title: this.$t('menu.help'), icon: 'help', to: { name: 'help' }, user: true },
+          { title: this.$t('menu.app_config'), icon: 'settings', to: { name: 'appconfig' }, user: false }
         ],
         mini: false,
         showSnack: true,
@@ -116,7 +116,7 @@
     computed: {
       me() {
         // this.$store.dispatch('fetchMe');
-        console.log(this.$store.getters['auth/me']);
+        // console.log(this.$store.getters['auth/me']);
         return this.$store.getters['auth/me'];
       },
       avatar() {
@@ -130,7 +130,7 @@
       setTimeout(() => {
         this.$store.dispatch('fetchMe').then(() => {
           this.me = this.$store.getters['auth/me'];
-          console.log(this.me);
+          // console.log(this.me);
         });
       }, 500);
     }

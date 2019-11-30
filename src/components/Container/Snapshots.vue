@@ -1,14 +1,26 @@
 <template>
   <div>
 <v-container fluid grid-list-xl>
+  <v-btn
+              absolute
+              dark
+              fab
+              top
+              right
+              small
+              color="blue"
+              @click="refreshData"
+            >
+              <v-icon>refresh</v-icon>
+            </v-btn>
     <v-layout row>
-      <v-flex md2 offset-md1>
-        <v-btn @click="createItem()" color="success">Create snapshot</v-btn>
+      <v-flex md3 offset-md1>
+        <v-btn @click="createItem()" color="success">{{ $t('containers.snapshots.create') }}</v-btn>
       </v-flex>
-      <v-flex md6 >
+      <v-flex md8 >
         <v-text-field
           name="snapshot-name"
-          label="Snapshot name"
+          :label="$t('containers.snapshots.name')"
           id="snapshot"
           v-model="snapshot_name"
         ></v-text-field>
@@ -25,20 +37,20 @@
         :pagination.sync="pagination">
         <template slot="items" slot-scope="props">
           <td>{{ props.item.name }}</td>
-          <td>{{ props.item.date }}</td>
+          <td>{{ props.item.created_at }}</td>
           <td class="text-xs-right">
-            <v-btn @click="restoreAction(props.item)" color="info">Restore</v-btn>
-            <v-btn @click="deleteAction(props.item)" color="error">Delete</v-btn>
+            <v-btn small @click="restoreAction(props.item)" color="info">{{ $t('containers.actions.restore') }}</v-btn>
+            <v-btn small @click="deleteAction(props.item)" color="error">{{ $t('containers.actions.delete') }}</v-btn>
           </td>
         </template>
       </v-data-table>
     </v-flex>
     <v-dialog v-model="dialog_destroy" max-width="500">
       <v-card>
-        <v-card-title class="headline">Delete this snapshot?</v-card-title>
+        <v-card-title class="headline">{{$t('containers.order.delete_snapshot.title')}}</v-card-title>
 
         <v-card-text>
-          This action is not reversible.
+          {{$t('containers.order.delete_snapshot.text')}}
         </v-card-text>
 
         <v-card-actions>
@@ -49,7 +61,7 @@
             flat="flat"
             @click="dialog_destroy = false"
           >
-            Disagree
+            {{$t('actions.disagree')}}
           </v-btn>
 
           <v-btn
@@ -58,17 +70,17 @@
             @click.native="dialog_destroy = false"
             @click="deleteItem(action_item)"
           >
-            Agree
+            {{$t('actions.agree')}}
           </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
     <v-dialog v-model="dialog_restore" max-width="500">
       <v-card>
-        <v-card-title class="headline">Restore this snapshot?</v-card-title>
+        <v-card-title class="headline">{{$t('containers.order.restore_snapshot.title')}}</v-card-title>
 
         <v-card-text>
-          This action is not reversible.
+          {{$t('containers.order.restore_snapshot.text')}}
         </v-card-text>
 
         <v-card-actions>
@@ -79,7 +91,7 @@
             flat="flat"
             @click="dialog_restore = false"
           >
-            Disagree
+            {{$t('actions.disagree')}}
           </v-btn>
 
           <v-btn
@@ -88,7 +100,7 @@
             @click.native="dialog_restore = false"
             @click="restoreItem(action_item)"
           >
-            Agree
+            {{$t('actions.agree')}}
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -113,23 +125,29 @@
         },
         headers: [
           {
-            text: 'name',
+            text: this.$t('containers.snapshots.name'),
             align: 'left',
             value: 'name'
           },
           {
-            text: 'date',
+            text: this.$t('containers.snapshots.date'),
             align: 'left',
             value: 'date'
           },
           {
-            text: 'action',
+            text: this.$t('actions.name'),
             align: 'right',
             value: 'action'
           }
         ],
         items: []
       };
+    },
+    computed: {
+      id() {
+        // console.log(this.$route);
+        return this.$route.params.id;
+      }
     },
     watch: {
       dialog(val) {
@@ -141,32 +159,8 @@
     },
     methods: {
       initialize() {
-        this.items = [
-          {
-            value: false,
-            name: 'Backup_daily',
-            date: '10.10.2018',
-            action: 'Restore, Delete'
-          },
-          {
-            value: false,
-            name: 'Backup_daily',
-            date: '11.10.2018',
-            action: 'Restore, Delete'
-          },
-          {
-            value: false,
-            name: 'Backup_daily',
-            date: '12.10.2018',
-            action: 'Restore, Delete'
-          },
-          {
-            value: false,
-            name: 'Backup_daily',
-            date: '13.10.2018',
-            action: 'Restore, Delete'
-          }
-        ];
+        this.items = this.$store.getters.snapshotsTableData;
+        // console.log(this.items);
       },
 
       deleteAction(item) {
@@ -176,6 +170,9 @@
       deleteItem(item) {
         const index = this.items.indexOf(item);
         this.items.splice(index, 1);
+        // console.log(item);
+        this.$store.dispatch('deleteSnapshot', { id: this.id, name: item.name });
+        this.$store.dispatch('notify', { id: 0, message: 'Your snapshot was deleted', color: '' });
       },
 
       restoreAction(item) {
@@ -183,8 +180,9 @@
         this.action_item = item;
       },
       restoreItem(item) {
-        console.log('item restored');
-        console.log(item);
+        // console.log('item restored');
+        // console.log(item);
+        this.$store.dispatch('restoreSnapshot', { id: this.id, name: item.name });
         this.$store.dispatch('notify', { id: 0, message: 'Your snapshot was restored', color: '' });
       },
 
@@ -194,12 +192,15 @@
           const obj = {
             value: false,
             name: this.snapshot_name,
-            date: `${d.getDate()}.${d.getMonth()}.${d.getFullYear()}`,
-            action: 'Restore, Delete'
+            created_at: `${d.getDate()}.${d.getMonth()}.${d.getFullYear()}`,
+            action: 'Restore, Delete',
+            stateful: 'false'
           };
 
-          console.log(new Date());
+          // console.log(new Date());
           this.items.push(obj);
+          // this.$store.dispatch('createSnapshot', { id: this.id, name: item.name });
+          this.$store.dispatch('createSnapshot', { id: this.id, data: obj });
           this.$store.dispatch('notify', { id: 0, message: 'Your snapshot was created', color: '' });
         }
       },
@@ -210,7 +211,17 @@
           this.editedItem = Object.assign({}, this.defaultItem);
           this.editedIndex = -1;
         }, 300);
+      },
+
+      refreshData() {
+        this.$store.dispatch('fetchSnapshots', this.id);
+        setTimeout(() => {
+          this.initialize();
+        }, 1500);
       }
+    },
+    mounted() {
+      this.$store.dispatch('fetchSnapshots', this.id);
     }
   };
 </script>

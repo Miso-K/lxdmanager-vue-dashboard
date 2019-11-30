@@ -7,7 +7,8 @@ export const changeTitle = ({ commit }, title) => {
 export const load = ({ commit }) => {
 // eslint-disable-next-line max-len
   // const actions = ['fetchMe', 'fetchGroups', 'fetchAbilities'].map(action => store.dispatch(action));
-  const actions = ['fetchMe', 'fetchGroups', 'fetchAbilities', 'fetchContainers'].map(action => store.dispatch(action));
+  // eslint-disable-next-line max-len
+  const actions = ['fetchMe', 'fetchGroups', 'fetchAbilities', 'fetchContainers', 'fetchAppConfig'].map(action => store.dispatch(action));
 
   return Promise.all(actions).then(() => {
     commit('APP_LOAD');

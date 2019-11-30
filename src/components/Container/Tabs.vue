@@ -2,23 +2,23 @@
     <v-container grid-list-md>
   <v-tabs icons-and-text fixed-tabs>
     <v-tab href="#tab-1">
-      Info
+      {{ $t('containers.tabs.info') }}
       <v-icon>info</v-icon>
     </v-tab>
     <v-tab href="#tab-2">
-      Console
+      {{ $t('containers.tabs.console') }}
       <v-icon>code</v-icon>
     </v-tab>
     <v-tab href="#tab-3">
-      Settings
+      {{ $t('containers.tabs.settings') }}
       <v-icon>settings</v-icon>
     </v-tab>
-    <!--<v-tab href="#tab-4">
-      Snapshots
+    <v-tab href="#tab-4">
+      {{ $t('containers.tabs.snapshots') }}
       <v-icon>photo_camera</v-icon>
-    </v-tab>-->
+    </v-tab>
     <v-tab-item
-      v-for="i in 3"
+      v-for="i in 4"
       :key="i"
       :value="'tab-' + i"
     >
