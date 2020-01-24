@@ -33,15 +33,13 @@
         v-if="items"
         :headers="headers"
         :items="items"
-        :search="search"
-        :pagination.sync="pagination">
-        <template slot="items" slot-scope="props">
-          <td>{{ props.item.name }}</td>
-          <td>{{ props.item.created_at }}</td>
-          <td class="text-xs-right">
-            <v-btn small @click="restoreAction(props.item)" color="info">{{ $t('containers.actions.restore') }}</v-btn>
-            <v-btn small @click="deleteAction(props.item)" color="error">{{ $t('containers.actions.delete') }}</v-btn>
-          </td>
+        :search="search">
+        <template v-slot:item.actions="{ item }">
+          <v-btn small @click="restoreAction(item)" color="info">{{ $t('containers.actions.restore') }}</v-btn>
+          <v-btn small @click="deleteAction(item)" color="error">{{ $t('containers.actions.delete') }}</v-btn>
+        </template>
+        <template v-slot:item.created_at="{ item }">
+          {{ formatDate(item.created_at) }}
         </template>
       </v-data-table>
     </v-flex>
@@ -58,7 +56,7 @@
 
           <v-btn
             color="green darken-1"
-            flat="flat"
+            text
             @click="dialog_destroy = false"
           >
             {{$t('actions.disagree')}}
@@ -66,7 +64,7 @@
 
           <v-btn
             color="red darken-1"
-            flat="flat"
+            text
             @click.native="dialog_destroy = false"
             @click="deleteItem(action_item)"
           >
@@ -88,7 +86,7 @@
 
           <v-btn
             color="green darken-1"
-            flat="flat"
+            text
             @click="dialog_restore = false"
           >
             {{$t('actions.disagree')}}
@@ -96,7 +94,7 @@
 
           <v-btn
             color="red darken-1"
-            flat="flat"
+            text
             @click.native="dialog_restore = false"
             @click="restoreItem(action_item)"
           >
@@ -120,9 +118,6 @@
         dialog_restore: false,
         snapshot_name: '',
         search: '',
-        pagination: {
-          sortBy: 'state'
-        },
         headers: [
           {
             text: this.$t('containers.snapshots.name'),
@@ -132,12 +127,12 @@
           {
             text: this.$t('containers.snapshots.date'),
             align: 'left',
-            value: 'date'
+            value: 'created_at'
           },
           {
             text: this.$t('actions.name'),
             align: 'right',
-            value: 'action'
+            value: 'actions'
           }
         ],
         items: []
@@ -145,8 +140,10 @@
     },
     computed: {
       id() {
-        // console.log(this.$route);
-        return this.$route.params.id;
+        return Number(this.$route.params.id);
+      },
+      container() {
+        return this.$store.getters.containerDataId(this.id);
       }
     },
     watch: {
@@ -163,6 +160,10 @@
         // console.log(this.items);
       },
 
+      formatDate(date) {
+        const d = new Date(date);
+        return d.toDateString();
+      },
       deleteAction(item) {
         this.dialog_destroy = true;
         this.action_item = item;
@@ -172,7 +173,7 @@
         this.items.splice(index, 1);
         // console.log(item);
         this.$store.dispatch('deleteSnapshot', { id: this.id, name: item.name });
-        this.$store.dispatch('notify', { id: 0, message: 'Your snapshot was deleted', color: '' });
+        this.$store.dispatch('notify', { id: 0, message: `${this.$i18n.t('notifications.snapshot_deleted')}`, color: '' });
       },
 
       restoreAction(item) {
@@ -183,16 +184,15 @@
         // console.log('item restored');
         // console.log(item);
         this.$store.dispatch('restoreSnapshot', { id: this.id, name: item.name });
-        this.$store.dispatch('notify', { id: 0, message: 'Your snapshot was restored', color: '' });
+        this.$store.dispatch('notify', { id: 0, message: `${this.$i18n.t('notifications.snapshot_restored')}`, color: '' });
       },
 
       createItem() {
-        const d = new Date();
         if (this.snapshot_name !== '') {
           const obj = {
             value: false,
             name: this.snapshot_name,
-            created_at: `${d.getDate()}.${d.getMonth()}.${d.getFullYear()}`,
+            created_at: new Date(),
             action: 'Restore, Delete',
             stateful: 'false'
           };
@@ -201,7 +201,7 @@
           this.items.push(obj);
           // this.$store.dispatch('createSnapshot', { id: this.id, name: item.name });
           this.$store.dispatch('createSnapshot', { id: this.id, data: obj });
-          this.$store.dispatch('notify', { id: 0, message: 'Your snapshot was created', color: '' });
+          this.$store.dispatch('notify', { id: 0, message: `${this.$i18n.t('notifications.snapshot_created')}`, color: '' });
         }
       },
 
@@ -222,7 +222,9 @@
     },
     mounted() {
       this.$store.dispatch('fetchSnapshots', this.id);
+      setTimeout(() => {
+        this.initialize();
+      }, 1500);
     }
   };
 </script>
-4

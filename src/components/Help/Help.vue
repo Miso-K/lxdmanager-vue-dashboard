@@ -4,14 +4,13 @@
       class="hide-overflow"
     >
       <v-form ref="form" v-model="valid" lazy-validation>
-      <v-toolbar
-        card
+      <v-app-bar flat
         color=""
       >
         <v-icon>mdi-account</v-icon>
         <v-toolbar-title class="font-weight-light">{{ $t('help.title') }}</v-toolbar-title>
         <v-spacer></v-spacer>
-      </v-toolbar>
+      </v-app-bar>
       <v-card-text>
         <v-text-field
           :label="$t('help.subject')"
@@ -66,7 +65,7 @@
       save() {
         this.hasSent = true;
         this.$store.dispatch('createRequests', { action: 'help', message: this.subject, status: 'waiting', meta_data: { text: this.message } });
-        this.$store.dispatch('notify', { id: 0, message: 'Your request was created', color: '' });
+        this.$store.dispatch('notify', { id: 0, message: `${this.$i18n.t('notifications.request_created')}`, color: '' });
         this.active = false;
         this.subject = '';
         this.message = '';

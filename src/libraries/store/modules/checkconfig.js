@@ -10,7 +10,7 @@ export const CHECKCONFIG_FAILURE = 'CHECKCONFIG_FAILURE';
  */
 const checkconfigState = {
   checkconfig: {},
-  loading: true
+  loading: false
 };
 
 /**
@@ -49,7 +49,7 @@ const actions = {
     return CheckconfigService.get()
       .then((res) => {
         console.log(res);
-        commit(CHECKCONFIG_SUCCESS, res);
+        commit(CHECKCONFIG_SUCCESS, { checkconfig: res.data.data });
       }).catch((err) => {
         commit(CHECKCONFIG_FAILURE, err);
       });

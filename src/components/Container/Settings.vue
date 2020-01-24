@@ -47,7 +47,7 @@
 
           <v-btn
             color="green darken-1"
-            flat="flat"
+            text
             @click="dialog_destroy = false"
           >
             {{$t('actions.disagree')}}
@@ -55,7 +55,7 @@
 
           <v-btn
             color="red darken-1"
-            flat="flat"
+            text
             @click.native="dialog_destroy = false"
             @click="sendRequestDestroy"
           >
@@ -94,8 +94,8 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" flat @click.native="dialog_clone = false">{{$t('actions.close')}}</v-btn>
-          <v-btn color="blue darken-1" flat @click.native="dialog_clone = false" @click="sendRequestClone">{{$t('actions.create')}}</v-btn>
+          <v-btn color="blue darken-1" text @click.native="dialog_clone = false">{{$t('actions.close')}}</v-btn>
+          <v-btn color="blue darken-1" text @click.native="dialog_clone = false" @click="sendRequestClone">{{$t('actions.create')}}</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -156,10 +156,10 @@
           </v-container>
         </v-card-text>
         <v-card-actions>
-          <v-btn color="blue darken-1" flat @click="getContainerConfig">Reset</v-btn>
+          <v-btn color="blue darken-1" text @click="getContainerConfig">Reset</v-btn>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" flat @click.native="dialog_upgrade = false">{{$t('actions.close')}}</v-btn>
-          <v-btn color="blue darken-1" flat @click.native="dialog_upgrade = false" @click="sendRequestUpgrade">{{$t('actions.create')}}</v-btn>
+          <v-btn color="blue darken-1" text @click.native="dialog_upgrade = false">{{$t('actions.close')}}</v-btn>
+          <v-btn color="blue darken-1" text @click.native="dialog_upgrade = false" @click="sendRequestUpgrade">{{$t('actions.create')}}</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -194,10 +194,10 @@
     },
     computed: {
       id() {
-        return this.$route.params.id;
+        return Number(this.$route.params.id);
       },
       container() {
-        return this.$store.getters.containerData(this.id);
+        return this.$store.getters.containerDataId(this.id);
       },
       containerName() {
         return this.container.name;
@@ -222,13 +222,13 @@
         return this.$store.getters.appconfig.storage.enabled === 'True';
       },
       canDelete() {
-        return this.me.abilities.includes('ct_delete');
+        return this.me.abilities.includes('containers_delete');
       },
       canClone() {
-        return this.me.abilities.includes('ct_clone');
+        return this.me.abilities.includes('containers_create');
       },
       canUpdate() {
-        return this.me.abilities.includes('ct_update');
+        return this.me.abilities.includes('containers_update');
       },
       price() {
         const cpu = this.getPrice.cpu * this.cpu; // 1
@@ -251,7 +251,7 @@
       sendRequestUpgrade() {
         if (this.canUpdate) {
           this.$store.dispatch('upgradeContainer', { id: this.id, name: this.containerName, cpu: this.cpu, memory: this.memory, disk: this.disk });
-          this.$store.dispatch('notify', { id: 0, message: 'Your container was upgraded', color: '' });
+          this.$store.dispatch('notify', { id: 0, message: `${this.$i18n.t('notifications.container_upgraded')}`, color: '' });
         } else {
           const data = {
             id: this.id,
@@ -262,9 +262,8 @@
             period: this.period,
             price: this.price
           };
-          console.log(data);
           this.$store.dispatch('createRequests', { action: 'upgrade', message: `Upgrade container ${this.name}`, status: 'waiting', meta_data: data });
-          this.$store.dispatch('notify', { id: 0, message: 'Your request was created', color: '' });
+          this.$store.dispatch('notify', { id: 0, message: `${this.$i18n.t('notifications.container_created')}`, color: '' });
           this.active = false;
         }
       },
@@ -273,29 +272,28 @@
           containerName: this.containerName,
           containerClone: this.containerClone,
           cpu: this.container.config.limits_cpu,
-          memory: `${this.container.config.limits_memory_mb}MB`,
+          memory: this.container.config.limits_memory,
           disk: this.container.config.limits_disk ? `${this.container.config.limits_disk}GB` : '0GB'
         };
-        console.log(data);
         if (this.canClone) {
           this.$store.dispatch('cloneContainer', data);
           this.$store.dispatch('notify', { id: 0, message: 'Your container was cloned', color: '' });
         } else {
           this.$store.dispatch('createRequests', { action: 'clone', message: `Clone container ${this.name}`, status: 'waiting', meta_data: data });
-          this.$store.dispatch('notify', { id: 0, message: 'Your request was created', color: '' });
+          this.$store.dispatch('notify', { id: 0, message: `${this.$i18n.t('notifications.request_created')}`, color: '' });
           this.active = false;
         }
       },
       sendRequestDestroy() {
         if (this.canDelete) {
           this.$store.dispatch('deleteContainer', this.id);
-          this.$store.dispatch('notify', { id: 0, message: 'Your container was deleted', color: '' });
+          this.$store.dispatch('notify', { id: 0, message: `${this.$i18n.t('notifications.container_deleted')}`, color: '' });
         } else {
           const data = {
             id: this.id
           };
           this.$store.dispatch('createRequests', { action: 'delete', message: `Delete container ${this.name}`, status: 'waiting', meta_data: data });
-          this.$store.dispatch('notify', { id: 0, message: 'Your request was created', color: '' });
+          this.$store.dispatch('notify', { id: 0, message: `${this.$i18n.t('notifications.request_created')}`, color: '' });
           this.active = false;
         }
       }

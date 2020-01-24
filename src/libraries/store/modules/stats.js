@@ -11,7 +11,7 @@ export const STATS_FAILURE = 'STATS_FAILURE';
  * @type {Object}
  */
 const statsState = {
-  loading: true,
+  loading: false,
   stats: {}
 };
 
@@ -53,8 +53,8 @@ const actions = {
 
     return StatsService.get()
       .then((res) => {
-        // console.log(res.stats[1]);
-        commit(STATS_SUCCESS, { stats: res.stats });
+        // console.log(res);
+        commit(STATS_SUCCESS, { stats: res.data.data });
       }).catch((err) => {
         commit(STATS_FAILURE, err);
       });

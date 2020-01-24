@@ -9,7 +9,7 @@ export const APPCONFIG_FAILURE = 'APPCONFIG_FAILURE';
  * @type {Object}
  */
 const appconfigState = {
-  loading: true,
+  loading: false,
   appconfig: {}
 };
 
@@ -18,7 +18,7 @@ const appconfigState = {
  * @type {Object}
  */
 const appconfigGetters = {
-  appconfig: state => state.appconfig[1] ? state.appconfig[1].attributes : state.appconfig // eslint-disable-line no-confusing-arrow, max-len
+  appconfig: state => state.appconfig // eslint-disable-line no-confusing-arrow, max-len
 };
 
 /**
@@ -48,8 +48,7 @@ const actions = {
 
     return AppConfigService.get()
       .then((res) => {
-        commit(APPCONFIG_SUCCESS, { appconfig: res.lxdconfig }); // it is named lxdconfig in backend
-        // console.log(res);
+        commit(APPCONFIG_SUCCESS, { appconfig: res.data.data }); // it is named lxdconfig in backend
       }).catch((err) => {
         commit(APPCONFIG_FAILURE, err);
       });

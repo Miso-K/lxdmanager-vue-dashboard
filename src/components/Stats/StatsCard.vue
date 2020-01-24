@@ -1,6 +1,6 @@
 <template>
   <v-flex :[flex]="true" sm6 xs12>
-    <v-card class="mb-3 mx-auto" height="130">
+    <v-card class="mb-0 ma-0" height="130">
       <v-sheet
         class="v-sheet--offset mx-auto"
         :color=color

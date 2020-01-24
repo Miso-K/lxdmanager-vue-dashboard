@@ -1,7 +1,5 @@
 import { HostService } from '../../services';
 
-const hostId = 1;
-
 export const HOST_REQUEST = 'HOST_REQUEST';
 export const HOST_SUCCESS = 'HOST_SUCCESS';
 export const HOST_FAILURE = 'HOST_FAILURE';
@@ -11,7 +9,7 @@ export const HOST_FAILURE = 'HOST_FAILURE';
  * @type {Object}
  */
 const hostState = {
-  loading: true,
+  loading: false,
   host: {}
 };
 
@@ -20,7 +18,7 @@ const hostState = {
  * @type {Object}
  */
 const hostGetters = {
-  host: state => state.host[hostId] ? state.host[hostId].attributes : state.host // eslint-disable-line no-confusing-arrow, max-len
+  host: state => state.host // eslint-disable-line no-confusing-arrow, max-len
 };
 
 /**
@@ -51,7 +49,7 @@ const actions = {
     return HostService.get()
       .then((res) => {
         // console.log(res);
-        commit(HOST_SUCCESS, { host: res.host });
+        commit(HOST_SUCCESS, { host: res.data.data });
       }).catch((err) => {
         commit(HOST_FAILURE, err);
       });

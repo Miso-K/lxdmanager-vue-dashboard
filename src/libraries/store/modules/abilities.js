@@ -11,7 +11,7 @@ export const ABILITIES_FAILURE = 'ABILITIES_FAILURE';
  */
 const abilitiesState = {
   abilities: {},
-  loading: true
+  loading: false
 };
 
 /**
@@ -53,6 +53,7 @@ const abilitiesActions = {
     commit(ABILITIES_REQUEST);
 
     return AbilitiesService.get().then((res) => {
+      res.abilities = res.data.data;
       commit(ABILITIES_SUCCESS, res);
     }).catch((err) => {
       commit(ABILITIES_FAILURE, err);

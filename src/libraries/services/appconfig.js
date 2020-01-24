@@ -21,7 +21,6 @@ class AppConfig {
   postcerts(options) {
     return axios.post(`/${this.base}/lxdcerts`, options);
   }
-
 }
 
 export default new AppConfig('lgw');

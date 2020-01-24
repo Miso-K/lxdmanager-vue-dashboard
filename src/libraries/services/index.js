@@ -13,6 +13,8 @@ import StatsService from './stats';
 import HostService from './host';
 import AppConfigService from './appconfig';
 import CheckconfigService from './checkconfig';
+import ImagesService from './images';
+import OperationsService from './operations';
 
 export {
   AbilitiesService,
@@ -25,5 +27,7 @@ export {
   StatsService,
   HostService,
   AppConfigService,
-  CheckconfigService
+  CheckconfigService,
+  OperationsService,
+  ImagesService
 };

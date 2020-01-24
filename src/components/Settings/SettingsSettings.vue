@@ -1,13 +1,9 @@
 <template>
-  <v-card
-    class="hide-overflow"
-  >
-    <v-toolbar
-      card
+  <v-card flat>
+    <v-app-bar
+      flat
       height="50px"
     >
-      <v-icon>mdi-account</v-icon>
-      <v-toolbar-title class="font-weight-light subheading">{{ $t('settings.settings.title') }}</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn
         fab
@@ -17,7 +13,7 @@
         <v-icon v-if="isEditing">close</v-icon>
         <v-icon v-else>edit</v-icon>
       </v-btn>
-    </v-toolbar>
+    </v-app-bar>
     <v-card-text>
       <v-select
         :disabled="!isEditing"
@@ -128,9 +124,9 @@
         // console.log(this.emailEnabled);
         if (this.emailEnabled) {
           return [
-          { text: 'None', value: 'none' },
-          { text: 'E-mail', value: 'email' },
-          { text: 'TOTP', value: 'totp' }
+            { text: 'None', value: 'none' },
+            { text: 'E-mail', value: 'email' },
+            { text: 'TOTP', value: 'totp' }
           ];
         }
         return [
@@ -159,7 +155,7 @@
       },
       save() {
         this.isEditing = !this.isEditing;
-        this.$store.dispatch('notify', { id: 0, message: 'Your language has changed', color: 'info' });
+        this.$store.dispatch('notify', { id: 0, message: `${this.$i18n.t('notifications.language_changed')}`, color: 'info' });
         this.$store.dispatch('updateMe', this.data);
         setTimeout(() => {
           this.$store.dispatch('fetchMe');
@@ -169,6 +165,7 @@
         this.$store.dispatch('otpMe');
         this.dialog = true;
         this.data.otp_enabled = true;
+        console.log(this.$store.state.users);
         setTimeout(() => {
           this.otpReady = true;
           this.otpUri = this.$store.state.users.otp.otp_uri;

@@ -60,7 +60,7 @@ class ContainerResource extends Resource {
 
   operation(id) {
     console.log(this.base);
-    return axios.get(`/operations/${id}/wait`);
+    return axios.get(`/lxc/operations/${id}`);
   }
 }
 

@@ -52,7 +52,9 @@ if (module.hot) {
     './modules/host',
     './modules/requests',
     './modules/appconfig',
-    './modules/checkconfig'
+    './modules/checkconfig',
+    './modules/images',
+    './modules/operations'
   ], () => {
     store.hotUpdate({
       getters: require('./getters'),
@@ -69,6 +71,8 @@ if (module.hot) {
         host: require('./modules/host'),
         appconfig: require('./modules/appconfig'),
         checkconfig: require('./modules/checkconfig'),
+        images: require('./modules/images'),
+        operations: require('./modules/operations'),
         stats: require('./modules/stats').default
       }
     });

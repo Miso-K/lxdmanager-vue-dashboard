@@ -27,19 +27,14 @@
     </v-card-title>
     <v-data-table
       v-if="items"
-      :headers="headers"
+      :headers="computedHeaders"
       :items="items"
-      :search="search"
-      :pagination.sync="pagination">
-      <template slot="items" slot-scope="props">
-        <td class="pa-1"><v-btn color="primary" small left :to="'/container/'+props.item.id">{{ $t('containers.actions.manage') }}</v-btn></td>
-        <td class="pa-1"><v-icon :color="colorstate(props.item.status)">{{ iconstate(props.item.status) }}</v-icon></td>
-        <td class="pa-1">{{ props.item.name }}</td>
-        <td class="pa-1" align="center">{{ props.item.config.limits_cpu }}</td>
-        <td class="pa-1" align="center">{{ props.item.config.limits_memory }}</td>
-        <td class="pa-1" align="center">{{ props.item.config.limits_disk ? props.item.config.limits_disk : '-'}}</td>
-        <td class="pa-1">{{ props.item.ips[0] ? props.item.ips[0].address : '-' }}</td>
-        <td class="pa-1">{{ props.item.ips[1] ? props.item.ips[1].address : '-' }}</td>
+      :search="search">
+      <template v-slot:item.action="{ item }">
+        <v-btn color="primary" small left :to="'/container/'+item.id">{{ $t('containers.actions.manage') }}</v-btn>
+      </template>
+      <template v-slot:item.status="{ item }">
+        <v-icon :color="colorstate(item.status)">{{ iconstate(item.status) }}</v-icon>
       </template>
     </v-data-table>
   </v-card>
@@ -59,7 +54,7 @@
         search: '',
         pagination: {
           sortBy: 'name',
-          rowsPerPage: 10
+          rowsPerPage: 15
         },
         dialog: false,
         dialogDelete: false,
@@ -67,14 +62,14 @@
           {
             text: this.$t('actions.name'),
             align: 'left',
-            value: 'state',
+            value: 'action',
             class: 'pl-4',
             sortable: false
           },
           {
             text: this.$t('stats.status'),
             align: 'left',
-            value: 'state',
+            value: 'status',
             class: 'pl-0',
             sortable: false
           },
@@ -87,33 +82,34 @@
           {
             text: `${this.$tc('stats.cpu', 1)}·s`,
             align: 'left',
-            value: 'cpus.formatted',
+            value: 'config.limits_cpu',
             sortable: false,
             class: 'pa-1'
           },
           {
             text: this.$t('stats.memory_limit'),
             align: 'left',
-            value: 'memory.limit.raw',
+            value: 'config.limits_memory',
             class: 'pa-1'
           },
           {
             text: this.$t('stats.disk_limit'),
             align: 'left',
-            value: 'disk.limit.raw',
+            value: 'config.limits_disk',
+            disk: false,
             class: 'pa-1'
           },
           {
             text: 'IPv4',
             align: 'left',
-            value: 'ips',
+            value: 'ips[0].address',
             sortable: false,
             class: 'pa-1'
           },
           {
             text: 'IPv6',
             align: 'left',
-            value: 'ips',
+            value: 'ips[1].address',
             sortable: false,
             class: 'pa-1'
           }
@@ -160,14 +156,24 @@
         }
       },
       items() {
-        // console.log(this.me);
+        // console.log(this.$store.getters.containersTableData);
+        // console.log(this.$store.getters['auth/me']);
         return this.$store.getters.containersTableData;
       },
       me() {
         return this.$store.getters['auth/me'];
       },
       canCreate() {
-        return this.me.abilities.includes('ct_create');
+        return this.me.abilities.includes('containers_create');
+      },
+      computedHeaders() {
+        return this.headers.filter(h => !(h.disk === this.showDisk) && !(h.price === this.showPrice));
+      },
+      showPrice() {
+        return this.$store.getters.appconfig.price.enabled === 'True';
+      },
+      showDisk() {
+        return this.$store.getters.appconfig.storage.enabled === 'True';
       }
     },
     watch: {
@@ -275,16 +281,19 @@
         }
       },
       refreshData() {
-        // this.fetchContainer(this.id);
         this.$store.dispatch('fetchContainers');
       }
     },
-    mounted() {
+    created() {
+      if (!this.$store.getters.containersTableData) {
+        this.$store.dispatch('fetchContainers');
+        setTimeout(() => {
+          this.editedItem = Object.assign({}, this.defaultItem);
+          this.editedIndex = -1;
+        }, 300);
+        console.log('fetched');
+      }
       this.$store.dispatch('fetchContainers');
-      setTimeout(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
-      }, 300);
     }
   };
 </script>

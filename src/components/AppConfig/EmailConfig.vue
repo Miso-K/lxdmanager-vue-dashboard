@@ -3,7 +3,8 @@
       <v-layout row wrap>
         <v-flex xs12 sm12 md12 lg12>
 
-          <v-card flat
+          <v-card
+            flat
         class="hide-overflow"
         color="lighteen-1"
       >
@@ -22,29 +23,53 @@
           </v-btn>
         </v-app-bar>
               <v-card-text>
+                <v-checkbox :disabled="!isEditing" v-model="showEmail" label="Enable email"></v-checkbox>
                 <v-text-field
                   :disabled="!isEditing"
-                  v-model="data.remote.endpoint"
-                  label="LXD host address"
-                  placeholder="https://127.0.0.1:8443"
+                  v-model="data.smtp.sender"
+                  label="SMTP sender"
+                   placeholder="app@lxdmanager.com"
                   required
                 ></v-text-field>
-                <v-select
-                  :disabled="!isEditing"
-                  :items="verify"
-                  v-model="data.remote.verify"
-                  label="Verify certificate (require signed certificate)"
-                  placeholder="False"
-                ></v-select>
                 <v-text-field
                   :disabled="!isEditing"
-                  v-model="data.app.production_name"
-                  label="APP production name"
+                  v-model="data.smtp.recipient"
+                  label="SMTP recipient (eg. support mail)"
                   required
-                  placeholder="LXDmanager.com"
+                  placeholder="support@lxdmanager.com"
                 ></v-text-field>
-                <v-btn color="orange" :disabled="!isEditing" :dark="isEditing" small @click="dialog = true">Add LXD connection certificates</v-btn>
-                <v-btn color="green" :disabled="!isEditing" :dark="isEditing" small @click=checkConfig()>Test LXD connection</v-btn>
+                <v-text-field
+                  :disabled="!isEditing"
+                  v-model="data.smtp.server"
+                  label="SMTP server"
+                  required
+                  placeholder="mail.lxdmanager.com"
+                ></v-text-field>
+                <v-text-field
+                  :disabled="!isEditing"
+                  v-model="data.smtp.port"
+                  label="SMTP port"
+                  required
+                  placeholder="587"
+                ></v-text-field>
+                <v-text-field
+                  :disabled="!isEditing"
+                  v-model="data.smtp.login"
+                  label="SMTP login"
+                  required
+                  placeholder="app@lxdmanager.com"
+                ></v-text-field>
+                <v-text-field
+                  :disabled="!isEditing"
+                  :append-icon="show1 ? 'visibility' : 'visibility_off'"
+                  v-model="data.smtp.password"
+                  label="SMTP password"
+                  required
+                  placeholder="*********"
+                  :type="show1 ? 'text' : 'password'"
+                  @click:append="show1 = !show1"
+                ></v-text-field>
+                <v-btn v-if="showEmail" :disabled="!isEditing" :dark="isEditing" color="green" small @click=sendTestEmail()>Send test email</v-btn>
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
@@ -127,13 +152,9 @@
         dialog: false,
         dialogTest: false,
         data: {
-          remote: {
-            endpoint: '',
-            verify: ''
-          },
-          app: {
-            production_name: ''
-          },
+          endpoint: '',
+          verify: '',
+          production_name: '',
           smtp: {
             enabled: false,
             sender: '',
@@ -169,8 +190,7 @@
     },
     computed: {
       checkconfig() {
-        // console.log(this.$store.getters.checkconfig);
-        return this.$store.getters.checkconfig ? this.$store.getters.checkconfig : '';
+        return this.$store.getters.checkconfig[0] ? this.$store.getters.checkconfig[0].attributes : '';
       }
     },
     methods: {
@@ -217,7 +237,6 @@
       setTimeout(() => {
         this.$store.dispatch('fetchAppConfig').then(() => {
           this.data = Object.assign({}, this.data, this.$store.getters.appconfig);
-          // console.log(this.data);
           this.showPrice = this.data.price.enabled === 'True';
           this.showStorage = this.data.storage.enabled === 'True';
           this.showEmail = this.data.smtp.enabled === 'True';

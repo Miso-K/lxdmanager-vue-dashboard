@@ -12,7 +12,6 @@ class Host {
   get() { // eslint-disable-line class-methods-use-this
     return axios.get(`/${this.base}`);
   }
-
 }
 
 export default new Host('lxc/resources');

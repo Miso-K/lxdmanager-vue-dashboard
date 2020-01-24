@@ -12,7 +12,7 @@
         ></stats-card>
         <stats-card
           flex="md4"
-          icon="data_usage"
+          icon="mdi-cpu-64-bit"
           color="green"
           :value="vcpus"
           :unit="$t('stats.units')"
@@ -91,7 +91,7 @@
       }
     },
     mounted() {
-      console.log(this.$store.getters.appconfig);
+      // console.log(this.$store.getters.appconfig);
       this.$store.dispatch('fetchStats');
       this.$store.dispatch('fetchAppConfig');
     },

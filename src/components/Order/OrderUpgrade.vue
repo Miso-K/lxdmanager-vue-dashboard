@@ -82,8 +82,8 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" flat @click.native="active = false">{{ $t('actions.close') }}</v-btn>
-          <v-btn color="green darken-1" flat @click="sendRequest">{{ $t('actions.create') }}</v-btn>
+          <v-btn color="blue darken-1" text @click.native="active = false">{{ $t('actions.close') }}</v-btn>
+          <v-btn color="green darken-1" text @click="sendRequest">{{ $t('actions.create') }}</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -138,7 +138,7 @@
       },
       containersId() {
         const containers = this.$store.getters.containersTableData;
-      // console.log(containers.map(container => container.id));
+        // console.log(containers.map(container => container.id));
         if (containers) {
           return containers.map(container => ({
             text: container.name,
@@ -148,7 +148,7 @@
         return '';
       },
       containerName() {
-        return this.$store.getters.containerData(this.selectedContainer).name;
+        return this.$store.getters.containerDataId(this.selectedContainer).name;
       },
       isValid() {
         return !!this.form.name.invalid;
@@ -199,9 +199,10 @@
         return containers.map(x => findName(inventory, x));
       },
       getContainerConfig() {
-        console.log(this.selectedContainer);
+        // console.log(this.selectedContainer);
+        // console.log(this.$store.getters.containerDataId(this.selectedContainer).config);
         this.name = this.containerName;
-        const config = this.$store.getters.containerData(this.selectedContainer).config;
+        const config = this.$store.getters.containerDataId(this.selectedContainer).config;
         // console.log(config);
         this.cpu = config.limits_cpu > 1 ? config.limits_cpu : 1;
         this.memory = config.limits_memory_mb > 512 ? config.limits_memory_mb : 512;
@@ -212,11 +213,6 @@
         this.$store.dispatch('closeContainerUpgradeDialog');
       },
       sendRequest() {
-        console.log(this.name);
-        console.log(this.cpu);
-        console.log(this.memory);
-        console.log(this.disk);
-
         if (this.name !== '') {
           const data = {
             id: this.selectedContainer,
@@ -227,9 +223,9 @@
             period: this.period,
             price: this.price
           };
-          console.log(data);
+          // console.log(data);
           this.$store.dispatch('createRequests', { action: 'upgrade', message: `Upgrade container ${this.name}`, status: 'waiting', meta_data: data });
-          this.$store.dispatch('notify', { id: 0, message: 'Your request was created', color: '' });
+          this.$store.dispatch('notify', { id: 0, message: `${this.$i18n.t('notifications.request_created')}`, color: '' });
           this.active = false;
         }
       }

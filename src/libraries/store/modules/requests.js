@@ -12,7 +12,7 @@ export const REQUESTS_FAILURE = 'REQUESTS_FAILURE';
  */
 const requestsState = {
   requests: {},
-  loading: true
+  loading: false
 };
 
 /**
@@ -23,7 +23,7 @@ const requestsGetters = {
   requests: state => state.requests,
   request: state => id => state.requests[id],
   requestsTableData(state, getters) {
-    if (Object.keys(getters.requests).length === 0) return false;
+    // if (Object.keys(getters.requests).length === 0) return false;
     return _map(getters.requests, request => formatRequest(request)); // eslint-disable-line max-len
   }
 };
@@ -56,6 +56,7 @@ const actions = {
     return RequestsService.get()
       .then((res) => {
         // console.log(res);
+        res.requests = res.data.data;
         commit(REQUESTS_SUCCESS, res);
       }).catch((err) => {
         commit(REQUESTS_FAILURE, err);
@@ -68,12 +69,10 @@ const actions = {
     const obj = {
       data: {
         type: 'requests',
-        attributes: {
-          action,
-          message,
-          status,
-          meta_data
-        }
+        action,
+        message,
+        status,
+        meta_data
       }
     };
     console.log(obj);
@@ -91,16 +90,23 @@ const actions = {
     const obj = {
       data: {
         type: 'requests',
-        attributes: {
-          message,
-          status
-        }
+        message,
+        status
       }
     };
     console.log(obj);
     return RequestsService.put(id, obj).then((res) => {
       console.log(res);
       commit(REQUESTS_SUCCESS, res.data);
+    }).catch((err) => {
+      commit(REQUESTS_FAILURE, err);
+    });
+  },
+
+  deleteRequests({ commit }, id) {
+    commit(REQUESTS_REQUEST);
+    RequestsService.delete(id).then((res) => {
+      commit(REQUESTS_SUCCESS, res);
     }).catch((err) => {
       commit(REQUESTS_FAILURE, err);
     });

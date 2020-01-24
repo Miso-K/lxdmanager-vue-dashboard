@@ -20,13 +20,21 @@
           <v-card-text>This action cannot by undo.</v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="green darken-1" flat @click="dialogDelete = false">Disagree</v-btn>
-            <v-btn color="red darken-1" flat @click.native="deleteItem" @click="dialogDelete = false">Agree</v-btn>
+            <v-btn color="green darken-1" text @click="dialogDelete = false">Disagree</v-btn>
+            <v-btn color="red darken-1" text @click.native="deleteItem" @click="dialogDelete = false">Agree</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
       <v-dialog v-model="dialog" max-width="700px">
-      <v-btn color="primary" dark slot="activator" class="mb-1">New user</v-btn>
+        <template v-slot:activator="{ on }">
+          <v-btn
+            color="primary"
+            dark
+            v-on="on"
+          >
+            New user
+          </v-btn>
+        </template>
       <v-card>
         <v-form ref="form" v-model="valid" lazy-validation>
         <v-card-title>
@@ -84,7 +92,7 @@
                 ></v-text-field>
               </v-flex>
               <v-flex xs12 sm6 md4>
-                <v-btn outline block small @click="generatePassword(10)">Generate password</v-btn>
+                <v-btn outlined block small @click="generatePassword(10)">Generate password</v-btn>
               </v-flex>
               <v-flex xs12 sm12 md12>
                 <v-checkbox
@@ -110,7 +118,7 @@
                   slot-scope="data"
                 >
                   <v-chip
-                    :selected="data.selected"
+                    :input-value="data.selected"
                     close
                     class="chip--select-multi"
                     @input="removeContainer(data.item)"
@@ -133,8 +141,8 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" flat @click.native="close">Cancel</v-btn>
-          <v-btn color="blue darken-1" flat @click.native="save" :disabled="!valid" >Save</v-btn>
+          <v-btn color="blue darken-1" text @click.native="close">Cancel</v-btn>
+          <v-btn color="blue darken-1" text @click.native="save" :disabled="!valid" >Save</v-btn>
         </v-card-actions>
         </v-form>
       </v-card>
@@ -152,32 +160,24 @@
       v-if="items"
       :headers="headers"
       :items="items"
-      :search="search"
-      :pagination.sync="pagination">
-      <template slot="items" slot-scope="props">
-        <td>{{ props.item.id }}</td>
-        <td>{{ props.item.username }}</td>
-        <td>{{ props.item.email }}</td>
-        <td>{{ props.item.name }}</td>
-        <td>{{ props.item.admin }}</td>
-        <td>
-          <span v-for="element in getGroupsName(props.item.groups)">
-            <v-chip small>{{ element }}</v-chip>
-          </span>
-        </td>
-        <td>
-          <span v-for="element in getContainersName(props.item.containers)">
-            <v-chip small>{{ element }}</v-chip>
-          </span>
-        </td>
-        <td class="justify-left layout px-0">
-          <v-btn icon class="mx-0" @click="editItem(props.item)">
-            <v-icon color="teal">edit</v-icon>
-          </v-btn>
-          <v-btn icon class="mx-0" @click="deleteDialog(props.item)">
-            <v-icon color="pink">delete</v-icon>
-          </v-btn>
-        </td>
+      :search="search">
+      <template v-slot:item.groups="{ item }">
+        <span v-if="item.groups" v-for="element in item.groups">
+          <v-chip small>{{ element.name }}</v-chip>
+        </span>
+      </template>
+      <template v-slot:item.containers="{ item }">
+        <span v-if="item.containers" v-for="element in item.containers">
+          <v-chip small>{{ element.name }}</v-chip>
+        </span>
+      </template>
+      <template v-slot:item.actions="{ item }">
+        <v-btn icon class="mx-0" @click="editItem(item)">
+          <v-icon color="teal">edit</v-icon>
+        </v-btn>
+        <v-btn icon class="mx-0" @click="deleteDialog(item)">
+          <v-icon color="pink">delete</v-icon>
+        </v-btn>
       </template>
       <template slot="no-data">
         <v-btn color="primary" @click="initialize">Reset</v-btn>
@@ -243,7 +243,7 @@
           },
           {
             text: 'Actions',
-            value: 'name',
+            value: 'actions',
             sortable: false
           }
         ],
@@ -328,16 +328,6 @@
         const index = this.editedItem.containers.indexOf(item.value);
         if (index >= 0) this.editedItem.containers.splice(index, 1);
       },
-      getContainersName(containers) {
-        function findName(array, id) {
-          return array.find(item => item.value === id).text;
-        }
-        const inventory = this.containersId;
-        return containers.map(x => findName(inventory, x));
-      },
-      getGroupsName(groups) {
-        return groups.map(group => this.$store.getters.group(group.id).attributes.name);
-      },
       editItem(item) {
         this.editedIndex = this.items.indexOf(item);
         this.editedItem = Object.assign({}, item);
@@ -407,6 +397,7 @@
       }
     },
     mounted() {
+      // console.log(this.$store.getters.usersTableData);
       this.$store.dispatch('fetchUsers');
     }
   };

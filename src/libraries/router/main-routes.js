@@ -13,6 +13,13 @@ export default [
     meta: { auth: true },
     component: resolve => require.ensure([], () => resolve(require('../../views/pages/Containers')), 'containers')
   },
+  // - Containers
+  {
+    name: 'images',
+    path: '/images',
+    meta: { auth: true },
+    component: resolve => require.ensure([], () => resolve(require('../../views/pages/Images')), 'images')
+  },
   // - Users
   {
     name: 'users',
@@ -31,7 +38,7 @@ export default [
   {
     name: 'settings',
     path: '/settings',
-    meta: { auth: 'me_edit' },
+    meta: { auth: 'me_update' },
     component: resolve => require.ensure([], () => resolve(require('../../views/pages/Settings')), 'settings')
   },
   // - Settings
@@ -52,7 +59,7 @@ export default [
   {
     name: 'appconfig',
     path: '/appconfig',
-    meta: { auth: 'lxd_config' },
+    meta: { auth: 'config_infos' },
     component: resolve => require.ensure([], () => resolve(require('../../views/pages/AppConfig')), 'appconfig')
   },
   // - Requests

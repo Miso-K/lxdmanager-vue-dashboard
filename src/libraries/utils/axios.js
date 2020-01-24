@@ -1,5 +1,6 @@
+/* eslint-disable max-len */
 import axios from 'axios';
-import normalize from 'json-api-normalizer';
+// import normalize from 'json-api-normalizer';
 import storage from './storage';
 import { STORAGE_TOKEN_KEY, STORAGE_REFRESH_TOKEN_KEY } from '../store/modules/auth';
 // import { STORAGE_REQUEST_TOKEN_KEY } from '../store/modules/auth';
@@ -17,10 +18,11 @@ const instance = axios.create({
 // Redirect to '/login' if API returns 401
 instance.interceptors.response.use((response) => {
   // console.log(response);
-  // const res = response.config.url.includes('auth')
-  // || response.config.url.includes('containers') ? response : normalize(response.data);
-  const res = response.config.url.includes('auth') ? response : normalize(response.data, { camelizeKeys: false });
+  // const res = response.config.url.includes('auth') || response.config.url.includes('users') || response.config.url.includes('me') || response.config.url.includes('abilities') || response.config.url.includes('groups') || response.config.url.includes('containers') || response.config.url.includes('requests') || response.config.url.includes('operations') || response.config.url.includes('resources') || response.config.url.includes('stats') || response.config.url.includes('lxdconfig') || response.config.url.includes('images') ? response : normalize(response.data, { camelizeKeys: false });
+  // const res = response.config.url.includes('auth') ? response : normalize(response.data, { camelizeKeys: false });
+  // const res = response.config.url.includes('auth') ? response : response.data;
   // console.log(res);
+  const res = response;
   return res;
 }, (err) => {
   console.log('[AXIOS:response:error]', err, err.response);

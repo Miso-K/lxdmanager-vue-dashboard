@@ -1,22 +1,37 @@
 <template>
     <v-container grid-list-md>
-      <v-layout row wrap>
-        <v-flex d-flex xs12 md8>
-          <settings-profile></settings-profile>
-        </v-flex>
-        <v-flex d-flex xs12 md4>
-          <v-layout wrap>
-            <v-flex d-flex md12>
-              <settings-settings></settings-settings>
-            </v-flex>
-            <v-flex d-flex md12>
-              <settings-change-password></settings-change-password>
-            </v-flex>
-          </v-layout>
-        </v-flex>
-      </v-layout>
+  <v-tabs icons-and-text fixed-tabs>
+    <v-tab href="#tab-1">
+      {{ $t('settings.profile.title') }}
+      <v-icon>mdi-account</v-icon>
+    </v-tab>
+    <v-tab href="#tab-2">
+      {{ $t('settings.settings.title') }}
+      <v-icon>settings</v-icon>
+    </v-tab>
+    <v-tab href="#tab-3">
+      {{ $t('settings.password.title') }}
+      <v-icon>mdi-account-lock</v-icon>
+    </v-tab>
+    <v-tab-item
+      v-for="i in 3"
+      :key="i"
+      :value="'tab-' + i"
+    >
+      <v-card v-if="i === 1" flat>
+         <settings-profile></settings-profile>
+      </v-card>
+      <v-card v-if="i === 2" flat>
+        <settings-settings></settings-settings>
+      </v-card>
+      <v-card v-if="i === 3" flat>
+        <settings-change-password></settings-change-password>
+      </v-card>
+    </v-tab-item>
+  </v-tabs>
     </v-container>
 </template>
+
 
 <script>
   // import StatsCard from './StatsCard';

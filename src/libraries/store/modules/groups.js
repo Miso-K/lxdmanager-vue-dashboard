@@ -11,7 +11,7 @@ export const GROUPS_FAILURE = 'GROUPS_FAILURE';
  */
 const groupsState = {
   groups: {},
-  loading: true
+  loading: false
 };
 
 /**
@@ -53,6 +53,7 @@ const groupsActions = {
     commit(GROUPS_REQUEST);
 
     return GroupsService.get().then((res) => {
+      res.groups = res.data.data;
       commit(GROUPS_SUCCESS, res);
     }).catch((err) => {
       commit(GROUPS_FAILURE, err);
@@ -67,23 +68,19 @@ const groupsActions = {
     const obj = {
       data: {
         type: 'groups',
-        attributes: {
-          name: data.name
-        },
+        name: data.name,
         relationships: {
-          abilities: {
-            data: data.abilities ? data.abilities.map(a => ({
-              type: 'ability',
-              id: a
-            })) : []
-          }
+          abilities: data.abilities ? data.abilities.map(a => ({
+            type: 'ability',
+            id: a
+          })) : []
         }
       }
     };
     // console.log(obj);
     return GroupsService.post(obj).then((res) => {
       // console.log(res);
-      commit(GROUPS_SUCCESS, res.data);
+      commit(GROUPS_SUCCESS, res.data.data);
     }).catch((err) => {
       commit(GROUPS_FAILURE, err);
     });
@@ -98,23 +95,19 @@ const groupsActions = {
       data: {
         type: 'groups',
         id: data.id,
-        attributes: {
-          name: data.name
-        },
+        name: data.name,
         relationships: {
-          abilities: {
-            data: data.abilities ? data.abilities.map(a => ({
-              type: 'ability',
-              id: a
-            })) : []
-          }
+          abilities: data.abilities ? data.abilities.map(a => ({
+            type: 'ability',
+            id: a
+          })) : []
         }
       }
     };
     // console.log(obj);
     return GroupsService.put(data.id, obj).then((res) => {
       // console.log(res);
-      commit(GROUPS_SUCCESS, res.data);
+      commit(GROUPS_SUCCESS, res.data.data);
     }).catch((err) => {
       commit(GROUPS_FAILURE, err);
     });

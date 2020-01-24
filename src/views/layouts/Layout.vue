@@ -1,41 +1,34 @@
 <template>
-  <transition name="fade">
     <v-app>
       <v-navigation-drawer stateless app :mini-variant="mini" v-model="drawer">
-        <v-list class="pa-0">
+        <v-list dense>
           <v-list-item>
-            <v-list-tile avatar tag="div">
-              <v-list-tile-avatar>
-                <img :src="avatar" />
+            <v-list-tile-avatar>
+                <v-img :src="avatar" contain height="30" />
               </v-list-tile-avatar>
-              <v-list-tile-content>
-                <v-list-tile-title>{{ me.name }}<v-chip v-if="me.admin" label small>Admin</v-chip></v-list-tile-title>
-              </v-list-tile-content>
-            </v-list-tile>
+            <v-list-tile-content>
+              <v-list-tile-title>{{ me.name }} <v-chip v-if="me.admin" label small>Admin</v-chip></v-list-tile-title>
+            </v-list-tile-content>
           </v-list-item>
         </v-list>
-        <v-list class="pt-0" dense>
+        <v-list dense>
           <v-divider></v-divider>
-          <v-list-item v-for="item in items" :key="item">
-            <v-list-tile v-if="item.user || me.admin" :to="item.to">
-              <v-list-tile-action>
-                <v-icon>{{ item.icon }}</v-icon>
-              </v-list-tile-action>
-              <v-list-tile-content>
-                <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-              </v-list-tile-content>
-            </v-list-tile>
+          <v-list-item color="primary" v-for="item in items" v-if="item.user || me.admin" :key="item.title" link :to="item.to">
+            <v-list-item-action>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+            </v-list-item-content>
           </v-list-item>
           <v-divider></v-divider>
-          <v-list-item>
-            <v-list-tile to="/logout">
-              <v-list-tile-action>
-                <v-icon>exit_to_app</v-icon>
-              </v-list-tile-action>
-              <v-list-tile-content>
-                <v-list-tile-title>{{ $t('menu.sign_out') }}</v-list-tile-title>
-              </v-list-tile-content>
-            </v-list-tile>
+          <v-list-item link to="/logout">
+            <v-list-item-action>
+              <v-icon>exit_to_app</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-tile-title>{{ $t('menu.sign_out') }}</v-list-tile-title>
+            </v-list-item-content>
           </v-list-item>
         </v-list>
         <v-btn v-if="!mini" icon absolute right style="bottom: 18px" @click.native.stop="mini = !mini">
@@ -46,22 +39,19 @@
         </v-btn>
       </v-navigation-drawer>
       <!--<v-toolbar fixed class="lwp-toolbar" app dark height="55px">-->
-        <v-toolbar fixed class="lwp-toolbar" app dark extended extension-height="7" height="50px">
-          <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-        <v-toolbar-title>
-          <router-link to="/" tabindex="-1">
-            <img class="logo" src="../../assets/logo_lxd-manager.png" />
-          </router-link>
-        </v-toolbar-title>
-        <v-progress-linear v-if="loading" slot="extension" :indeterminate="true" class="ma-0"></v-progress-linear>
-      </v-toolbar>
-      <main>
-        <v-content>
-          <v-container fluid>
-            <router-view></router-view>
-          </v-container>
-        </v-content>
-      </main>
+
+      <v-app-bar app color="deep-purple darken-4" dark extended extension-height="8" height="57px">
+        <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
+        <v-img :src="require('@/assets/logo_lxd-manager.png')" contain height="30" ></v-img>
+        <loader slot="extension"></loader>
+      </v-app-bar>
+
+      <v-content>
+        <v-container fluid>
+          <router-view></router-view>
+        </v-container>
+      </v-content>
+
       <notifications></notifications>
       <relogin></relogin>
       <v-footer class="pa-3" fixed inset>
@@ -69,7 +59,6 @@
         <div>&copy; lxdmanager.com {{ new Date().getFullYear() }}</div>
       </v-footer>
     </v-app>
-  </transition>
 </template>
 
 <script>
@@ -101,6 +90,7 @@
         items: [
           { title: this.$t('menu.dashboard'), icon: 'dashboard', to: { name: 'dashboard' }, user: true },
           { title: this.$t('menu.containers'), icon: 'storage', to: { name: 'containers' }, user: true },
+          { title: this.$t('menu.images'), icon: 'storage', to: { name: 'images' }, user: false },
           { title: this.$t('menu.users'), icon: 'group', to: { name: 'users' }, user: false },
           { title: this.$t('menu.groups'), icon: 'people_outline', to: { name: 'groups' }, user: false },
           { title: this.$t('menu.requests'), icon: 'list', to: { name: 'requests' }, user: true },
@@ -115,7 +105,7 @@
     },
     computed: {
       me() {
-        // this.$store.dispatch('fetchMe');
+        // this.$store.dispatch(fetchMe');
         // console.log(this.$store.getters['auth/me']);
         return this.$store.getters['auth/me'];
       },
@@ -123,7 +113,9 @@
         return `https://www.gravatar.com/avatar/${md5(this.me.email || '')}?s=84&d=retro`;
       },
       loading() {
-        return this.$store.state.containers.loading;
+        const st = this.$store.state;
+        // eslint-disable-next-line max-len
+        return st.stats.loading || st.containers.loading || st.images.loading || st.users.loading || st.requests.loading;
       }
     },
     mounted() {
@@ -137,16 +129,3 @@
   };
 </script>
 
-<style lang="scss">
-  .logo {
-    display: block;
-    width: 140px;
-  }
-
-  .lwp-toolbar,
-  .lwp-footer {
-    background-color: #004159 !important;
-  }
-
-
-</style>

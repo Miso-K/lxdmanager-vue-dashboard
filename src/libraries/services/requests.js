@@ -22,6 +22,11 @@ class Requests {
     const url = `/${this.base}/${id}`;
     return axios.put(url, options);
   }
+
+  delete(id) {
+    const url = `/${this.base}/${id}`;
+    return axios.delete(url);
+  }
 }
 
 export default new Requests('lgw/requests');

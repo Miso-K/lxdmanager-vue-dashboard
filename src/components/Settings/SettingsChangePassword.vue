@@ -1,14 +1,10 @@
 <template>
-  <v-card
-    class="hide-overflow,mt-3"
-  >
+  <v-card flat>
     <v-form ref="form" v-model="valid" lazy-validation>
-    <v-toolbar
-      card
+    <v-app-bar
+      flat
       height="50px"
     >
-      <v-icon>mdi-account</v-icon>
-      <v-toolbar-title class="font-weight-light subheading">{{ $t('settings.password.title') }}</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn
         fab
@@ -18,7 +14,7 @@
         <v-icon v-if="isEditing">close</v-icon>
         <v-icon v-else>edit</v-icon>
       </v-btn>
-    </v-toolbar>
+    </v-app-bar>
     <v-card-text>
       <v-text-field
         :disabled="!isEditing"
@@ -103,10 +99,10 @@
         if (this.$refs.form.validate()) {
           this.isEditing = !this.isEditing;
           if ((this.data.cur_password !== this.data.new_password) && (this.data.new_password === this.data.confirm_password)) { // eslint-disable-line max-len
-            this.$store.dispatch('notify', { id: 0, message: 'Your password has been saved', color: 'info' });
+            this.$store.dispatch('notify', { id: 0, message: `${this.$i18n.t('notifications.password_saved')}`, color: 'info' });
             this.$store.dispatch('updateMe', this.data); // comment this on demo.lxdmanager.com
           } else {
-            this.$store.dispatch('notify', { id: 0, message: 'You set wrong password', color: 'error' });
+            this.$store.dispatch('notify', { id: 0, message: `${this.$i18n.t('notifications.password_wrong')}`, color: 'error' });
           }
         }
       }

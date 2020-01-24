@@ -10,6 +10,6 @@
 <script>
   export default {
     name: 'not-found',
-    title: 'Not Found — LXD Web Panel'
+    title: 'Not Found — LXDmanager'
   };
 </script>

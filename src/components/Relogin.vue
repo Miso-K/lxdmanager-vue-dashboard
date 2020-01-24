@@ -14,7 +14,7 @@
 
           <v-btn
             color="green darken-1"
-            flat="flat"
+            text
             @click.native="dialog_relogin = false"
             @click="refreshToken"
           >
@@ -23,7 +23,7 @@
 
           <v-btn
             color="red darken-1"
-            flat="flat"
+            text
             @click.native="dialog_relogin = false"
             @click="$router.push('logout')"
           >
@@ -50,7 +50,7 @@
         startCountDown() {
           this.interval = setInterval(() => {
             // 15 minut interval
-            if (this.value === 900) {
+            if (this.value === 1800) {
               this.dialog_relogin = true;
               this.actionCountDown();
               this.value = 0;

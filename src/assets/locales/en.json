@@ -8,6 +8,7 @@
   "menu": {
     "dashboard": "Dashboard",
     "containers": "Containers",
+    "images": "Images",
     "requests": "Requests",
     "settings": "Settings",
     "help": "Help",
@@ -23,7 +24,33 @@
     "status": "Status",
     "message": "Message",
     "changed": "Changed",
-    "actions": "Actions"
+    "actions": "Actions",
+    "data": {
+      "create": "create",
+      "upgrade": "upgrade",
+      "clone": "clone",
+      "help": "help",
+      "waiting": "waiting",
+      "answered": "answered",
+      "cancelled": "cancelled",
+      "create_new_container": "Create new container",
+      "upgrade_container": "Upgrade container",
+      "clone_container": "Clone container",
+      "delete_container": "Delete container"
+    }
+  },
+  "notifications": {
+    "request_created": "Your request was created",
+    "container_created": "Your container was created",
+    "container_upgraded": "Your container was upgraded",
+    "container_deleted": "Your container was deleted",
+    "container_cloned": "Your container was cloned",
+    "snapshot_created": "Your snapshot was created",
+    "snapshot_deleted": "Your snapshot was deleted",
+    "snapshot_restored": "Your snapshot was restored",
+    "profile_updated": "Your profile was updated",
+    "password_saved": "Your password has been saved",
+    "password_wrong": "You set wrong password"
   },
   "containers": {
     "name": "Containers",

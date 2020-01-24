@@ -3,6 +3,7 @@
 import Vue from 'vue';
 import { sync } from 'vuex-router-sync';
 import Vuetify from 'vuetify';
+import 'vuetify/dist/vuetify.min.css';
 import App from './App';
 
 import i18n from './libraries/i18n';
@@ -10,15 +11,17 @@ import store from './libraries/store';
 import router from './libraries/router';
 import plugins from './libraries/plugins';
 
-import '../node_modules/vuetify/dist/vuetify.min.css';
-import '../node_modules/nprogress/nprogress.css';
-import './assets/styles/main.scss';
+
+// import '../node_modules/nprogress/nprogress.css';
+// import './assets/styles/main.scss';
 
 window.Event = new Vue();
 
 // ## Use plugins
 // =========================
 Vue.use(Vuetify);
+const vuetify = new Vuetify({ icons: { iconfont: 'mdi' } });
+
 Vue.use(plugins);
 sync(store, router, { moduleName: 'route' });
 
@@ -34,7 +37,8 @@ const app = new Vue({
   router,
   i18n,
   store,
-  render: h => h(App)
+  render: h => h(App),
+  vuetify
 });
 
 app.$mount('#app');

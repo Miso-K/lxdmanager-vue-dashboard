@@ -1,15 +1,9 @@
 <template>
-  <v-card
-    class="hide-overflow"
-    color="lighteen-1"
-  >
+  <v-card flat>
     <v-form ref="form" v-model="valid" lazy-validation>
-    <v-toolbar
-      card
+    <v-app-bar flat
       height="50px"
     >
-      <v-icon>mdi-account</v-icon>
-      <v-toolbar-title class="font-weight-light subheading">{{ $t('settings.profile.title') }}</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn
         fab
@@ -19,7 +13,7 @@
         <v-icon v-if="isEditing">close</v-icon>
         <v-icon v-else>edit</v-icon>
       </v-btn>
-    </v-toolbar>
+    </v-app-bar>
     <v-card-text>
       <v-container>
                     <v-layout wrap>
@@ -165,7 +159,7 @@
       save() {
         if (this.$refs.form.validate()) {
           this.isEditing = !this.isEditing;
-          this.$store.dispatch('notify', { id: 0, message: 'Your profile has been updated', color: '' });
+          this.$store.dispatch('notify', { id: 0, message: `${this.$i18n.t('notifications.profile_updated')}`, color: '' });
           this.$store.dispatch('updateMe', this.data);
           setTimeout(() => {
             this.$store.dispatch('fetchMe');

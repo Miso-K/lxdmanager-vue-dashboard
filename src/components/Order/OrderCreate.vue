@@ -89,8 +89,8 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" flat @click.native="active = false">{{ $t('actions.close') }}</v-btn>
-          <v-btn color="green darken-1" flat @click="save">{{ $t('actions.create') }}</v-btn>
+          <v-btn color="blue darken-1" text @click.native="active = false">{{ $t('actions.close') }}</v-btn>
+          <v-btn color="green darken-1" text @click="save">{{ $t('actions.create') }}</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -98,7 +98,6 @@
 </template>
 
 <script>
-
 
   export default {
     components: {
@@ -111,17 +110,10 @@
         ispconfig: 'no',
         period: 1,
         name: '',
-        os: 'ubuntu/16.04',
+        os: 'ubuntu',
         cpu: '1',
         memory: '512',
         disk: '10',
-        templates: [
-          { text: 'Ubuntu 16.04', value: 'ubuntu/16.04' },
-          { text: 'Debian 9', value: 'debian/9' },
-          { text: 'CentOS 7', value: 'centos/7' },
-          { text: 'Fedora 29', value: 'fedora/29' },
-          { text: 'Alpine 3.9', value: 'alpine/3.9' }
-        ],
         periodes: [
           { text: '1 Month', value: 1 },
           { text: '3 Months', value: 1 },
@@ -146,6 +138,13 @@
         // console.log(this.$store.getters.appconfig);
         return this.$store.getters.appconfig.price.enabled === 'True';
       },
+      templates() {
+        const images = this.$store.getters.imagesTableData;
+        const img = images.map(image => ({
+          text: image.alias_description ? image.alias_description : image.name,
+          value: image.name }));
+        return img;
+      },
       getPrice() {
         return this.$store.getters.appconfig.price;
       },
@@ -153,13 +152,16 @@
         return this.$store.getters.appconfig.storage;
       },
       diskEnabled() {
-        return this.$store.getters.appconfig.storage.enabled === 'True';
+        if (this.getStorage) {
+          return this.$store.getters.appconfig.storage.enabled === 'True';
+        }
+        return false;
       },
       me() {
         return this.$store.getters['auth/me'];
       },
       canCreate() {
-        return this.me.abilities.includes('ct_create');
+        return this.me.abilities.includes('containers_create');
       },
       price() {
         const cpu = this.getPrice.cpu * this.cpu; // 1
@@ -205,9 +207,9 @@
       },
       save() {
         if (this.name) {
-          console.log(this.memory);
+          // console.log(this.memory);
           if (!this.canCreate) {
-            console.log('send request');
+            // console.log('send request');
             this.sendRequest();
           } else {
             const data = {
@@ -220,7 +222,7 @@
               price: this.price ? this.price : ''
             };
             this.$store.dispatch('createContainer', data);
-// eslint-disable-next-line max-len
+            // eslint-disable-next-line max-len
             // this.$store.dispatch('notify', { id: 0, message: 'Your container is launching', color: '' });
             setTimeout(() => {
               this.$store.dispatch('fetchContainers');
@@ -231,12 +233,6 @@
         this.active = false;
       },
       sendRequest() {
-        console.log(this.me.name);
-        console.log(this.name);
-        console.log(this.cpu);
-        console.log(this.memory);
-        console.log(this.disk);
-
         if (this.name !== '') {
           const data = {
             name: this.name,
@@ -248,12 +244,16 @@
             period: this.period,
             price: this.price
           };
-          console.log(data);
+          // console.log(data);
           this.$store.dispatch('createRequests', { action: 'create', message: `Create new container ${this.name}`, status: 'waiting', meta_data: data });
-          this.$store.dispatch('notify', { id: 0, message: 'Your request was created', color: '' });
+          this.$store.dispatch('notify', { id: 0, message: `${this.$i18n.t('notifications.request_created')}`, color: '' });
           this.active = false;
         }
       }
+    },
+    created() {
+      this.$store.dispatch('fetchImages');
+      // console.log('fetchedImages');
     }
   };
 </script>

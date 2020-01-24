@@ -3,7 +3,8 @@
       <v-layout row wrap>
         <v-flex xs12 sm12 md12 lg12>
 
-          <v-card flat
+          <v-card
+            flat
         class="hide-overflow"
         color="lighteen-1"
       >
@@ -22,30 +23,15 @@
           </v-btn>
         </v-app-bar>
               <v-card-text>
+                <v-checkbox :disabled="!isEditing" v-model="showStorage" label="Enable zfs/brtfs storage"></v-checkbox>
                 <v-text-field
                   :disabled="!isEditing"
-                  v-model="data.remote.endpoint"
-                  label="LXD host address"
-                  placeholder="https://127.0.0.1:8443"
+                  v-model="data.storage.pool_name"
+                  label="Storage name (for default container installation)"
+                  placeholder="lxd"
                   required
                 ></v-text-field>
-                <v-select
-                  :disabled="!isEditing"
-                  :items="verify"
-                  v-model="data.remote.verify"
-                  label="Verify certificate (require signed certificate)"
-                  placeholder="False"
-                ></v-select>
-                <v-text-field
-                  :disabled="!isEditing"
-                  v-model="data.app.production_name"
-                  label="APP production name"
-                  required
-                  placeholder="LXDmanager.com"
-                ></v-text-field>
-                <v-btn color="orange" :disabled="!isEditing" :dark="isEditing" small @click="dialog = true">Add LXD connection certificates</v-btn>
-                <v-btn color="green" :disabled="!isEditing" :dark="isEditing" small @click=checkConfig()>Test LXD connection</v-btn>
-              </v-card-text>
+                </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="success" :disabled="!isEditing" @click="save">Save</v-btn>
@@ -127,13 +113,9 @@
         dialog: false,
         dialogTest: false,
         data: {
-          remote: {
-            endpoint: '',
-            verify: ''
-          },
-          app: {
-            production_name: ''
-          },
+          endpoint: '',
+          verify: '',
+          production_name: '',
           smtp: {
             enabled: false,
             sender: '',
@@ -169,8 +151,7 @@
     },
     computed: {
       checkconfig() {
-        // console.log(this.$store.getters.checkconfig);
-        return this.$store.getters.checkconfig ? this.$store.getters.checkconfig : '';
+        return this.$store.getters.checkconfig[0] ? this.$store.getters.checkconfig[0].attributes : '';
       }
     },
     methods: {
@@ -217,7 +198,6 @@
       setTimeout(() => {
         this.$store.dispatch('fetchAppConfig').then(() => {
           this.data = Object.assign({}, this.data, this.$store.getters.appconfig);
-          // console.log(this.data);
           this.showPrice = this.data.price.enabled === 'True';
           this.showStorage = this.data.storage.enabled === 'True';
           this.showEmail = this.data.smtp.enabled === 'True';

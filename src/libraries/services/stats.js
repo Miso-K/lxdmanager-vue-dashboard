@@ -12,7 +12,6 @@ class Stats {
   get() { // eslint-disable-line class-methods-use-this
     return axios.get(`/${this.base}`);
   }
-
 }
 
 export default new Stats('lgw/stats');

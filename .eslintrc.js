@@ -40,6 +40,7 @@ module.exports = {
     // disallows trailing commas
     'comma-dangle': ['error', 'never'],
 
+    'camelcase': 0,
     'global-require': 0,
 
     // allow console during development

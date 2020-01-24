@@ -21,7 +21,6 @@ class Me {
   otp() {
     return axios.post(`/${this.base}/otp`);
   }
-
 }
 
 export default new Me('lgw/me');

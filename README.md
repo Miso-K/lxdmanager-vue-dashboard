@@ -3,7 +3,7 @@
 This application provide frontend for lxdmanager.
 You can read more details and try **demo** on https://lxdmanager.com
 
-**1.0.0-RC** — *Possible run it in production*
+**1.0.0** — *Possible run it in production*
 
 ![dashboard](https://user-images.githubusercontent.com/45683353/61130070-1f70cc80-a4b6-11e9-9bd8-2166abad5988.png)
 ![dashboard2](https://user-images.githubusercontent.com/45683353/61130071-1f70cc80-a4b6-11e9-928d-696e86bb8469.png)

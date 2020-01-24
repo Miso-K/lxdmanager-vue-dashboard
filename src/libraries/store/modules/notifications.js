@@ -64,7 +64,7 @@ const notificationsActions = {
       } else {
         clearInterval(timer);
       }
-    }, 2000);
+    }, 5000);
   },
   closeNotif() {
     // console.log('closeNotif');

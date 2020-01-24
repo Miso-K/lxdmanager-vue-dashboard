@@ -1,16 +1,16 @@
 <template>
   <div>
-    <appconfig></appconfig>
+    <images></images>
   </div>
 </template>
 
 <script>
-  import AppConfig from '../../components/AppConfig/Tabs';
+  import Images from '../../components/Images/Images';
 
   export default {
-    name: 'container',
+    name: 'Images',
     components: {
-      appconfig: AppConfig
+      images: Images
     },
     data() {
       return {

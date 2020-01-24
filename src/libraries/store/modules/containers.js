@@ -71,7 +71,7 @@ const containersGetters = {
   containerData(state, getters) {
     return id => formatContainer(getters.container(id), getters.hostTotalMemory);
   },
-  containerDataId: state => id => formatContainer(state.containers[id]) || false, // eslint-disable-line max-len
+  containerDataId: (state, getters) => id => formatContainer(getters.containers.find(obj => obj.id === id)) || false, // eslint-disable-line max-len
   containersStates: (state, getters) => _countBy(getters.containers, 'attributes.state'),
   containersTableData(state, getters) {
     if (Object.keys(getters.containers).length === 0) return false;
@@ -102,26 +102,19 @@ const containersMutations = {
     Object.assign(state, { loading: false });
   },
 
-  [CONTAINER_REQUEST]: (state, { id, attributes }) => {
-    state.containers[id] = {
-      ...state.containers[id],
-      loading: true,
-      attributes: {
-        ...state.containers[id].attributes,
-        ...attributes
-      }
-    };
+  [CONTAINER_REQUEST]: (state, { id, status }) => {
+    const index = state.containers.findIndex(e => e.id === id);
+    state.loading = true;
+    state.containers[index].status = status;
   },
-  [CONTAINER_SUCCESS]: (state, { id, attributes }) => {
+  [CONTAINER_SUCCESS]: (state, { id, data }) => {
+    const index = state.containers.findIndex(e => e.id === id);
     state.loading = false;
-    state.containers[id] = {
-      ...state.containers[id],
-      loading: false,
-      attributes: {
-        ...state.containers[id].attributes,
-        ...attributes
-      }
-    };
+    Object.assign(state.containers[index], { ...data });
+    // state.containers[index] = {
+    //  ...state.containers[index],
+    //  ...data
+    // };
   },
   [CONTAINER_FAILURE]: (state, err, id) => {
     console.log(CONTAINER_FAILURE, err);
@@ -212,6 +205,8 @@ const containersActions = {
     commit(CONTAINERS_REQUEST);
 
     ContainersService.get().then((res) => {
+      // console.log(res.data);
+      res.containers = res.data.data; // when not using json-api-normalizer
       // console.log(res);
       setTimeout(() => {
         commit(CONTAINERS_SUCCESS, res);
@@ -226,10 +221,12 @@ const containersActions = {
     commit(CONTAINERS_REQUEST);
 
     ContainersService.fetch(id).then((res) => {
-      // console.log(res);
+      console.log(res.data.data);
       setTimeout(() => {
+        // objIndex = .findIndex((obj => obj.id == 1));
         // commit(CONTAINER_SUCCESS, { id, attributes: res.containers[id].attributes });
-        commit(CONTAINER_SUCCESS, { id, attributes: res.containers[id].attributes });
+        const data = res.data.data;
+        commit(CONTAINER_SUCCESS, { id, data });
         // console.log('fetch:');
         // console.log(res);
       }, 1000);
@@ -241,42 +238,40 @@ const containersActions = {
   createContainer({ dispatch, commit }, data) {
     commit(CONTAINERS_REQUEST);
     // console.log('create log:');
-    // console.log(data);
+    console.log(data);
 
     const obj = {
       data: {
         type: 'containers',
-        attributes: {
-          name: data.name,
-          config: {
-            limits_cpu: data.cpu,
-            limits_memory: data.memory,
-            limits_disk: data.disk,
-            pool_name: data.pool_name,
-            price: data.price
-          },
-          source: {
-            type: 'image',
-            mode: 'pull',
-            server: 'https://uk.images.linuxcontainers.org',
-            protocol: 'simplestreams',
-            alias: data.os
-          }
+        name: data.name,
+        config: {
+          limits_cpu: data.cpu,
+          limits_memory: data.memory,
+          limits_disk: data.disk,
+          pool_name: data.pool_name,
+          price: data.price
+        },
+        source: {
+          type: 'image',
+          // mode: 'pull',
+          // server: 'https://uk.images.linuxcontainers.org',
+          // protocol: 'simplestreams',
+          alias: data.os
         },
         relationships: {
-          users: {
-            data: data.users ? data.users.map(u => ({
-              type: 'users',
-              id: u
-            })) : []
-          }
+          users: data.users ? data.users.map(u => ({
+            type: 'users',
+            id: u.id
+          })) : []
         }
       }
     };
     // console.log(obj);
     return ContainersService.post(obj).then((res) => {
-      // console.log(res);
-      commit(CONTAINERS_SUCCESS, res.data);
+      console.log(res);
+      dispatch('fetchOperation', res.data.metadata.id);
+      // dispatch('fetchOperation', '8ebb755f-d813-41d7-beca-e3d052f014d6');
+      commit(CONTAINERS_SUCCESS);
     }).catch((err) => {
       commit(CONTAINERS_FAILURE, err);
     });
@@ -290,15 +285,13 @@ const containersActions = {
     const obj = {
       data: {
         type: 'containers',
-        attributes: {
-          name: data.name,
-          config: {
-            limits_cpu: data.cpu,
-            limits_memory: data.memory,
-            limits_disk: data.disk
-          },
-          devices: {}
-        }
+        name: data.name,
+        config: {
+          limits_cpu: data.cpu,
+          limits_memory: data.memory,
+          limits_disk: data.disk
+        },
+        devices: {}
       }
     };
     // console.log(obj);
@@ -313,31 +306,27 @@ const containersActions = {
   cloneContainer({ commit }, data) {
     commit(CONTAINERS_REQUEST);
     // console.log('create log:');
-    // console.log(data);
+    console.log(data);
 
     const obj = {
       data: {
         type: 'containers',
-        attributes: {
-          name: data.containerClone,
-          config: {
-            limits_cpu: data.cpu,
-            limits_memory: data.memory,
-            limits_disk: data.disk
-          },
-          source: {
-            type: 'copy',
-            container_only: true,
-            source: data.containerName
-          }
+        name: data.containerClone,
+        config: {
+          limits_cpu: data.cpu,
+          limits_memory: data.memory,
+          limits_disk: data.disk
+        },
+        source: {
+          type: 'copy',
+          container_only: true,
+          source: data.containerName
         },
         relationships: {
-          users: {
-            data: data.users ? data.users.map(u => ({
-              type: 'users',
-              id: u
-            })) : []
-          }
+          users: data.users ? data.users.map(u => ({
+            type: 'users',
+            id: u
+          })) : []
         }
       }
     };
@@ -360,16 +349,13 @@ const containersActions = {
     });
   },
 
-  startContainer({ dispatch, commit }, id) {
-    commit(CONTAINERS_REQUEST);
-    commit(CONTAINER_REQUEST, { id, attributes: { status: STARTING } });
+  startContainer({ commit }, id) {
+    commit(CONTAINER_REQUEST, { id, status: STARTING });
 
     ContainersService.start(id).then(() => {
-      // console.log(res);
-      commit(CONTAINERS_SUCCESS);
       setTimeout(() => {
-        commit(CONTAINER_SUCCESS, { id, attributes: { status: RUNNING } });
-        dispatch('fetchContainer', id);
+        const data = { status: RUNNING };
+        commit(CONTAINER_SUCCESS, { id, data });
       }, 2000);
     }).catch((err) => {
       commit(CONTAINERS_FAILURE, err);
@@ -377,15 +363,13 @@ const containersActions = {
     });
   },
 
-  stopContainer({ dispatch, commit }, id) {
-    commit(CONTAINERS_REQUEST);
-    commit(CONTAINER_REQUEST, { id, attributes: { status: STOPPING } });
+  stopContainer({ commit }, id) {
+    commit(CONTAINER_REQUEST, { id, status: STOPPING });
 
     ContainersService.stop(id).then(() => {
-      commit(CONTAINERS_SUCCESS);
       setTimeout(() => {
-        commit(CONTAINER_SUCCESS, { id, attributes: { status: STOPPED } });
-        dispatch('fetchContainer', id);
+        const data = { status: STOPPED };
+        commit(CONTAINER_SUCCESS, { id, data });
       }, 2000);
     }).catch((err) => {
       commit(CONTAINERS_FAILURE, err);
@@ -393,61 +377,52 @@ const containersActions = {
     });
   },
 
-  freezeContainer({ dispatch, commit }, id) {
-    commit(CONTAINERS_REQUEST);
-    commit(CONTAINER_REQUEST, { id, attributes: { status: FREEZING } });
+  freezeContainer({ commit }, id) {
+    commit(CONTAINER_REQUEST, { id, status: FREEZING });
 
     ContainersService.freeze(id).then(() => {
-      commit(CONTAINERS_SUCCESS);
       setTimeout(() => {
-        commit(CONTAINER_SUCCESS, { id, attributes: { status: FROZEN } });
-        dispatch('fetchContainer', id);
+        const data = { status: FROZEN };
+        commit(CONTAINER_SUCCESS, { id, data });
       }, 2000);
     }).catch((err) => {
       commit(CONTAINERS_FAILURE, err);
     });
   },
 
-  unfreezeContainer({ dispatch, commit }, id) {
-    commit(CONTAINERS_REQUEST);
-    commit(CONTAINER_REQUEST, { id, attributes: { status: UNFREEZING } });
+  unfreezeContainer({ commit }, id) {
+    commit(CONTAINER_REQUEST, { id, status: UNFREEZING });
 
     ContainersService.unfreeze(id).then(() => {
-      commit(CONTAINERS_SUCCESS);
       setTimeout(() => {
-        commit(CONTAINER_SUCCESS, { id, attributes: { status: RUNNING } });
-        dispatch('fetchContainer', id);
+        const data = { status: RUNNING };
+        commit(CONTAINER_SUCCESS, { id, data });
       }, 2000);
     }).catch((err) => {
       commit(CONTAINERS_FAILURE, err);
     });
   },
 
-  stopforceContainer({ dispatch, commit }, id) {
-    commit(CONTAINERS_REQUEST);
-    commit(CONTAINER_REQUEST, { id, attributes: { status: SHUTTING_DOWN } });
+  stopforceContainer({ commit }, id) {
+    commit(CONTAINER_REQUEST, { id, status: SHUTTING_DOWN });
 
     ContainersService.stopforce(id).then(() => {
-      commit(CONTAINERS_SUCCESS);
       setTimeout(() => {
-        commit(CONTAINER_SUCCESS, { id, attributes: { status: STOPPED } });
-        dispatch('fetchContainer', id);
+        const data = { status: STOPPED };
+        commit(CONTAINER_SUCCESS, { id, data });
       }, 2000);
     }).catch((err) => {
       commit(CONTAINERS_FAILURE, err);
     });
   },
 
-  restartContainer({ dispatch, commit }, id) {
-    commit(CONTAINERS_REQUEST);
-    commit(CONTAINER_REQUEST, { id, attributes: { status: RESTARTING } });
+  restartContainer({ commit }, id) {
+    commit(CONTAINER_REQUEST, { id, status: RESTARTING });
 
     ContainersService.restart(id).then(() => {
-      commit(CONTAINERS_SUCCESS);
-      commit(CONTAINER_SUCCESS, { id, attributes: { status: STOPPED } });
       setTimeout(() => {
-        commit(CONTAINER_SUCCESS, { id, attributes: { status: RUNNING } });
-        dispatch('fetchContainer', id);
+        const data = { status: RUNNING };
+        commit(CONTAINER_SUCCESS, { id, data });
       }, 2000);
     }).catch((err) => {
       commit(CONTAINERS_FAILURE, err);
@@ -458,11 +433,11 @@ const containersActions = {
     commit(CONTAINERS_REQUEST);
 
     ContainersService.terminal(id).then((res) => {
-      // console.log(res);
+      console.log(res);
       setTimeout(() => {
         // commit(CONTAINER_SUCCESS, { id, attributes: res.terminal[id].attributes });
         // console.log(res);
-        commit(SET_CONTAINER_TERMINAL, res.terminal[id].attributes);
+        commit(SET_CONTAINER_TERMINAL, res.data.data);
         // console.log('this');
         // console.log(res.terminal[id].attributes);
       }, 1000);
@@ -477,24 +452,11 @@ const containersActions = {
     ContainersService.snapshots(id).then((res) => {
       // console.log(res);
       setTimeout(() => {
-        commit(SNAPSHOTS_SUCCESS, res);
+        commit(SNAPSHOTS_SUCCESS, { snapshots: res.data.data });
         // console.log(res);
       }, 500);
     }).catch((err) => {
       commit(CONTAINERS_FAILURE, err);
-    });
-  },
-
-  fetchSnapshot({ commit }, id, name) {
-    commit(SNAPSHOTS_REQUEST);
-
-    ContainersService.snapshot(id, name).then((res) => {
-      // console.log(res);
-      setTimeout(() => {
-        commit(SNAPSHOT_SUCCESS, { id, attributes: res.snapshots[id].attributes });
-      }, 1000);
-    }).catch((err) => {
-      commit(CONTAINER_FAILURE, err, id);
     });
   },
 
@@ -529,10 +491,8 @@ const containersActions = {
     const obj = {
       data: {
         type: 'snapshots',
-        attributes: {
-          name: data.name,
-          stateful: data.stateful
-        }
+        name: data.name,
+        stateful: data.stateful
       }
     };
     // console.log(obj);
@@ -541,20 +501,6 @@ const containersActions = {
       commit(SNAPSHOTS_SUCCESS, res.data);
     }).catch((err) => {
       commit(SNAPSHOTS_FAILURE, err);
-    });
-  },
-
-  fetchOperation({ dispatch, commit }, id) {
-    // commit(SNAPSHOTS_REQUEST);
-
-    ContainersService.operation(id).then((res) => {
-      console.log(res);
-      setTimeout(() => {
-        // commit(SNAPSHOT_SUCCESS, { id, attributes: res.snapshots[id].attributes });
-        dispatch('notify', { id: 0, message: 'Your container was created', color: '' });
-      }, 1000);
-    }).catch((err) => {
-      commit(CONTAINER_FAILURE, err, id);
     });
   },
 

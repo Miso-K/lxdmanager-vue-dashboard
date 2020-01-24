@@ -14,6 +14,17 @@
               <v-icon>refresh</v-icon>
             </v-btn>
     <v-card-title>
+      <v-dialog v-model="dialogDelete" max-width="490">
+        <v-card>
+          <v-card-title class="headline">Are you sure to delete request?</v-card-title>
+          <v-card-text>This action cannot by undo.</v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="green darken-1" text @click="dialogDelete = false">Disagree</v-btn>
+            <v-btn color="red darken-1" text @click.native="deleteItem" @click="dialogDelete = false">Agree</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
       <v-dialog v-model="dialogConfirm" max-width="500px">
         <v-card>
           <v-card-title>
@@ -30,14 +41,17 @@
                     v-model="editedItem.meta_data"
                   ></v-textarea>
                 </v-flex>
+                <v-flex>
+                  <v-checkbox v-model="doAction" :label="`Do action: ${editedItem.message}`"></v-checkbox>
+                </v-flex>
               </v-layout>
             </v-container>
           </v-card-text>
 
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" flat @click="close">Close</v-btn>
-            <v-btn color="blue darken-1" flat @click="saveConfirm">Confirm</v-btn>
+            <v-btn color="blue darken-1" text @click="close">Close</v-btn>
+            <v-btn color="blue darken-1" text @click="saveConfirm">Confirm</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -59,8 +73,8 @@
 
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" flat @click="close">Close</v-btn>
-            <v-btn color="blue darken-1" flat @click="save">Send</v-btn>
+            <v-btn color="blue darken-1" text @click="close">Close</v-btn>
+            <v-btn color="blue darken-1" text @click="save">Send</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -82,8 +96,8 @@
 
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" flat @click="close">Close</v-btn>
-            <v-btn color="blue darken-1" flat @click="save">Cancel request</v-btn>
+            <v-btn color="blue darken-1" text @click="close">Close</v-btn>
+            <v-btn color="blue darken-1" text @click="save">Cancel request</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -124,7 +138,7 @@
 
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" flat @click="close">Close</v-btn>
+            <v-btn color="blue darken-1" text @click="close">Close</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -139,46 +153,47 @@
     </v-card-title>
     <v-data-table
       v-if="items"
-      :headers="headers"
+      :headers="computedHeaders"
       :items="items"
-      :search="search"
-      :pagination.sync="pagination">
-      <template slot="items" slot-scope="props">
-          <td>
-            <span v-for="element in getUsersName(props.item.users)">
-              <v-chip small>{{ element }}</v-chip>
-            </span>
-          </td>
-          <td>{{ props.item.action }}</td>
-          <td class="text-xs">{{ props.item.status }}</td>
-          <td class="text-xs">{{ props.item.message }}</td>
-          <td class="text-xs">{{ props.item.changed_on ? props.item.changed_on : props.item.created_on}}</td>
-          <td class="text-xs-right layout px-0">
+      :search="search">
+      <template v-slot:item.users="{ item }">
+        <span v-for="element in item.users">
+          <v-chip small>{{ element.name }}</v-chip>
+        </span>
+      </template>
+      <template v-slot:item.last_change="{ item }">
+        {{ formatDate(item.last_change) }}
+      </template>
+      <template v-slot:item.actions="{ item }">
             <v-icon
               v-if="me.admin"
-              :disabled="props.item.status === 'confirmed' || props.item.status === 'cancelled'"
-              @click="confirmItem(props.item)"
+              :disabled="item.status === 'confirmed' || item.status === 'cancelled'"
+              @click="confirmItem(item)"
             >
               check
             </v-icon>
             <v-icon
-              :disabled="props.item.status === 'confirmed'"
-              @click="editItem(props.item)"
+              :disabled="item.status === 'confirmed'"
+              @click="editItem(item)"
             >
               message
             </v-icon>
             <v-icon
-              :disabled="props.item.status === 'cancelled' || props.item.status === 'confirmed'"
-              @click="cancelItem(props.item)"
+              :disabled="item.status === 'cancelled' || item.status === 'confirmed'"
+              @click="cancelItem(item)"
             >
               cancel
             </v-icon>
             <v-icon
-              @click="detailItem(props.item)"
+              @click="detailItem(item)"
             >
               more
             </v-icon>
-          </td>
+            <v-icon v-if="me.admin"
+              @click="deleteDialog(item)"
+            >
+              delete
+            </v-icon>
         </template>
         <template slot="no-data">
           <v-btn color="primary" @click="initialize">Reset</v-btn>
@@ -194,27 +209,31 @@
     name: 'Requests',
     data() {
       return {
+        doAction: false,
         search: '',
         pagination: {
-          sortBy: 'state',
+          sortBy: 'last_change',
+          descending: 'true',
           rowsPerPage: 10
         },
         dialogMessage: false,
         dialogDetail: false,
         dialogCancel: false,
         dialogConfirm: false,
+        dialogDelete: false,
         message_cancel: 'Cancel this request',
         headers: [
-          { text: this.$t('requests.user'), value: 'user' },
+          { text: this.$t('requests.user'), value: 'users', width: '5%', user: false },
           {
             text: this.$t('requests.action'),
             sortable: true,
-            value: 'action'
+            value: 'action',
+            width: '5%'
           },
-          { text: this.$t('requests.status'), value: 'status' },
-          { text: this.$t('requests.message'), value: 'message' },
-          { text: this.$t('requests.changed'), value: 'changed' },
-          { text: this.$t('requests.actions'), sortable: false }
+          { text: this.$t('requests.status'), value: 'status', width: '5%' },
+          { text: this.$t('requests.message'), value: 'message', width: '25%' },
+          { text: this.$t('requests.changed'), value: 'last_change', width: '25%' },
+          { text: this.$t('requests.actions'), value: 'actions', sortable: false, width: '15%' }
         ],
         valid: false,
         editedItemId: -1,
@@ -243,19 +262,9 @@
       }
     },
     methods: {
-      getUsersName(users) {
-        if (!this.me.admin) {
-          return ['Myself'];
-        }
-        try {
-          // console.log(this.$store.getters.user(2).attributes.name);
-          return users.map(user => this.$store.getters.user(user.id).attributes.name);
-          // return users.map(user => user.id);
-        } catch (error) {
-          // this.$store.dispatch('fetchUsers');
-          return ['unknown'];
-        }
-        // return users;
+      formatDate(date) {
+        const d = new Date(date);
+        return d.toDateString();
       },
       editItem(item) {
         // console.log(item);
@@ -285,10 +294,26 @@
         this.editedItem.message = this.message_cancel;
         this.dialogCancel = true;
       },
+      deleteDialog(item) {
+        this.editedIndex = this.items.indexOf(item);
+        this.editedItem = Object.assign({}, item);
+        this.dialogDelete = true;
+      },
+      deleteItem() {
+        if (this.editedIndex > -1) {
+          const item = this.editedItem;
+          const index = this.items.indexOf(item);
+          this.items.splice(index, 1);
+          this.$store.dispatch('deleteRequests', item.id);
+          setTimeout(() => {
+            this.$store.dispatch('fetchRequests');
+          }, 500);
+        }
+      },
 
       // deleteItem(item) {
-        // const index = this.desserts.indexOf(item);
-        // confirm('Are you sure you want to delete this item?') && this.desserts.splice(index, 1);
+      // const index = this.desserts.indexOf(item);
+      // confirm('Are you sure you want to delete this item?') && this.desserts.splice(index, 1);
       // },
 
       close() {
@@ -311,28 +336,35 @@
       },
 
       saveConfirm() {
+        // eslint-disable-next-line max-len
         this.$store.dispatch('changeRequests', { id: this.editedItemId, message: this.editedItem.message, status: this.editedItem.status });
         // console.log(`'${this.editedItem.meta_data}'`);
         const str = this.editedItem.meta_data.replace(/'/g, '"');
-        // const str = JSON.stringify(this.editedItem.meta_data);
-        // console.log(str);
+        // const strparse = JSON.parse(str);
+        // strparse.users = [{ id: 2 }];
+        // console.log(strparse);
         // console.log(JSON.parse(str));
-        if (this.editedItem.action === 'create') {
-          this.$store.dispatch('createContainer', JSON.parse(str));
-        }
-        if (this.editedItem.action === 'upgrade') {
-          this.$store.dispatch('upgradeContainer', JSON.parse(str));
-        }
-        if (this.editedItem.action === 'clone') {
-          this.$store.dispatch('cloneContainer', JSON.parse(str));
-        }
-        if (this.editedItem.action === 'delete') {
-          this.$store.dispatch('deleteContainer', JSON.parse(str).id);
+        if (this.doAction) {
+          if (this.editedItem.action === 'create') {
+            this.$store.dispatch('createContainer', JSON.parse(str));
+          }
+          if (this.editedItem.action === 'upgrade') {
+            this.$store.dispatch('upgradeContainer', JSON.parse(str));
+          }
+          if (this.editedItem.action === 'clone') {
+            this.$store.dispatch('cloneContainer', JSON.parse(str));
+          }
+          if (this.editedItem.action === 'delete') {
+            this.$store.dispatch('deleteContainer', JSON.parse(str).id);
+          }
         }
         setTimeout(() => {
           this.$store.dispatch('fetchRequests');
         }, 500);
         this.close();
+      },
+      refreshData() {
+        this.$store.dispatch('fetchRequests');
       }
     },
     computed: {
@@ -344,15 +376,11 @@
       me() {
         return this.$store.getters['auth/me'];
       },
-      refreshData() {
-        // this.fetchContainer(this.id);
-        this.$store.dispatch('fetchRequests');
+      computedHeaders() {
+        return this.headers.filter(h => !(h.user === this.me.admin));
       }
     },
-    mounted() {
-    },
     created() {
-      this.$store.dispatch('fetchUsers');
       this.$store.dispatch('fetchRequests');
     }
   };

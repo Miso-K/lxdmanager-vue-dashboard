@@ -1,28 +1,21 @@
-import _reduce from 'lodash/reduce';
-import build from 'redux-object';
+// import _reduce from 'lodash/reduce';
+// import build from 'redux-object';
 
-const getUserAbilities = (state, identity) => {
-  const user = build(state, 'users', identity);
-
-  let abilities = [];
-
-  if (user && user.groups) {
-    abilities = _reduce(user.groups, (acc, group) => {
-      if (group && group.abilities) {
-        group.abilities.forEach((ability) => {
-          if (ability && ability.name) {
-            if (acc.indexOf(ability.name) === -1) {
-              acc.push(ability.name);
-            }
-          }
-        });
+const getUserAbilities = (state) => {
+  const user = state.myself;
+  const abilities = [];
+  if (user && user.relationships.groups) {
+    const abbs = state.groups[0].relationships.abilities;
+    abbs.forEach((ability) => {
+      if (ability && ability.name) {
+        if (abilities.indexOf(ability.name) === -1) {
+          abilities.push(ability.name);
+        }
       }
-
-      return acc;
-    }, []);
+    });
+    return abilities;
   }
-
-  return abilities;
+  return [];
 };
 
 export default getUserAbilities;

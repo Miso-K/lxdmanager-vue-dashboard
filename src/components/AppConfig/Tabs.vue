@@ -2,37 +2,37 @@
     <v-container grid-list-md>
   <v-tabs icons-and-text fixed-tabs>
     <v-tab href="#tab-1">
-      {{ $t('containers.tabs.info') }}
+      App config
       <v-icon>info</v-icon>
     </v-tab>
     <v-tab href="#tab-2">
-      {{ $t('containers.tabs.console') }}
+      Email config
       <v-icon>code</v-icon>
     </v-tab>
     <v-tab href="#tab-3">
-      {{ $t('containers.tabs.settings') }}
+      Price config
       <v-icon>settings</v-icon>
     </v-tab>
-    <v-tab v-if="showSnapshots" href="#tab-4">
-      {{ $t('containers.tabs.snapshots') }}
+    <v-tab href="#tab-4">
+      Storage config
       <v-icon>photo_camera</v-icon>
     </v-tab>
     <v-tab-item
-      v-for="i in tabsLength"
+      v-for="i in 4"
       :key="i"
       :value="'tab-' + i"
     >
       <v-card v-if="i === 1" flat>
-         <tab-info></tab-info>
+         <app-config></app-config>
       </v-card>
       <v-card v-if="i === 2" flat>
-        <tab-console></tab-console>
+        <email-config></email-config>
       </v-card>
       <v-card v-if="i === 3" flat>
-        <tab-settings></tab-settings>
+        <price-config></price-config>
       </v-card>
       <v-card v-if="i === 4" flat>
-        <tab-snapshots></tab-snapshots>
+        <storage-config></storage-config>
       </v-card>
     </v-tab-item>
   </v-tabs>
@@ -40,10 +40,10 @@
 </template>
 
 <script>
-  import TabInfo from './Info';
-  import TabConsole from './Console';
-  import TabSnapshots from './Snapshots';
-  import TabSettings from './Settings';
+  import AppConfig from './AppConfig';
+  import EmailConfig from './EmailConfig';
+  import PriceConfig from './PriceConfig';
+  import StorageConfig from './StorageConfig';
 
   export default {
     name: 'tabs',
@@ -52,18 +52,10 @@
       };
     },
     components: {
-      'tab-info': TabInfo,
-      'tab-console': TabConsole,
-      'tab-snapshots': TabSnapshots,
-      'tab-settings': TabSettings
-    },
-    computed: {
-      tabsLength() {
-        return this.showSnapshots ? 4 : 3;
-      },
-      showSnapshots() {
-        return this.$store.getters.appconfig.storage.enabled === 'True';
-      }
+      'app-config': AppConfig,
+      'email-config': EmailConfig,
+      'price-config': PriceConfig,
+      'storage-config': StorageConfig
     },
     mounted() {
       // this.$store.dispatch('fetchContainers');

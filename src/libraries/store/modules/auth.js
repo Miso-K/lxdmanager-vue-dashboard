@@ -1,6 +1,6 @@
 import jwtDecode from 'jwt-decode';
 import { AuthService } from '../../services';
-import { getUserAbilities, getUserGroups, getUserContainers } from '../../utils/auth';
+import { getUserAbilities } from '../../utils/auth';
 import storage from '../../utils/storage';
 
 export const STORAGE_TOKEN_KEY = 'lwp_token';
@@ -41,16 +41,12 @@ const authGetters = {
   otp_token: state => state.otp_token,
   otpConfirmed: state => state.otp_confirmed,
   identity: ({ token }) => token ? jwtDecode(token).identity : null, // eslint-disable-line no-confusing-arrow,max-len
-  me(state, getters, rootState, { users, groups, abilities, containers }) {
-    const me = Object.keys(users).length > 0 && getters.identity && users[getters.identity]
-      ? users[getters.identity].attributes
-      : {}; // eslint-disable-line max-len
-
+  me(state, getters, rootState, { myself, groups, abilities }) {
+    // const index = users.findIndex(e => e.id === getters.identity);
     return {
-      ...me,
-      abilities: getUserAbilities({ users, groups, abilities }, getters.identity),
-      groups: getUserGroups({ users, groups }, getters.identity),
-      containers: getUserContainers({ users, containers }, getters.identity)
+      ...myself,
+      abilities: getUserAbilities({ myself, groups, abilities }, getters.identity)
+      // groups: getUserGroups({ myself, groups }, getters.identity)
     };
   }
 };
@@ -66,14 +62,14 @@ const authMutations = {
   [TOKEN_SUCCESS]: (state, data) => {
     Object.assign(state, {
       token: data.access_token,
-// eslint-disable-next-line max-len
+      // eslint-disable-next-line max-len
       refresh_token: data.refresh_token ? data.refresh_token : storage.get(STORAGE_REFRESH_TOKEN_KEY),
       otp_confirmed: jwtDecode(data.access_token).user_claims.otp_confirmed,
       me: jwtDecode(data.access_token).identity
     });
-// eslint-disable-next-line max-len
+    // eslint-disable-next-line max-len
     storage.set(STORAGE_TOKEN_KEY, data.access_token);
-// eslint-disable-next-line max-len
+    // eslint-disable-next-line max-len
     storage.set(STORAGE_REFRESH_TOKEN_KEY, data.refresh_token ? data.refresh_token : storage.get(STORAGE_REFRESH_TOKEN_KEY));
   },
   [TOKEN_FAILURE]: (state, err) => {

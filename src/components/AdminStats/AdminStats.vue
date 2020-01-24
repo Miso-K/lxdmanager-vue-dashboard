@@ -16,7 +16,7 @@
           color="purple"
           :value="machines"
           unit=" units"
-          label="Virtual Servers"
+          label="Instances"
           label_sub="Running"
           :value_sub="runningMachines"
         ></admin-stats-card>
@@ -38,7 +38,7 @@
           icon="memory"
           color="blue"
           :value="totalMemory"
-          unit=" GB"
+          unit=" "
           label="Total Memory"
           :value_sub="memory"
           unit_sub=" GB"
@@ -115,13 +115,13 @@
     },
     mounted() {
       // console.log(this.$store.getters.stats);
-      this.$store.dispatch('fetchStats');
-      this.$store.dispatch('fetchUsers');
-      this.$store.dispatch('fetchHost');
       // console.log(this.$store.getters['auth/me']);
     },
     created() {
       // this.$store.registerModule('host', Host);
+      this.$store.dispatch('fetchStats');
+      this.$store.dispatch('fetchUsers');
+      this.$store.dispatch('fetchHost');
     }
   };
 </script>

@@ -10,5 +10,7 @@ import host from './host';
 import requests from './requests';
 import appconfig from './appconfig';
 import checkconfig from './checkconfig';
+import images from './images';
+import operations from './operations';
 
-export default { abilities, auth, containers, groups, notifications, users, stats, host, requests, checkconfig, appconfig };
+export default { abilities, auth, containers, groups, notifications, users, stats, host, requests, checkconfig, appconfig, images, operations };
