@@ -139,6 +139,7 @@
 
   export default {
     name: 'tab-info',
+    props: ['id'],
     data() {
       return {
         buttons: [
@@ -211,11 +212,17 @@
         return this.buttons;
       },
       id() {
-        return Number(this.$route.params.id);
+        // return Number(this.$route.params.id);
+        // console.log(this.$props);
+        return Number(this.$props.id);
       },
       container() {
-        // console.log(this.$store.getters.containerDataId(this.id));
-        return this.$store.getters.containerDataId(this.id);
+        if (this.id) {
+          // console.log(this.$store.getters.containerDataId(this.id));
+          console.log(this.id);
+          return this.$store.getters.containerDataId(this.id);
+        }
+        return null;
       },
       config() {
         // console.log(this.container.config);

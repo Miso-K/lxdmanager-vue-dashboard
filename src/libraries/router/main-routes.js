@@ -46,6 +46,7 @@ export default [
     name: 'container',
     path: '/container/:id',
     meta: { auth: true },
+    props: true,
     component: resolve => require.ensure([], () => resolve(require('../../views/pages/Container')), 'container')
   },
   // - Help

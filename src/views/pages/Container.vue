@@ -1,6 +1,6 @@
 <template>
   <div>
-    <tabs></tabs>
+    <tabs v-bind="$props"></tabs>
   </div>
 </template>
 
@@ -12,6 +12,7 @@
     components: {
       tabs: Tabs
     },
+    props: ['id'],
     data() {
       return {
 

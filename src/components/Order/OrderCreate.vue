@@ -161,7 +161,7 @@
         return this.$store.getters['auth/me'];
       },
       canCreate() {
-        return this.me.abilities.includes('containers_create');
+        return this.me.abilities.includes('instances_create');
       },
       price() {
         const cpu = this.getPrice.cpu * this.cpu; // 1

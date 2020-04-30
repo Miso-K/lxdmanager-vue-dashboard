@@ -53,7 +53,7 @@ const actions = {
 
     return StatsService.get()
       .then((res) => {
-        // console.log(res);
+        console.log(res);
         commit(STATS_SUCCESS, { stats: res.data.data });
       }).catch((err) => {
         commit(STATS_FAILURE, err);

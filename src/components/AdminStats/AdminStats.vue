@@ -89,10 +89,10 @@
         return this.$store.getters.host;
       },
       machines() {
-        return this.stats.containers && this.stats.containers.count;
+        return this.stats.instances && this.stats.instances.count;
       },
       runningMachines() {
-        return this.stats.containers && this.stats.containers.count_running;
+        return this.stats.instances && this.stats.instances.count_running;
       },
       vcpus() {
         return this.stats.cpus && this.stats.cpus.cpus_count;

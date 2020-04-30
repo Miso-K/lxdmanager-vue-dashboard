@@ -20,7 +20,7 @@ export default function user(us) {
     otp_enabled: us.otp_enabled,
     otp_type: us.otp_type,
     admin: us.admin,
-    containers: us.relationships.containers.map(container => container),
+    containers: us.relationships.instances.map(container => container),
     groups: us.relationships.groups.map(group => group)
   };
 }

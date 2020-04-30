@@ -222,13 +222,13 @@
         return this.$store.getters.appconfig.storage.enabled === 'True';
       },
       canDelete() {
-        return this.me.abilities.includes('containers_delete');
+        return this.me.abilities.includes('instances_delete');
       },
       canClone() {
-        return this.me.abilities.includes('containers_create');
+        return this.me.abilities.includes('instances_create');
       },
       canUpdate() {
-        return this.me.abilities.includes('containers_update');
+        return this.me.abilities.includes('instances_update');
       },
       price() {
         const cpu = this.getPrice.cpu * this.cpu; // 1

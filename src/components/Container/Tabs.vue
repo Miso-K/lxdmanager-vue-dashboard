@@ -23,16 +23,16 @@
       :value="'tab-' + i"
     >
       <v-card v-if="i === 1" flat>
-         <tab-info></tab-info>
+         <tab-info v-bind="$props"></tab-info>
       </v-card>
       <v-card v-if="i === 2" flat>
-        <tab-console></tab-console>
+        <tab-console v-bind="$props"></tab-console>
       </v-card>
       <v-card v-if="i === 3" flat>
-        <tab-settings></tab-settings>
+        <tab-settings v-bind="$props"></tab-settings>
       </v-card>
       <v-card v-if="i === 4" flat>
-        <tab-snapshots></tab-snapshots>
+        <tab-snapshots v-bind="$props"></tab-snapshots>
       </v-card>
     </v-tab-item>
   </v-tabs>
@@ -47,6 +47,7 @@
 
   export default {
     name: 'tabs',
+    props: ['id'],
     data() {
       return {
       };

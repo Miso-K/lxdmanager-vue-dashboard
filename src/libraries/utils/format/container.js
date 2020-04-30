@@ -39,6 +39,7 @@ export default function container(ct) {
     status,
     id: ct.id,
     name: ct.name,
+    type: ct.type,
     created_at: ct.created_at,
     ips,
     config: {

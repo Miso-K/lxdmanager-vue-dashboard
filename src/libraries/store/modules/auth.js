@@ -82,6 +82,7 @@ const authMutations = {
     Object.assign(state, { token: null, me: null });
     storage.remove(STORAGE_TOKEN_KEY);
     storage.remove(STORAGE_REFRESH_TOKEN_KEY);
+    location.reload();
   }
 };
 

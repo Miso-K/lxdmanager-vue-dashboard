@@ -64,4 +64,4 @@ class ContainerResource extends Resource {
   }
 }
 
-export default new ContainerResource('lxc/containers');
+export default new ContainerResource('lxc/instances');

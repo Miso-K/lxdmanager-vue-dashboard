@@ -14,6 +14,7 @@ import {
   UNFREEZING
 } from '../../utils/states';
 import formatContainer from '../../utils/format/container';
+import storage from '../../utils/storage';
 
 export const CONTAINERS_REQUEST = 'CONTAINERS_REQUEST';
 export const CONTAINERS_SUCCESS = 'CONTAINERS_SUCCESS';
@@ -41,12 +42,16 @@ export const CONTAINER_UPGRADE_DIALOG_CLOSE = 'CONTAINER_UPGRADE_DIALOG_CLOSE';
 export const SET_CONTAINERS_FILTER = 'SET_CONTAINERS_FILTER';
 export const SET_CONTAINER_TERMINAL = 'SET_CONTAINER_TERMINAL';
 
+export const STORAGE_CONTAINERS_KEY = 'STORAGE_CONTAINERS';
+
+const storedContainers = storage.get(STORAGE_CONTAINERS_KEY);
+
 /**
  * Initial state
  * @type {Object}
  */
 const containersState = {
-  containers: {},
+  containers: storedContainers || [],
   snapshots: {},
   loading: false,
   dialogs: {
@@ -96,10 +101,12 @@ const containersMutations = {
   },
   [CONTAINERS_SUCCESS]: (state, containers) => {
     Object.assign(state, { ...containers, loading: false });
+    storage.set(STORAGE_CONTAINERS_KEY, containers.containers);
   },
   [CONTAINERS_FAILURE]: (state, err) => {
     console.log(CONTAINERS_FAILURE, err);
     Object.assign(state, { loading: false });
+    storage.remove(STORAGE_CONTAINERS_KEY);
   },
 
   [CONTAINER_REQUEST]: (state, { id, status }) => {
@@ -115,6 +122,7 @@ const containersMutations = {
     //  ...state.containers[index],
     //  ...data
     // };
+    storage.set(STORAGE_CONTAINERS_KEY, state.containers);
   },
   [CONTAINER_FAILURE]: (state, err, id) => {
     console.log(CONTAINER_FAILURE, err);
@@ -123,6 +131,7 @@ const containersMutations = {
       ...state.containers[id],
       loading: false
     };
+    storage.remove(STORAGE_CONTAINERS_KEY);
   },
 
   [CONTAINER_INFO_DIALOG_OPEN]: (state, id) => {
@@ -284,19 +293,19 @@ const containersActions = {
 
     const obj = {
       data: {
-        type: 'containers',
+        type: 'instances',
         name: data.name,
         config: {
           limits_cpu: data.cpu,
-          limits_memory: data.memory,
-          limits_disk: data.disk
+          limits_memory: `${data.memory}MB`,
+          limits_disk: `${data.disk}MB`
         },
         devices: {}
       }
     };
-    // console.log(obj);
+    console.log(obj);
     return ContainersService.put(data.id, obj).then((res) => {
-      // console.log(res);
+      console.log(res);
       commit(CONTAINERS_SUCCESS, res.data);
     }).catch((err) => {
       commit(CONTAINERS_FAILURE, err);

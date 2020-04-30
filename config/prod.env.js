@@ -1,4 +1,5 @@
-var dotenv = require('dotenv').config()
+var dotenv = require('dotenv').config({ path: 'static/.env'})
+//dotenv({ path: "static/"});
 
 module.exports = {
   NODE_ENV: '"production"',

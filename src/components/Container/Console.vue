@@ -126,7 +126,8 @@
           console.log('WebSocket is supported by your Browser!');
           // Let us open a web socket
           // const wssurl2 = 'wss://127.0.0.1:8443/1.0/operations/7bd31bce-c7b5-4a34-a90c-328b2b67841e/websocket?secret=231c068d3a5278529a7e497c21d96389a4911c42e51152c520b3ff1d591008a0';
-          // const wssurl2 = 'wss://185.66.200.250:8443/1.0/operations/d0fe700a-54ee-4699-bfec-6d712adc98e0/websocket?secret=c045f2ab2063c10acd24d042b6b23d7b8b37e54d5f195626d2c65f60c4859816';
+          // console.log(`${wsUrl}/1.0/operations/${operationId}/websocket?secret=${secret}`);
+          // const wssurl = 'ws://127.0.0.1:8444';
           const wssurl = `${wsUrl}/1.0/operations/${operationId}/websocket?secret=${secret}`;
           // const wssurl = `${wsUrl}${termWs}`;
           // console.log(wssurl);

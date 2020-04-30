@@ -112,6 +112,13 @@
             value: 'ips[1].address',
             sortable: false,
             class: 'pa-1'
+          },
+          {
+            text: 'Type',
+            align: 'left',
+            value: 'type',
+            sortable: true,
+            class: 'pa-1'
           }
         ],
         editedIndex: -1,
@@ -164,7 +171,7 @@
         return this.$store.getters['auth/me'];
       },
       canCreate() {
-        return this.me.abilities.includes('containers_create');
+        return this.me.abilities.includes('instances_create');
       },
       computedHeaders() {
         return this.headers.filter(h => !(h.disk === this.showDisk) && !(h.price === this.showPrice));

@@ -24,11 +24,35 @@ This project is based on [vue-cli](https://github.com/lxc-webpanel/dashboard-vue
 
 This project require running backend for API from (https://github.com/Miso-K/lxd-api-gateway)
 
-## Configure
+It is recomended to use *Nginx* as webserver and proxy for websocket.
 
-Before build set API_BASE_URL and API_BASE_WS_URL in .env file
+## Install
+For installation actual version of *lxdmanager-vue-dashboard* you can use *install_dashboard.sh* script.
+
+The script download github repository and copy content of directory *dist* into */var/www/lxdmanager-vue-dashboard/* 
+
+You can manualy download repository from github and copy content of directory *dist* where you need.
+
+*Nginx* config templates are stored in *nginx* directory.  
+
+## Configure
+Go to */var/www/lxdmanager-vue-dashboard/* and edit *.env* file according to *.env.example*
+
+``` bash
+API_BASE_URL - refers to *lxd-api-gateway* host 
+API_BASE_WS_URL - refers to lxd host websocket (please set *nginx* proxy)
+``` 
+
+You can also change LXDManager logo to yours in *img/logo.png*
+
+## Configure for build
+
+Before build set API_BASE_URL and API_BASE_WS_URL in static/.env file
+
+``` bash
 API_BASE_URL - refers to *lxd-api-gateway* host
-API_BASE_WS_URL - refers to lxd host websocket
+API_BASE_WS_URL - refers to lxd host websocket (please use *nginx* proxy)
+``` 
 
 ## Build Setup
 
