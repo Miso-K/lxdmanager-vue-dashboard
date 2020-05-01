@@ -29,6 +29,15 @@ It is recomended to use *Nginx* as webserver and proxy for websocket.
 ## Install
 For installation actual version of *lxdmanager-vue-dashboard* you can use *install_dashboard.sh* script.
 
+``` bash
+# Download the script
+curl https://raw.githubusercontent.com/Miso-K/lxdmanager-vue-dashboard/master/install_dashboard.sh > install_dashboard.sh
+# Set execution permissions
+chmod +x install_dashboard.sh
+# Run script to install program
+./install_dashboard.sh
+```
+
 The script download github repository and copy content of directory *dist* into */var/www/lxdmanager-vue-dashboard/* 
 
 You can manualy download repository from github and copy content of directory *dist* where you need.
@@ -45,7 +54,7 @@ API_BASE_WS_URL - refers to lxd host websocket (please set *nginx* proxy)
 
 You can also change LXDManager logo to yours in *img/logo.png*
 
-## Configure for build
+## Configure for development and build
 
 Before build set API_BASE_URL and API_BASE_WS_URL in static/.env file
 
@@ -54,7 +63,7 @@ API_BASE_URL - refers to *lxd-api-gateway* host
 API_BASE_WS_URL - refers to lxd host websocket (please use *nginx* proxy)
 ``` 
 
-## Build Setup
+## Development and build Setup
 
 ``` bash
 # install dependencies
