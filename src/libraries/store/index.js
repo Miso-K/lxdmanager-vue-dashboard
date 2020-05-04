@@ -45,6 +45,7 @@ if (module.hot) {
     './modules/abilities',
     './modules/auth',
     './modules/containers',
+    './modules/instances',
     './modules/groups',
     './modules/notifications',
     './modules/users',
@@ -64,6 +65,7 @@ if (module.hot) {
         abilities: require('./modules/abilities'),
         auth: require('./modules/auth'),
         containers: require('./modules/containers'),
+        instances: require('./modules/instances'),
         groups: require('./modules/groups'),
         notifications: require('./modules/notifications'),
         users: require('./modules/users'),
@@ -79,6 +81,6 @@ if (module.hot) {
   });
 }
 
-// store.registerModule('host', modules.Host);
+// store.registerModule('instances', modules.instances);
 
 export default store;

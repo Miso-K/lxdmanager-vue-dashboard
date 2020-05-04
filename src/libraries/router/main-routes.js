@@ -13,7 +13,14 @@ export default [
     meta: { auth: true },
     component: resolve => require.ensure([], () => resolve(require('../../views/pages/Containers')), 'containers')
   },
-  // - Containers
+  // - Instances
+  {
+    name: 'instances',
+    path: '/instances',
+    meta: { auth: true },
+    component: resolve => require.ensure([], () => resolve(require('../../views/pages/Instances')), 'instances')
+  },
+  // - Images
   {
     name: 'images',
     path: '/images',
@@ -41,13 +48,21 @@ export default [
     meta: { auth: 'me_update' },
     component: resolve => require.ensure([], () => resolve(require('../../views/pages/Settings')), 'settings')
   },
-  // - Settings
+  // - Container
   {
     name: 'container',
     path: '/container/:id',
     meta: { auth: true },
     props: true,
     component: resolve => require.ensure([], () => resolve(require('../../views/pages/Container')), 'container')
+  },
+  // - Instance
+  {
+    name: 'instance',
+    path: '/instance/:id',
+    meta: { auth: true },
+    props: true,
+    component: resolve => require.ensure([], () => resolve(require('../../views/pages/Instance')), 'instance')
   },
   // - Help
   {

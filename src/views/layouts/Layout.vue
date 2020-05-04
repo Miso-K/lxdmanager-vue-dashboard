@@ -89,7 +89,7 @@
         drawer: true,
         items: [
           { title: this.$t('menu.dashboard'), icon: 'dashboard', to: { name: 'dashboard' }, user: true },
-          { title: this.$t('menu.containers'), icon: 'storage', to: { name: 'containers' }, user: true },
+          { title: this.$t('menu.instances'), icon: 'storage', to: { name: 'instances' }, user: true },
           { title: this.$t('menu.images'), icon: 'storage', to: { name: 'images' }, user: false },
           { title: this.$t('menu.users'), icon: 'group', to: { name: 'users' }, user: false },
           { title: this.$t('menu.groups'), icon: 'people_outline', to: { name: 'groups' }, user: false },

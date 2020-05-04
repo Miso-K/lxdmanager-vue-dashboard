@@ -2,6 +2,7 @@
 import abilities from './abilities';
 import auth from './auth';
 import containers from './containers';
+import instances from './instances';
 import groups from './groups';
 import notifications from './notifications';
 import users from './users';
@@ -13,4 +14,4 @@ import checkconfig from './checkconfig';
 import images from './images';
 import operations from './operations';
 
-export default { abilities, auth, containers, groups, notifications, users, stats, host, requests, checkconfig, appconfig, images, operations };
+export default { abilities, auth, containers, instances, groups, notifications, users, stats, host, requests, checkconfig, appconfig, images, operations };

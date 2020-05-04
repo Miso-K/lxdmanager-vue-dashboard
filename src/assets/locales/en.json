@@ -8,6 +8,7 @@
   "menu": {
     "dashboard": "Dashboard",
     "containers": "Containers",
+    "instances": "Instances",
     "images": "Images",
     "requests": "Requests",
     "settings": "Settings",
@@ -51,6 +52,116 @@
     "profile_updated": "Your profile was updated",
     "password_saved": "Your password has been saved",
     "password_wrong": "You set wrong password"
+  },
+  "instances": {
+    "name": "Instances",
+    "tabs": {
+      "info": "Info",
+      "console": "Console",
+      "settings": "Settings",
+      "snapshots": "Snapshots"
+    },
+    "actions": {
+      "manage": "Manage",
+      "clone": "Clone instance",
+      "new": "New instance",
+      "upgrade": "Upgrade instance",
+      "destroy": "Destroy instance",
+      "freeze": "Freeze",
+      "restart": "Restart",
+      "stopforce": "Force stop",
+      "start": "Start",
+      "stop": "Stop",
+      "unfreeze": "Unfreeze",
+      "restore": "Restore",
+      "delete": "Delete"
+    },
+    "config":{
+      "general": "General",
+      "system": "System",
+      "limits": "Limits",
+      "network": "Network",
+      "name": "Name",
+      "created": "Created",
+      "status": "Status",
+      "os": "OS",
+      "os_release": "OS release",
+      "os_version": "OS version",
+      "cpu": "CPU",
+      "memory": "Memory",
+      "disk": "Disk",
+      "price": "Price"
+    },
+    "snapshots": {
+      "create": "Create snapshot",
+      "name": "Snapshot name",
+      "date": "Date created",
+      "action": "Action"
+    },
+    "states": {
+      "ALL": "All",
+      "FREEZING": "Freezing...",
+      "FROZEN": "Frozen",
+      "RESTARTING": "Restarting...",
+      "RUNNING": "Running",
+      "SHUTTING_DOWN": "Shutting down...",
+      "STARTING": "Starting...",
+      "STOPPED": "Stopped",
+      "STOPPING": "Stopping...",
+      "UNFREEZING": "Unfreezing..."
+    },
+    "order": {
+      "new": "New instance",
+      "upgrade": "Upgrade instance",
+      "select_instance": {
+        "label": "Select instance",
+        "help": "Something to help the user about instance's name."
+      },
+      "instance_name": {
+        "label": "Instance name",
+        "help": "Something to help the user about container's name."
+      },
+      "instance_clone_name": {
+        "label": "Instance clone",
+        "help": "Something to help the user about container's name."
+      },
+      "destroy_instance": {
+        "label": "Create request to destroy instance",
+        "help": "Send request for destroying your instance."
+      },
+      "os": {
+        "label": "OS",
+        "help": "Something to help the user about container's os."
+      },
+      "cpu": {
+        "label": "CPU",
+        "help": "Something to help the user about CPU"
+      },
+      "memory": {
+        "label": "RAM",
+        "help": "Something to help the user about memory and swap."
+      },
+      "disk": {
+        "label": "Disk",
+        "help": "Something to help the user about memory and swap."
+      },
+      "payment_period": {
+        "label": "Payment period",
+        "help": "Something to help the user about memory and swap."
+      },
+      "calculated_price": {
+        "label": "Calculated price",
+        "help": "Something to help the user about memory and swap."
+      },
+      "restore_snapshot": {
+        "title": "Restore this snapshot?",
+        "text": "This action is not reversible."
+      },
+      "delete_snapshot": {
+        "title": "Delete this snapshot?",
+        "text": "This action is not reversible."
+      }
+    }
   },
   "containers": {
     "name": "Containers",

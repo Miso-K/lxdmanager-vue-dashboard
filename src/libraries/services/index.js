@@ -5,6 +5,7 @@
 import AbilitiesService from './abilities';
 import AuthService from './auth';
 import ContainersService from './containers';
+import InstancesService from './instances';
 import MeService from './me';
 import UsersService from './users';
 import RequestsService from './requests';
@@ -20,6 +21,7 @@ export {
   AbilitiesService,
   AuthService,
   ContainersService,
+  InstancesService,
   GroupsService,
   RequestsService,
   MeService,

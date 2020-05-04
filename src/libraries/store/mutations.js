@@ -27,14 +27,15 @@ export const TOGGLE_SIDEBAR_COLLAPSE = (state) => {
 export const CLOSE_DIALOG = (state) => {
   state.dialog = { // eslint-disable-line no-param-reassign
     active: false,
-    containerId: null
+    containerId: null,
+    instanceId: null
   };
 };
 
 export const OPEN_DIALOG = (state, id) => {
   state.dialog = { // eslint-disable-line no-param-reassign
     active: true,
-    containerId: id
+    instanceId: id
   };
 };
 
