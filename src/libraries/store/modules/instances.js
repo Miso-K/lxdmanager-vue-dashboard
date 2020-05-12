@@ -289,7 +289,7 @@ const instancesActions = {
   upgradeInstance({ commit }, data) {
     commit(INSTANCES_REQUEST);
     // console.log('create log:');
-    // console.log(data);
+    console.log(data);
 
     const obj = {
       data: {

@@ -9,9 +9,9 @@
               color="blue"
               dark
               class="elevation-3"
-              @click="$store.dispatch('openContainerCreateDialog')"
+              @click="$store.dispatch('openInstanceCreateDialog')"
             >
-              {{ $t('containers.actions.new') }}
+              {{ $t('instances.actions.new') }}
               <v-icon large right dark>plus_one</v-icon>
             </v-btn>
           </v-flex>
@@ -22,9 +22,9 @@
               color="green"
               dark
               class="elevation-3"
-              @click.native="$store.dispatch('openContainerUpgradeDialog')"
+              @click.native="$store.dispatch('openInstanceUpgradeDialog')"
             >
-              {{ $t('containers.actions.upgrade') }}
+              {{ $t('instances.actions.upgrade') }}
               <v-icon large right dark>build</v-icon>
             </v-btn>
           </v-flex>

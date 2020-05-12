@@ -4,7 +4,7 @@
 import { KMGBToB } from '../helpers';
 
 export default function instance(ct) {
-  console.log(ct);
+  // console.log(ct);
   const status = ct.status.toUpperCase();
 
   let limitsMemoryRaw = null;

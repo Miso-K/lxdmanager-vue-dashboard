@@ -3,7 +3,7 @@
     <div v-if="!me.admin">
       <stats></stats>
       <order></order>
-      <dashboard_containers></dashboard_containers>
+      <dashboard_instances></dashboard_instances>
     </div>
     <div v-if="me.admin">
       <admin_stats></admin_stats>
@@ -15,7 +15,7 @@
   import Stats from '../../components/Stats/Stats';
   import Order from '../../components/Order/Order';
   import AdminStats from '../../components/AdminStats/AdminStats';
-  import DashboardContainers from '../../components/Containers/DashboardContainers';
+  import DashboardInstances from '../../components/Instances/DashboardInstances';
 
   export default {
     name: 'Dashboard',
@@ -23,7 +23,7 @@
       stats: Stats,
       order: Order,
       admin_stats: AdminStats,
-      dashboard_containers: DashboardContainers
+      dashboard_instances: DashboardInstances
     },
     computed: {
       me() {

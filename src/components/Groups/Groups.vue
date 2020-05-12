@@ -54,8 +54,8 @@
                 chips
                 color="blue-grey lighten-2"
                 label="Abilities"
-                item-text="text"
-                item-value="value"
+                item-text="name"
+                item-value="id"
                 multiple
               >
                 <template
@@ -66,9 +66,9 @@
                     :input-value="data.selected"
                     close
                     class="chip--select-multi"
-                    @input="removeAbility(data.item)"
+                    @click:close="removeAbility(data.item)"
                   >
-                    {{ data.item.text }}
+                    {{ data.item.name }}
                   </v-chip>
                 </template>
                 <template
@@ -76,7 +76,7 @@
                   slot-scope="data"
                 >
                   <template >
-                    <v-list-tile-content v-text="data.item.text"></v-list-tile-content>
+                    <v-list-tile-content v-text="data.item.name"></v-list-tile-content>
                   </template>
                 </template>
               </v-autocomplete>
@@ -195,10 +195,9 @@
       },
       abilitiesId() {
         const abilities = this.$store.getters.abilitiessTableData;
-        // console.log(containers.map(container => container.id));
         return abilities.map(ability => ({
-          text: ability.name,
-          value: ability.id
+          name: ability.name,
+          id: ability.id
         }));
       }
     },
@@ -209,8 +208,11 @@
     },
     methods: {
       removeAbility(item) {
-        const index = this.editedItem.abilities.indexOf(item.value);
+        // const index = this.editedItem.abilities.indexOf(item.value);
+        const index = this.editedItem.abilities.findIndex(x => x.id === item.id);
+        // console.log(index);
         if (index >= 0) this.editedItem.abilities.splice(index, 1);
+        // console.log(this.editedItem.abilities);
       },
       editItem(item) {
         this.editedIndex = this.items.indexOf(item);
@@ -218,7 +220,7 @@
         this.editedItem.id = item.id;
         this.editedItem.name = item.name;
         this.editedItem.abilities = item.relationships.abilities.map(ability => ({
-          value: ability.id
+          id: ability.id
         }));
         this.dialog = true;
       },
@@ -256,7 +258,8 @@
         if (this.$refs.form.validate()) {
           if (this.editedIndex > -1) {
             Object.assign(this.items[this.editedIndex], this.editedItem);
-            // console.log(this.editedItem);
+            console.log(this.editedItem);
+            console.log(this.items);
             this.$store.dispatch('updateGroup', this.editedItem);
             setTimeout(() => {
               this.$store.dispatch('fetchGroups');
@@ -272,7 +275,6 @@
         }
       },
       refreshData() {
-        // this.fetchContainer(this.id);
         this.$store.dispatch('fetchGroups');
         this.$store.dispatch('fetchAbilities');
       }

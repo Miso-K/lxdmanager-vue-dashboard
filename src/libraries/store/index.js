@@ -44,7 +44,6 @@ if (module.hot) {
     './actions',
     './modules/abilities',
     './modules/auth',
-    './modules/containers',
     './modules/instances',
     './modules/groups',
     './modules/notifications',
@@ -64,7 +63,6 @@ if (module.hot) {
       modules: {
         abilities: require('./modules/abilities'),
         auth: require('./modules/auth'),
-        containers: require('./modules/containers'),
         instances: require('./modules/instances'),
         groups: require('./modules/groups'),
         notifications: require('./modules/notifications'),

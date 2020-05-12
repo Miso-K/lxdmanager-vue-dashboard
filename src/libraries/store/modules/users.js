@@ -101,8 +101,8 @@ const usersActions = {
               id: 2
             }
           ],
-          containers: data.containers ? data.containers.map(c => ({
-            type: 'containers',
+          instances: data.instances ? data.instances.map(c => ({
+            type: 'instances',
             id: c
           })) : []
         }
@@ -149,8 +149,8 @@ const usersActions = {
 
   updateUser({ commit }, data) {
     commit(USERS_REQUEST);
-    // console.log('update log:');
-    // console.log(data);
+    console.log('update log:');
+    console.log(data);
 
     const obj = {
       data: {
@@ -166,9 +166,9 @@ const usersActions = {
               id: 2
             }
           ],
-          containers: data.containers ? data.containers.map(c => ({
-            type: 'containers',
-            id: c
+          instances: data.instances ? data.instances.map(c => ({
+            type: 'instances',
+            id: c.id ? c.id : c
           })) : []
         }
       }

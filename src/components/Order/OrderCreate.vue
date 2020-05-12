@@ -3,19 +3,19 @@
     <v-dialog v-model="active" max-width="800px">
       <v-card>
         <v-card-title>
-          <span class="headline">{{ $t('containers.order.new') }}</span>
+          <span class="headline">{{ $t('instances.order.new') }}</span>
         </v-card-title>
         <v-card-text>
           <v-container grid-list-md>
             <v-layout wrap>
               <v-flex xs12 sm6>
-                <v-text-field :label="$t('containers.order.container_name.label')" v-model="name" required></v-text-field>
+                <v-text-field :label="$t('instances.order.instance_name.label')" v-model="name" required></v-text-field>
               </v-flex>
               <v-flex xs12 sm6>
                 <v-select
                   :items=templates
                   v-model="os"
-                  :label="$t('containers.order.os.label')"
+                  :label="$t('instances.order.os.label')"
                 ></v-select>
               </v-flex>
               <v-flex xs3 sm3>
@@ -39,19 +39,19 @@
                   </v-btn>
               </v-flex>
               <v-flex xs10>
-                <v-slider min="1" max="4" step="1" v-model="cpu" :label="$t('containers.order.cpu.label')"></v-slider>
+                <v-slider min="1" max="4" step="1" v-model="cpu" :label="$t('instances.order.cpu.label')"></v-slider>
               </v-flex>
               <v-flex xs2>
                 <v-text-field v-model="cpu" type="CPUs" suffix="CPUs"></v-text-field>
               </v-flex>
               <v-flex xs10>
-                <v-slider min="512" max="8192" step="512" v-model="memory" :label="$t('containers.order.memory.label')"></v-slider>
+                <v-slider min="512" max="8192" step="512" v-model="memory" :label="$t('instances.order.memory.label')"></v-slider>
               </v-flex>
               <v-flex xs2>
                 <v-text-field v-model="memory" type="MB" suffix="MB"></v-text-field>
               </v-flex>
               <v-flex xs10>
-                <v-slider v-if="diskEnabled" min="10" max="500" step="5" v-model="disk" :label="$t('containers.order.disk.label')"></v-slider>
+                <v-slider v-if="diskEnabled" min="10" max="500" step="5" v-model="disk" :label="$t('instances.order.disk.label')"></v-slider>
               </v-flex>
               <v-flex xs2>
                 <v-text-field v-if="diskEnabled" v-model="disk" type="Disk" suffix="GB"></v-text-field>
@@ -66,7 +66,7 @@
               </v-flex>
               <template v-if="showPrice">
                 <v-flex xs3>
-                  <v-subheader>{{ $t('containers.order.payment_period.label') }}</v-subheader>
+                  <v-subheader>{{ $t('instances.order.payment_period.label') }}</v-subheader>
                 </v-flex>
                 <v-flex xs3>
                   <v-select
@@ -75,7 +75,7 @@
                   ></v-select>
                 </v-flex>
                 <v-flex xs4>
-                  <v-subheader>{{ $t('containers.order.calculated_price.label') }}</v-subheader>
+                  <v-subheader>{{ $t('instances.order.calculated_price.label') }}</v-subheader>
                 </v-flex>
                 <v-flex xs2>
                   <v-text-field
@@ -126,7 +126,7 @@
     computed: {
       active: {
         get() {
-          return this.$store.state.containers.dialogs.create;
+          return this.$store.state.instances.dialogs.create;
         },
         set(value) {
           if (!value) {
@@ -161,6 +161,7 @@
         return this.$store.getters['auth/me'];
       },
       canCreate() {
+        console.log(this.me.abilities);
         return this.me.abilities.includes('instances_create');
       },
       price() {
@@ -203,7 +204,7 @@
       },
       closeDialog() {
         this.step = 0;
-        this.$store.dispatch('closeContainerCreateDialog');
+        this.$store.dispatch('closeInstanceCreateDialog');
       },
       save() {
         if (this.name) {
@@ -221,13 +222,13 @@
               pool_name: this.getStorage.enabled === 'True' ? this.getStorage.pool_name : '',
               price: this.price ? this.price : ''
             };
-            this.$store.dispatch('createContainer', data);
+            this.$store.dispatch('createInstance', data);
             // eslint-disable-next-line max-len
-            // this.$store.dispatch('notify', { id: 0, message: 'Your container is launching', color: '' });
+            // this.$store.dispatch('notify', { id: 0, message: 'Your instance is launching', color: '' });
             setTimeout(() => {
-              this.$store.dispatch('fetchContainers');
+              this.$store.dispatch('fetchInstances');
             }, 500);
-            console.log('create container');
+            console.log('create instance');
           }
         }
         this.active = false;
@@ -245,7 +246,7 @@
             price: this.price
           };
           // console.log(data);
-          this.$store.dispatch('createRequests', { action: 'create', message: `Create new container ${this.name}`, status: 'waiting', meta_data: data });
+          this.$store.dispatch('createRequests', { action: 'create', message: `Create new instance ${this.name}`, status: 'waiting', meta_data: data });
           this.$store.dispatch('notify', { id: 0, message: `${this.$i18n.t('notifications.request_created')}`, color: '' });
           this.active = false;
         }

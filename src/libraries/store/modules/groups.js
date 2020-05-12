@@ -72,7 +72,7 @@ const groupsActions = {
         relationships: {
           abilities: data.abilities ? data.abilities.map(a => ({
             type: 'ability',
-            id: a
+            id: a.id ? a.id : a
           })) : []
         }
       }
@@ -99,7 +99,7 @@ const groupsActions = {
         relationships: {
           abilities: data.abilities ? data.abilities.map(a => ({
             type: 'ability',
-            id: a
+            id: a.id ? a.id : a
           })) : []
         }
       }

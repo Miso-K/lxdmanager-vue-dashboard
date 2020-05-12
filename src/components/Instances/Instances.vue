@@ -15,7 +15,7 @@
             >
               <v-icon>refresh</v-icon>
             </v-btn>
-      <v-btn color="primary" dark @click="$store.dispatch('openContainerCreateDialog')" class="mb-1">{{ $t('instances.actions.new') }}</v-btn>
+      <v-btn color="primary" dark @click="$store.dispatch('openInstanceCreateDialog')" class="mb-1">{{ $t('instances.actions.new') }}</v-btn>
       <v-spacer></v-spacer>
       <v-text-field
         append-icon="search"
@@ -163,7 +163,7 @@
         }
       },
       items() {
-        // console.log(this.$store.getters.containersTableData);
+        // console.log(this.$store.getters.instancesTableData);
         // console.log(this.$store.getters['auth/me']);
         return this.$store.getters.instancesTableData;
       },

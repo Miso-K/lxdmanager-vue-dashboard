@@ -1,8 +1,8 @@
 // import _map from 'lodash/map';
 
 export default function createUser(data) {
-  const cts = data.containers.map(c => ({
-    type: 'containers',
+  const ints = data.instances.map(c => ({
+    type: 'instances',
     id: c
   }));
 
@@ -33,8 +33,8 @@ export default function createUser(data) {
             }
           ]
         },
-        containers: {
-          data: cts
+        instances: {
+          data: ints
         }
       }
     }

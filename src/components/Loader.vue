@@ -11,7 +11,7 @@
         const st = this.$store.state;
         // console.log(st);
         // eslint-disable-next-line max-len
-        return st.containers.loading || st.images.loading || st.users.loading || st.requests.loading;
+        return st.instances.loading || st.images.loading || st.users.loading || st.requests.loading;
       }
     }
   };

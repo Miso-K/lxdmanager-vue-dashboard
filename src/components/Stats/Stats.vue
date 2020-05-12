@@ -8,7 +8,7 @@
           color="red"
           :value="machines"
           :unit="$t('stats.units')"
-          :label="$t('stats.containers')"
+          :label="$t('stats.instances')"
         ></stats-card>
         <stats-card
           flex="md4"
@@ -69,7 +69,7 @@
         return this.$store.getters.stats;
       },
       machines() {
-        return this.stats.containers && this.stats.containers.count;
+        return this.stats.instances && this.stats.instances.count;
       },
       vcpus() {
         return this.stats.cpus && this.stats.cpus.cpus_count;

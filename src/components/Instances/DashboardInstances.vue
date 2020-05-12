@@ -2,8 +2,8 @@
     <v-container grid-list-md>
       <!--<loader v-if="loading"></loader>-->
       <v-data-iterator
-        v-if="containers"
-        :items="containers"
+        v-if="instances"
+        :items="instances"
         :footer-props.items-per-page-options="rowsPerPageItems"
         :hide-default-footer="total < 8"
       >
@@ -24,7 +24,7 @@
           >
               <v-icon style="margin-left: -20px;" class="ml-0 mr-1" :color="colorstate(item.status)">{{ iconstate(item.status) }}</v-icon>
               <v-spacer></v-spacer>
-              <v-btn color="primary" text left :to="'/container/'+item.id">{{ item.name }}</v-btn>
+              <v-btn color="primary" text left :to="'/instance/'+item.id">{{ item.name }}</v-btn>
 
           </v-app-bar>
             <v-divider></v-divider>
@@ -40,7 +40,7 @@
                 <v-list-item-content class="align-end">{{ (item.state.cpu.usage / (1000 ** 3)).toFixed(0) }}</v-list-item-content>
               </v-list-item>
               <v-list-item>
-                <v-list-item-content>{{ $t('containers.config.memory') }}:</v-list-item-content>
+                <v-list-item-content>{{ $t('instances.config.memory') }}:</v-list-item-content>
                 <!--<v-list-tile-content class="align-end pa-1">
                   {{ usage(props.item.config.limits_memory_raw, props.item.state.memory ? props.item.state.memory.usage : '') }}
                 </v-list-tile-content>-->
@@ -57,7 +57,7 @@
                 </v-list-item-content>
               </v-list-item>
               <v-list-item v-if="showDisk">
-                <v-list-item-content>{{ $t('containers.config.disk') }}:</v-list-item-content>
+                <v-list-item-content>{{ $t('instances.config.disk') }}:</v-list-item-content>
                 <!--<v-list-tile-content class="align-end pa-1">
                   {{ usage(40000, 20000) }}
                 </v-list-tile-content>-->
@@ -74,7 +74,7 @@
                 </v-list-item-content>
               </v-list-item>
               <v-list-item v-if="showPrice">
-                <v-list-item-content>{{ $t('containers.config.price') }}:</v-list-item-content>
+                <v-list-item-content>{{ $t('instances.config.price') }}:</v-list-item-content>
                 <v-list-item-content class="align-end pa-1">
                     {{ item.config.user_price ? item.config.user_price : '' }}
                 </v-list-item-content>
@@ -136,14 +136,14 @@
     computed: {
       total() {
         // console.log(this.$store.getters);
-        return this.$store.getters.containersTotal;
+        return this.$store.getters.instancesTotal;
       },
       loading() {
-        return this.$store.state.containers.loading;
+        return this.$store.state.instances.loading;
       },
-      containers() {
-        // console.log(this.$store.getters.containersTableData);
-        return this.$store.getters.containersTableData;
+      instances() {
+        // console.log(this.$store.getters.instancesTableData);
+        return this.$store.getters.instancesTableData;
       },
       showPrice() {
         return this.$store.getters.appconfig.price.enabled === 'True';
@@ -187,7 +187,7 @@
       }
     },
     created() {
-      this.$store.dispatch('fetchContainers');
+      this.$store.dispatch('fetchInstances');
     }
   };
 </script>

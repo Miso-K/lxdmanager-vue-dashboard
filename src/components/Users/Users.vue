@@ -103,14 +103,14 @@
               </v-flex>
               <v-flex xs12 sm12 md12>
                 <v-autocomplete
-                v-model="editedItem.containers"
+                v-model="editedItem.instances"
                 :disabled="isUpdating"
-                :items="containersId"
+                :items="instancesId"
                 chips
                 color="blue-grey lighten-2"
-                label="Containers"
-                item-text="text"
-                item-value="value"
+                label="Instances"
+                item-text="name"
+                item-value="id"
                 multiple
               >
                 <template
@@ -121,9 +121,9 @@
                     :input-value="data.selected"
                     close
                     class="chip--select-multi"
-                    @input="removeContainer(data.item)"
+                    @click:close="removeInstance(data.item)"
                   >
-                    {{ data.item.text }}
+                    {{ data.item.name }}
                   </v-chip>
                 </template>
                 <template
@@ -131,7 +131,7 @@
                   slot-scope="data"
                 >
                   <template >
-                    <v-list-tile-content v-text="data.item.text"></v-list-tile-content>
+                    <v-list-tile-content v-text="data.item.name"></v-list-tile-content>
                   </template>
                 </template>
               </v-autocomplete>
@@ -166,8 +166,8 @@
           <v-chip small>{{ element.name }}</v-chip>
         </span>
       </template>
-      <template v-slot:item.containers="{ item }">
-        <span v-if="item.containers" v-for="element in item.containers">
+      <template v-slot:item.instances="{ item }">
+        <span v-if="item.instances" v-for="element in item.instances">
           <v-chip small>{{ element.name }}</v-chip>
         </span>
       </template>
@@ -236,9 +236,9 @@
             sortable: false
           },
           {
-            text: 'containers',
+            text: 'instances',
             align: 'left',
-            value: 'containers',
+            value: 'instances',
             sortable: false
           },
           {
@@ -276,7 +276,7 @@
           ic_dph: '',
           dic: '',
           groups: '',
-          containers: '',
+          instances: '',
           password: '',
           otp_type: ''
         },
@@ -292,7 +292,7 @@
           ic_dph: '',
           dic: '',
           groups: '',
-          containers: '',
+          instances: '',
           password: '',
           otp_type: ''
         }
@@ -309,12 +309,11 @@
         // console.log(this.$store.getters.usersTableData);
         return this.$store.getters.usersTableData;
       },
-      containersId() {
-        const containers = this.$store.getters.containersTableData;
-        // console.log(containers.map(container => container.id));
-        return containers.map(container => ({
-          text: container.name,
-          value: container.id
+      instancesId() {
+        const instances = this.$store.getters.instancesTableData;
+        return instances.map(instance => ({
+          name: instance.name,
+          id: instance.id
         }));
       }
     },
@@ -324,14 +323,16 @@
       }
     },
     methods: {
-      removeContainer(item) {
-        const index = this.editedItem.containers.indexOf(item.value);
-        if (index >= 0) this.editedItem.containers.splice(index, 1);
+      removeInstance(item) {
+        const index = this.editedItem.instances.findIndex(x => x.id === item.id);
+        // console.log(index);
+        if (index >= 0) this.editedItem.instances.splice(index, 1);
+        // console.log(this.editedItem.instances);
       },
       editItem(item) {
         this.editedIndex = this.items.indexOf(item);
         this.editedItem = Object.assign({}, item);
-        console.log(item);
+        // console.log(item);
         this.dialog = true;
       },
       deleteDialog(item) {
@@ -367,7 +368,7 @@
         if (this.$refs.form.validate()) {
           if (this.editedIndex > -1) {
             Object.assign(this.items[this.editedIndex], this.editedItem);
-            // console.log(this.editedItem);
+            console.log(this.editedItem);
             this.$store.dispatch('updateUser', this.editedItem);
             setTimeout(() => {
               this.$store.dispatch('fetchUsers');
@@ -392,7 +393,6 @@
         this.editedItem.password = retVal;
       },
       refreshData() {
-        // this.fetchContainer(this.id);
         this.$store.dispatch('fetchUsers');
       }
     },

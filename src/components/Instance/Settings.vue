@@ -286,8 +286,20 @@
       },
       sendRequestDestroy() {
         if (this.canDelete) {
-          this.$store.dispatch('deleteInstance', this.id);
-          this.$store.dispatch('notify', { id: 0, message: `${this.$i18n.t('notifications.instance_deleted')}`, color: '' });
+          if (this.instance.status === 'STOPPED') {
+            this.$store.dispatch('deleteInstance', this.id);
+            this.$store.dispatch('notify', {
+              id: 0,
+              message: `${this.$i18n.t('notifications.instance_deleted')}`,
+              color: ''
+            });
+          } else {
+            this.$store.dispatch('notify', {
+              id: 0,
+              message: `${this.$i18n.t('notifications.instance_is_running')}`,
+              color: 'red'
+            });
+          }
         } else {
           const data = {
             id: this.id

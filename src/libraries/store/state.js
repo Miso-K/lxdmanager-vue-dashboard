@@ -4,7 +4,6 @@ const state = {
   initiliazed: false,
   dialog: {
     active: false,
-    containerId: null,
     instanceId: null
   }
 };

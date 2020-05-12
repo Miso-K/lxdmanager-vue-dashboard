@@ -3,17 +3,17 @@
     <v-dialog v-model="active" max-width="800px">
       <v-card>
         <v-card-title>
-          <span class="headline">{{ $t('containers.order.upgrade') }}</span>
+          <span class="headline">{{ $t('instances.order.upgrade') }}</span>
         </v-card-title>
         <v-card-text>
           <v-container grid-list-md>
             <v-layout wrap>
               <v-flex xs12>
                 <v-select
-                  v-model="selectedContainer"
-                  :items=containersId
-                  :label="$t('containers.order.select_container.label')"
-                  @change="getContainerConfig"
+                  v-model="selectedInstance"
+                  :items=instancesId
+                  :label="$t('instances.order.select_instance.label')"
+                  @change="getInstanceConfig"
                   required
                 ></v-select>
               </v-flex>
@@ -38,26 +38,26 @@
                   </v-btn>
               </v-flex>
               <v-flex xs10>
-                <v-slider min="1" max="4" step="1" v-model="cpu" :label="$t('containers.order.cpu.label')"></v-slider>
+                <v-slider min="1" max="4" step="1" v-model="cpu" :label="$t('instances.order.cpu.label')"></v-slider>
               </v-flex>
               <v-flex xs2>
                 <v-text-field v-model="cpu" type="CPUs" suffix="CPUs"></v-text-field>
               </v-flex>
               <v-flex xs10>
-                <v-slider min="512" max="8172" step="512" v-model="memory" :label="$t('containers.order.memory.label')"></v-slider>
+                <v-slider min="512" max="8172" step="512" v-model="memory" :label="$t('instances.order.memory.label')"></v-slider>
               </v-flex>
               <v-flex xs2>
                 <v-text-field v-model="memory" type="MB" suffix="MB"></v-text-field>
               </v-flex>
               <v-flex xs10>
-                <v-slider v-if="diskEnabled" min="10" max="160" step="10" v-model="disk" :label="$t('containers.order.disk.label')"></v-slider>
+                <v-slider v-if="diskEnabled" min="10" max="160" step="10" v-model="disk" :label="$t('instances.order.disk.label')"></v-slider>
               </v-flex>
               <v-flex xs2>
                 <v-text-field v-if="diskEnabled" v-model="disk" type="Disk" suffix="GB"></v-text-field>
               </v-flex>
               <template v-if="showPrice">
                 <v-flex xs3>
-                  <v-subheader>{{ $t('containers.order.payment_period.label') }}</v-subheader>
+                  <v-subheader>{{ $t('instances.order.payment_period.label') }}</v-subheader>
                 </v-flex>
                 <v-flex xs3>
                   <v-select
@@ -67,7 +67,7 @@
                   ></v-select>
                 </v-flex>
                 <v-flex xs4>
-                  <v-subheader>{{ $t('containers.order.calculated_price.label') }}</v-subheader>
+                  <v-subheader>{{ $t('instances.order.calculated_price.label') }}</v-subheader>
                 </v-flex>
                 <v-flex xs2>
                   <v-text-field
@@ -83,7 +83,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" text @click.native="active = false">{{ $t('actions.close') }}</v-btn>
-          <v-btn color="green darken-1" text @click="sendRequest">{{ $t('actions.create') }}</v-btn>
+          <v-btn color="green darken-1" text @click="save">{{ $t('actions.create') }}</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -103,7 +103,7 @@
         cpu: '1',
         memory: '512',
         disk: '10',
-        selectedContainer: '',
+        selectedInstance: '',
         periodes: [
           { text: '1 Month', value: 1 },
           { text: '3 Months', value: 1 },
@@ -116,7 +116,7 @@
     computed: {
       active: {
         get() {
-          return this.$store.state.containers.dialogs.upgrade !== null;
+          return this.$store.state.instances.dialogs.upgrade !== null;
         },
         set(value) {
           if (!value) {
@@ -133,22 +133,29 @@
       diskEnabled() {
         return this.$store.getters.appconfig.storage.enabled === 'True';
       },
-      id() {
-        return this.$store.state.containers.dialogs.upgrade;
+      me() {
+        return this.$store.getters['auth/me'];
       },
-      containersId() {
-        const containers = this.$store.getters.containersTableData;
-        // console.log(containers.map(container => container.id));
-        if (containers) {
-          return containers.map(container => ({
-            text: container.name,
-            value: container.id
+      canUpdate() {
+        console.log(this.me.abilities);
+        return this.me.abilities.includes('instances_update');
+      },
+      id() {
+        return this.$store.state.instances.dialogs.upgrade;
+      },
+      instancesId() {
+        const instances = this.$store.getters.instancesTableData;
+        // console.log(instances.map(instance => instance.id));
+        if (instances) {
+          return instances.map(instance => ({
+            text: instance.name,
+            value: instance.id
           }));
         }
         return '';
       },
-      containerName() {
-        return this.$store.getters.containerDataId(this.selectedContainer).name;
+      instanceName() {
+        return this.$store.getters.instanceDataId(this.selectedInstance).name;
       },
       isValid() {
         return !!this.form.name.invalid;
@@ -191,18 +198,18 @@
             this.disk = 10;
         }
       },
-      getContainersName(containers) {
+      getInstancesName(instances) {
         function findName(array, id) {
           return array.find(item => item.value === id).text;
         }
-        const inventory = this.containersId;
-        return containers.map(x => findName(inventory, x));
+        const inventory = this.instancesId;
+        return instances.map(x => findName(inventory, x));
       },
-      getContainerConfig() {
-        // console.log(this.selectedContainer);
-        // console.log(this.$store.getters.containerDataId(this.selectedContainer).config);
-        this.name = this.containerName;
-        const config = this.$store.getters.containerDataId(this.selectedContainer).config;
+      getInstanceConfig() {
+        // console.log(this.selectedInstance);
+        // console.log(this.$store.getters.instanceDataId(this.selectedInstance).config);
+        this.name = this.instanceName;
+        const config = this.$store.getters.instanceDataId(this.selectedInstance).config;
         // console.log(config);
         this.cpu = config.limits_cpu > 1 ? config.limits_cpu : 1;
         this.memory = config.limits_memory_mb > 512 ? config.limits_memory_mb : 512;
@@ -210,12 +217,30 @@
       },
       closeDialog() {
         this.name = {};
-        this.$store.dispatch('closeContainerUpgradeDialog');
+        this.$store.dispatch('closeInstanceUpgradeDialog');
+      },
+      save() {
+        if (this.name) {
+          // console.log(this.memory);
+          if (!this.canUpdate) {
+            // console.log('send request');
+            this.sendRequest();
+          } else {
+            this.$store.dispatch('upgradeInstance', { id: this.selectedInstance, name: this.name, cpu: this.cpu, memory: this.memory, disk: this.disk });
+            this.$store.dispatch('notify', { id: 0, message: `${this.$i18n.t('notifications.instance_upgraded')}`, color: '' });
+            this.active = false;
+            setTimeout(() => {
+              this.$store.dispatch('fetchInstances');
+            }, 500);
+            console.log('create instance');
+          }
+        }
+        this.active = false;
       },
       sendRequest() {
         if (this.name !== '') {
           const data = {
-            id: this.selectedContainer,
+            id: this.selectedInstance,
             os: this.os,
             cpu: this.cpu,
             memory: `${this.memory}MB`,
@@ -224,7 +249,7 @@
             price: this.price
           };
           // console.log(data);
-          this.$store.dispatch('createRequests', { action: 'upgrade', message: `Upgrade container ${this.name}`, status: 'waiting', meta_data: data });
+          this.$store.dispatch('createRequests', { action: 'upgrade', message: `Upgrade instance ${this.name}`, status: 'waiting', meta_data: data });
           this.$store.dispatch('notify', { id: 0, message: `${this.$i18n.t('notifications.request_created')}`, color: '' });
           this.active = false;
         }

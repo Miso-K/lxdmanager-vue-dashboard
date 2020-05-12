@@ -27,7 +27,7 @@
                 <v-text-field
                   :disabled="!isEditing"
                   v-model="data.storage.pool_name"
-                  label="Storage name (for default container installation)"
+                  label="Storage name (for default instance installation)"
                   placeholder="lxd"
                   required
                 ></v-text-field>

@@ -203,8 +203,6 @@
         this.$store.dispatch('fetchImages');
         // console.log(this.$store.state.images);
         // console.log(this.$store.getters.imagesTableData);
-        // this.fetchContainer(this.id);
-        // this.$store.dispatch('fetchContainers');
       },
       editItem(item) {
         // this.editedIndex = this.items.indexOf(item);

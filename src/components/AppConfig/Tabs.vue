@@ -58,8 +58,6 @@
       'storage-config': StorageConfig
     },
     mounted() {
-      // this.$store.dispatch('fetchContainers');
-      // console.log(this.$store.getters.containersTableData);
     }
   };
 </script>

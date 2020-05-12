@@ -346,16 +346,16 @@
         // console.log(JSON.parse(str));
         if (this.doAction) {
           if (this.editedItem.action === 'create') {
-            this.$store.dispatch('createContainer', JSON.parse(str));
+            this.$store.dispatch('createInstance', JSON.parse(str));
           }
           if (this.editedItem.action === 'upgrade') {
-            this.$store.dispatch('upgradeContainer', JSON.parse(str));
+            this.$store.dispatch('upgradeInstance', JSON.parse(str));
           }
           if (this.editedItem.action === 'clone') {
-            this.$store.dispatch('cloneContainer', JSON.parse(str));
+            this.$store.dispatch('cloneInstance', JSON.parse(str));
           }
           if (this.editedItem.action === 'delete') {
-            this.$store.dispatch('deleteContainer', JSON.parse(str).id);
+            this.$store.dispatch('deleteInstance', JSON.parse(str).id);
           }
         }
         setTimeout(() => {

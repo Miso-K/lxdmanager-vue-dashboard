@@ -90,7 +90,7 @@
           this.xTerm.destroy();
           this.openedTerminal = false;
         } else {
-          this.$store.dispatch('openContainerTerminal', this.id);
+          this.$store.dispatch('openInstanceTerminal', this.id);
           // console.log(this.$store.state);
           // console.log(process.env.API_BASE_WS_URL);
           this.openedTerminal = true;
