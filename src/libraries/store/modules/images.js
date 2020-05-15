@@ -141,9 +141,9 @@ const imagesActions = {
         name: data.new_name
       }
     };
-    // console.log(obj);
+    console.log(obj);
     return ImagesService.aliasRename(data.name, obj).then((res) => {
-      // console.log(res);
+      console.log(res);
       commit(IMAGE_SUCCESS, res.data);
     }).catch((err) => {
       commit(IMAGES_FAILURE, err);

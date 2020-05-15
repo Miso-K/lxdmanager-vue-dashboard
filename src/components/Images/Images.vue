@@ -41,6 +41,7 @@
         <v-card-text>
           <v-text-field
             v-model="editedItem.new_name"
+            :value="editedItem.name"
             label="Alias name"
           ></v-text-field>
           <v-text-field
@@ -207,6 +208,7 @@
       editItem(item) {
         // this.editedIndex = this.items.indexOf(item);
         this.editedItem = Object.assign({}, item);
+        this.editedItem.new_name = this.editedItem.name;
         console.log(item);
         this.dialogEdit = true;
       },

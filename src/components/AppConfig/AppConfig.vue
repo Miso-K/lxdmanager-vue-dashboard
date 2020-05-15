@@ -96,8 +96,26 @@
             <span class="headline">LXD test connection</span>
           </v-card-title>
           <v-card-text>
+            <span>Returned LXD server configuration: (Empty list if failed)</span>
             <v-container grid-list-md>
-              {{ checkconfig }}
+              <v-flex>
+                  <ul id="lxddata">
+                    <li v-for="(value, name) in checkconfig" :key="name">
+                      {{ name }}:
+                      <ul v-if="Array.isArray(value)" id="lxddatasub">
+                        <li v-for="value2 in value" :key="value2">
+                          {{ value2 }}
+                        </li>
+                      </ul>
+                      <ul v-else-if="typeof value === 'object'">
+                        <li v-for="(value3, name3) in value" :key="value3">
+                          {{ name3 }}: {{ value3 }}
+                        </li>
+                      </ul>
+                      <span v-else>{{ value }}</span>
+                    </li>
+                  </ul>
+                </v-flex>
             </v-container>
           </v-card-text>
           <v-card-actions>
@@ -207,7 +225,7 @@
         this.save();
         this.$store.dispatch('createRequests', { action: 'test', message: 'Test email configuration', status: 'cancelled', meta_data: '' });
         this.$store.dispatch('notify', { id: 0, message: 'Test email was sent', color: 'info' });
-        console.log('testemail');
+        // console.log('testemail');
       }
     },
     // created() {

@@ -102,7 +102,7 @@
           }));
         },
         items() {
-          console.log(this.entries);
+          // console.log(this.entries);
           // console.log(this.entries.map((entry) => {
           //  const description = entry.description;
           //  return Object.assign({}, entry, { description });
@@ -117,6 +117,7 @@
 
       methods: {
         save() {
+          this.$store.dispatch('notify', { id: 0, message: 'Downloading image', color: '' });
           this.$store.dispatch('createImage', {
             fingerprint: this.model.target,
             aliasName: this.aliasName ? this.aliasName : this.model.name,

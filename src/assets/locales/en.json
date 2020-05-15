@@ -276,6 +276,7 @@
   },
   "stats": {
     "containers": "Containers count",
+    "instances": "Instances count",
     "total_cpu": "Allocated CPUs",
     "total_memory": "Allocated memory",
     "total_disk": "Allocated disk space",

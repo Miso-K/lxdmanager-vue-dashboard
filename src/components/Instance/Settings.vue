@@ -302,7 +302,8 @@
           }
         } else {
           const data = {
-            id: this.id
+            id: this.id,
+            name: this.instanceName
           };
           this.$store.dispatch('createRequests', { action: 'delete', message: `Delete instance ${this.name}`, status: 'waiting', meta_data: data });
           this.$store.dispatch('notify', { id: 0, message: `${this.$i18n.t('notifications.request_created')}`, color: '' });

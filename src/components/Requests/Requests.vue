@@ -14,9 +14,9 @@
               <v-icon>refresh</v-icon>
             </v-btn>
     <v-card-title>
-      <v-dialog v-model="dialogDelete" max-width="490">
+      <v-dialog v-model="dialogDelete" max-width="520">
         <v-card>
-          <v-card-title class="headline">Are you sure to delete request?</v-card-title>
+          <v-card-title class="headline">Are you sure to delete request from history?</v-card-title>
           <v-card-text>This action cannot by undo.</v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
@@ -35,11 +35,14 @@
             <v-container grid-list-md>
               <v-layout wrap>
                 <v-flex xs12 sm12 md12>
-                  <v-textarea
-                    name="meta_data"
-                    label="Metadata"
-                    v-model="editedItem.meta_data"
-                  ></v-textarea>
+                  Metadata:
+                </v-flex>
+                <v-flex>
+                  <ul id="metadataconfirm">
+                    <li v-for="(value, name) in formatMetaData(editedItem.meta_data)" :key="name">
+                      {{ name }}: {{ value }}
+                    </li>
+                  </ul>
                 </v-flex>
                 <v-flex>
                   <v-checkbox v-model="doAction" :label="`Do action: ${editedItem.message}`"></v-checkbox>
@@ -119,18 +122,21 @@
                 <v-flex xs12 sm12 md12>
                   <v-text-field v-model="editedItem.message" label="Message"></v-text-field>
                 </v-flex>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editedItem.created_on" label="Created"></v-text-field>
+                <v-flex xs12 sm6 md6>
+                  <v-text-field :value="formatDate(editedItem.created_on)" label="Created"></v-text-field>
                 </v-flex>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editedItem.changed_on" label="Changed"></v-text-field>
+                <v-flex xs12 sm6 md6>
+                  <v-text-field :value="formatDate(editedItem.changed_on)" label="Changed"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm12 md12>
-                  <v-textarea
-                    name="meta_data"
-                    label="Metadata"
-                    v-model="editedItem.meta_data"
-                  ></v-textarea>
+                  Metadata:
+                </v-flex>
+                <v-flex>
+                  <ul id="metadata">
+                    <li v-for="(value, name) in formatMetaData(editedItem.meta_data)" :key="name">
+                      {{ name }}: {{ value }}
+                    </li>
+                  </ul>
                 </v-flex>
               </v-layout>
             </v-container>
@@ -223,6 +229,7 @@
         dialogDelete: false,
         message_cancel: 'Cancel this request',
         headers: [
+          { text: 'Id', value: 'id', width: '5%' },
           { text: this.$t('requests.user'), value: 'users', width: '5%', user: false },
           {
             text: this.$t('requests.action'),
@@ -263,11 +270,20 @@
     },
     methods: {
       formatDate(date) {
-        const d = new Date(date);
-        return d.toDateString();
+        if (date) {
+          return date.substring(0, date.length - 5);
+        } return '-';
+      },
+      formatMetaData(data) {
+        if (data) {
+          // console.log(data);
+          const str = data.replace(/'/g, '"');
+          const obj = JSON.parse(str);
+          // console.log(obj);
+          return obj;
+        } return '';
       },
       editItem(item) {
-        // console.log(item);
         this.editedIndex = this.items.indexOf(item);
         this.editedItem = Object.assign({}, item);
         this.editedItemId = item.id;

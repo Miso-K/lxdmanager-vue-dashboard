@@ -348,12 +348,14 @@ const instancesActions = {
     });
   },
 
-  deleteInstance({ commit }, id) {
+  deleteInstance({ dispatch, commit }, id) {
     commit(INSTANCES_REQUEST);
+    console.log(id);
     InstancesService.delete(id).then((res) => {
       // console.log(res);
       commit(INSTANCES_SUCCESS, res);
     }).catch((err) => {
+      dispatch('notify', { id: 0, message: err, color: '' });
       commit(INSTANCES_FAILURE, err);
     });
   },
