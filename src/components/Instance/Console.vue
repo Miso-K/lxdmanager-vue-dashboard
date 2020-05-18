@@ -35,6 +35,7 @@
   import { Terminal } from 'xterm';
   import * as fit from 'xterm/lib/addons/fit/fit';
   import 'xterm/dist/xterm.css';
+  import storage from '../../libraries/utils/storage';
 
   export default {
     components: {},
@@ -109,7 +110,7 @@
         const operationId = term.metadata.id;
         const secret = term.metadata.metadata.fds[0];
         // console.log(secret);
-        const wsUrl = process.env.API_BASE_WS_URL;
+        const wsUrl = storage.getItem('API_BASE_WS_URL');
 
         // var width = 100
         const height = Math.max(Math.round(window.innerHeight / 39.0), 15);

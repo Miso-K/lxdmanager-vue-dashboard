@@ -7,7 +7,7 @@ Vue.use(VueRouter);
 const Router = new VueRouter({
   mode: 'history',
   // mode: process.env.PUBLIC_URL ? 'history' : 'hash',
-  // base: process.env.PUBLIC_URL,
+  base: process.env.PUBLIC_URL,
   routes
 });
 

@@ -71,6 +71,10 @@ module.exports = {
   plugins: [
     new CopyWebpackPlugin([
       {
+        from: path.resolve(__dirname, '../static/config.json'),
+        to: path.resolve(__dirname, '../dist/static')
+      },
+      {
         from: path.resolve(__dirname, '../static/.env'),
         to: path.resolve(__dirname, '../dist/static')
       },

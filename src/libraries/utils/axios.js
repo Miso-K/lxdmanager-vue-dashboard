@@ -6,8 +6,18 @@ import { STORAGE_TOKEN_KEY, STORAGE_REFRESH_TOKEN_KEY } from '../store/modules/a
 // import { STORAGE_REQUEST_TOKEN_KEY } from '../store/modules/auth';
 import router from '../router';
 
+// Vue.prototype.$URL
+axios.get('static/config.json').then((response) => {
+  const API_BASE_URL = `${response.data.URL}/api/v1`;
+  const API_BASE_WS_URL = `${response.data.URL}/api/v1`;
+  storage.set('API_BASE_URL', API_BASE_URL);
+  storage.set('API_BASE_WS_URL', API_BASE_WS_URL);
+});
+
+
 const instance = axios.create({
-  baseURL: process.env.API_BASE_URL || '',
+  // baseURL: process.env.API_BASE_URL || '',
+  baseURL: storage.get('API_BASE_URL') || process.env.API_BASE_URL,
   timeout: 50000,
   headers: {
     'Content-Type': 'application/json',
