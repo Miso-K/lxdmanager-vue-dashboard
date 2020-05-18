@@ -8,8 +8,8 @@ import router from '../router';
 
 // Vue.prototype.$URL
 axios.get('static/config.json').then((response) => {
-  const API_BASE_URL = `${response.data.URL}/api/v1`;
-  const API_BASE_WS_URL = `${response.data.URL}/api/v1`;
+  const API_BASE_URL = `${response.data.API_BASE_URL}/api/v1`;
+  const API_BASE_WS_URL = `${response.data.API_BASE_WS_URL}`;
   storage.set('API_BASE_URL', API_BASE_URL);
   storage.set('API_BASE_WS_URL', API_BASE_WS_URL);
 });

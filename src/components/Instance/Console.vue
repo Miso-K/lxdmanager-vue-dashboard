@@ -110,7 +110,7 @@
         const operationId = term.metadata.id;
         const secret = term.metadata.metadata.fds[0];
         // console.log(secret);
-        const wsUrl = storage.getItem('API_BASE_WS_URL');
+        const wsUrl = storage.get('API_BASE_WS_URL');
 
         // var width = 100
         const height = Math.max(Math.round(window.innerHeight / 39.0), 15);
