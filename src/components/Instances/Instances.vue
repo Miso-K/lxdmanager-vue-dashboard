@@ -30,6 +30,12 @@
       :headers="computedHeaders"
       :items="items"
       :search="search">
+      <template v-slot:item.ips[0].address="{ item }">
+        <v-span v-if="item.ips[0]">{{ filterIpv6(item.ips[0]) }}</v-span>
+      </template>
+      <template v-slot:item.ips[1].address="{ item }">
+        <v-span v-if="item.ips[1]">{{ filterIpv6(item.ips[1]) }}</v-span>
+      </template>
       <template v-slot:item.action="{ item }">
         <v-btn color="primary" small left :to="'/instance/'+item.id">{{ $t('instances.actions.manage') }}</v-btn>
       </template>
@@ -189,6 +195,12 @@
       }
     },
     methods: {
+      filterIpv6(ip) {
+        if (ip.scope === 'link') {
+          return '';
+        }
+        return ip.address;
+      },
       iconstate(state) {
         switch (state) {
           case 'RUNNING':

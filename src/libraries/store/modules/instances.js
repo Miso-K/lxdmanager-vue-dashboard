@@ -297,8 +297,8 @@ const instancesActions = {
         name: data.name,
         config: {
           limits_cpu: data.cpu,
-          limits_memory: `${data.memory}MB`,
-          limits_disk: `${data.disk}MB`
+          limits_memory: data.memory,
+          limits_disk: data.disk
         },
         devices: {}
       }

@@ -226,7 +226,7 @@
             // console.log('send request');
             this.sendRequest();
           } else {
-            this.$store.dispatch('upgradeInstance', { id: this.selectedInstance, name: this.name, cpu: this.cpu, memory: this.memory, disk: this.disk });
+            this.$store.dispatch('upgradeInstance', { id: this.selectedInstance, name: this.name, cpu: this.cpu, memory: `${this.memory}MB`, disk: `${this.disk}GB` });
             this.$store.dispatch('notify', { id: 0, message: `${this.$i18n.t('notifications.instance_upgraded')}`, color: '' });
             this.active = false;
             setTimeout(() => {

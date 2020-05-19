@@ -94,14 +94,14 @@
           <v-list-item>
             <v-list-item-content>
               <v-list-item-title>IPv4</v-list-item-title>
-                <v-list-item-subtitle v-if="ips[0]">{{ ips[0].address }}</v-list-item-subtitle>
+                <v-list-item-subtitle v-if="ips[0]">{{ filterIpv6(ips[0]) }}</v-list-item-subtitle>
                 <v-list-item-subtitle v-else>-</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
           <v-list-item>
             <v-list-item-content>
               <v-list-item-title>IPv6</v-list-item-title>
-              <v-list-item-subtitle v-if="ips[1]">{{ ips[1].address }}</v-list-item-subtitle>
+              <v-list-item-subtitle v-if="ips[1]">{{ filterIpv6(ips[1]) }}</v-list-item-subtitle>
               <v-list-item-subtitle v-else>-</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
@@ -255,6 +255,12 @@
         'unfreezeInstance',
         'fetchInstance'
       ]),
+      filterIpv6(ip) {
+        if (ip.scope === 'link') {
+          return '';
+        }
+        return ip.address;
+      },
       disableButton(button) {
         // console.log(this.buttons.indexOf(button));
         const x = this.buttons.indexOf(button);
