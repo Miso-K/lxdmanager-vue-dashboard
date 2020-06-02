@@ -178,7 +178,7 @@
         }
       },
       items() {
-        console.log(this.$store.getters.instancesTableData);
+        // console.log(this.$store.getters.instancesTableData);
         // console.log(this.$store.getters['auth/me']);
         return this.$store.getters.instancesTableData;
       },
