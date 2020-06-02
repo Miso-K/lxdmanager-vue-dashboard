@@ -138,6 +138,9 @@
                   <v-select
                     :items=periodes
                     v-model="period"
+                    item-text="text"
+                    item-value="value"
+                    return-object
                     label="Period"
                   ></v-select>
                 </v-flex>
@@ -147,8 +150,9 @@
                 <v-flex xs2>
                   <v-text-field
                     label="Price"
-                    :value="price"
+                    v-model="calcPrice"
                     suffix="€"
+                    :disabled="!me.admin"
                   ></v-text-field>
                 </v-flex>
               </template>
@@ -176,7 +180,7 @@
         dialog_clone: false,
         dialog_destroy: false,
         dialog_upgrade: false,
-        period: 1,
+        period: { text: '1 Month', value: 1 },
         name: '',
         cpu: '',
         memory: '',
@@ -189,7 +193,8 @@
           { text: '6 Months', value: 0.95 },
           { text: '12 Months', value: 0.90 },
           { text: '24 Months', value: 0.80 }
-        ]
+        ],
+        price: ''
       };
     },
     computed: {
@@ -230,13 +235,20 @@
       canUpdate() {
         return this.me.abilities.includes('instances_update');
       },
-      price() {
-        const cpu = this.getPrice.cpu * this.cpu; // 1
-        const memory = this.getPrice.memory * this.memory; // 0.048
-        const disk = this.getPrice.disk * this.disk; // 0.150
-        const period = this.period;
-        const cmemory = (cpu + memory + disk) * period;
-        return cmemory.toFixed(2);
+      calcPrice: {
+        get() {
+          const cpu = this.getPrice.cpu * this.cpu; // 1
+          const memory = this.getPrice.memory * this.memory; // 0.048
+          const disk = this.getPrice.disk * this.disk; // 0.150
+          const period = this.period.value;
+          const cmemory = (cpu + memory + disk) * period;
+          this.price = cmemory.toFixed(2);
+          return cmemory.toFixed(2);
+        },
+        set(val) {
+          this.price = parseFloat(val).toFixed(2);
+          return parseFloat(val).toFixed(2);
+        }
       }
     },
     methods: {
@@ -250,7 +262,17 @@
       },
       sendRequestUpgrade() {
         if (this.canUpdate) {
-          this.$store.dispatch('upgradeInstance', { id: this.id, name: this.instanceName, cpu: this.cpu, memory: `${this.memory}MB`, disk: `${this.disk}MB` });
+          const data = {
+            id: this.id,
+            name: this.name,
+            cpu: this.cpu,
+            memory: `${this.memory}MB`,
+            disk: `${this.disk}GB`,
+            pool_name: this.getStorage.enabled === 'True' ? this.getStorage.pool_name : '',
+            period: this.showPrice ? this.period.text : '',
+            price: this.showPrice ? this.price : ''
+          };
+          this.$store.dispatch('upgradeInstance', data);
           this.$store.dispatch('notify', { id: 0, message: `${this.$i18n.t('notifications.instance_upgraded')}`, color: '' });
         } else {
           const data = {
@@ -259,8 +281,8 @@
             cpu: this.cpu,
             memory: `${this.memory}MB`,
             disk: `${this.disk}GB`,
-            period: this.period,
-            price: this.price
+            period: this.showPrice ? this.period.text : '',
+            price: this.showPrice ? this.price : ''
           };
           this.$store.dispatch('createRequests', { action: 'upgrade', message: `Upgrade instance ${this.name}`, status: 'waiting', meta_data: data });
           this.$store.dispatch('notify', { id: 0, message: `${this.$i18n.t('notifications.instance_created')}`, color: '' });

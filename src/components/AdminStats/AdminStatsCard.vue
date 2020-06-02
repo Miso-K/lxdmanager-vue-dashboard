@@ -1,5 +1,5 @@
 <template>
-  <v-flex md6 sm6 xs12 >
+  <v-flex>
     <v-card class="mb-3 mx-auto">
       <v-sheet
         class="v-sheet--offset mx-auto"

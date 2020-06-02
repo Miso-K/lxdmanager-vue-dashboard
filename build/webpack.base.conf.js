@@ -75,11 +75,7 @@ module.exports = {
         to: path.resolve(__dirname, '../dist/static')
       },
       {
-        from: path.resolve(__dirname, '../static/.env'),
-        to: path.resolve(__dirname, '../dist/static')
-      },
-      {
-        from: path.resolve(__dirname, '../static/.env.example'),
+        from: path.resolve(__dirname, '../static/config.json.example'),
         to: path.resolve(__dirname, '../dist/static')
       },
       {

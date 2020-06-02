@@ -7,6 +7,7 @@
     </div>
     <div v-if="me.admin">
       <admin_stats></admin_stats>
+      <order></order>
     </div>
   </div>
 </template>

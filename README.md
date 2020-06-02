@@ -45,7 +45,7 @@ You can manualy download repository from github and copy content of directory *d
 *Nginx* config templates are stored in *nginx* directory.  
 
 ## Configure
-Go to */var/www/lxdmanager-vue-dashboard/* and edit *.env* file according to *.env.example*
+Go to */var/www/lxdmanager-vue-dashboard/* and edit *config.json* file according to *config.json.example*
 
 ``` bash
 API_BASE_URL - refers to *lxd-api-gateway* host 

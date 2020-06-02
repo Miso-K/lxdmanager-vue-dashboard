@@ -214,9 +214,7 @@ const instancesActions = {
     commit(INSTANCES_REQUEST);
 
     InstancesService.get().then((res) => {
-      // console.log(res.data);
       res.instances = res.data.data; // when not using json-api-normalizer
-      // console.log(res);
       setTimeout(() => {
         commit(INSTANCES_SUCCESS, res);
         // console.log(res);
@@ -232,12 +230,8 @@ const instancesActions = {
     InstancesService.fetch(id).then((res) => {
       console.log(res.data.data);
       setTimeout(() => {
-        // objIndex = .findIndex((obj => obj.id == 1));
-        // commit(INSTANCE_SUCCESS, { id, attributes: res.instances[id].attributes });
         const data = res.data.data;
         commit(INSTANCE_SUCCESS, { id, data });
-        // console.log('fetch:');
-        // console.log(res);
       }, 1000);
     }).catch((err) => {
       commit(INSTANCE_FAILURE, err, id);
@@ -246,38 +240,44 @@ const instancesActions = {
 
   createInstance({ dispatch, commit }, data) {
     commit(INSTANCES_REQUEST);
-    // console.log('create log:');
-    console.log(data);
+    // console.log(data);
 
     const obj = {
       data: {
         type: 'instances',
+        instance: {
+          name: data.name,
+          config: {
+            'limits.cpu': data.cpu.toString(),
+            'limits.memory': data.memory,
+            'user.price': data.price,
+            'user.period': data.period
+          },
+          source: {
+            type: 'image',
+            alias: data.os
+          },
+          devices: data.pool_name ? {
+            root: {
+              path: '/',
+              pool: data.pool_name,
+              type: 'disk',
+              size: data.disk
+            }
+          } : {}
+        },
         name: data.name,
-        config: {
-          limits_cpu: data.cpu,
-          limits_memory: data.memory,
-          limits_disk: data.disk,
-          pool_name: data.pool_name,
-          price: data.price
-        },
-        source: {
-          type: 'image',
-          // mode: 'pull',
-          // server: 'https://uk.images.linuxcontainers.org',
-          // protocol: 'simplestreams',
-          alias: data.os
-        },
         relationships: {
           users: data.users ? data.users.map(u => ({
             type: 'users',
-            id: u.id
+            id: u
           })) : []
         }
       }
     };
     // console.log(obj);
     return InstancesService.post(obj).then((res) => {
-      console.log(res);
+      // console.log(res);
       dispatch('fetchOperation', res.data.metadata.id);
       // dispatch('fetchOperation', '8ebb755f-d813-41d7-beca-e3d052f014d6');
       commit(INSTANCES_SUCCESS);
@@ -288,24 +288,34 @@ const instancesActions = {
 
   upgradeInstance({ commit }, data) {
     commit(INSTANCES_REQUEST);
-    // console.log('create log:');
-    console.log(data);
+    // console.log(data);
 
     const obj = {
       data: {
         type: 'instances',
         name: data.name,
-        config: {
-          limits_cpu: data.cpu,
-          limits_memory: data.memory,
-          limits_disk: data.disk
-        },
-        devices: {}
+        instance: {
+          name: data.name,
+          config: {
+            'limits.cpu': data.cpu.toString(),
+            'limits.memory': data.memory,
+            'user.price': data.price,
+            'user.period': data.period
+          },
+          devices: data.pool_name ? {
+            root: {
+              path: '/',
+              pool: data.pool_name,
+              type: 'disk',
+              size: data.disk
+            }
+          } : {}
+        }
       }
     };
-    console.log(obj);
-    return InstancesService.put(data.id, obj).then((res) => {
-      console.log(res);
+    // console.log(obj);
+    return InstancesService.patch(data.id, obj).then((res) => {
+      // console.log(res);
       commit(INSTANCES_SUCCESS, res.data);
     }).catch((err) => {
       commit(INSTANCES_FAILURE, err);
@@ -320,17 +330,29 @@ const instancesActions = {
     const obj = {
       data: {
         type: 'instances',
+        instance: {
+          name: data.instanceClone,
+          config: {
+            'limits.cpu': data.cpu.toString(),
+            'limits.memory': data.memory,
+            'user.price': data.price,
+            'user.period': data.period
+          },
+          source: {
+            type: 'copy',
+            instance_only: true,
+            source: data.instanceName
+          },
+          devices: data.pool_name ? {
+            root: {
+              path: '/',
+              pool: data.pool_name,
+              type: 'disk',
+              size: data.disk
+            }
+          } : {}
+        },
         name: data.instanceClone,
-        config: {
-          limits_cpu: data.cpu,
-          limits_memory: data.memory,
-          limits_disk: data.disk
-        },
-        source: {
-          type: 'copy',
-          instance_only: true,
-          source: data.instanceName
-        },
         relationships: {
           users: data.users ? data.users.map(u => ({
             type: 'users',

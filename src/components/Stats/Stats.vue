@@ -3,15 +3,13 @@
    <v-container grid-list-md>
       <v-layout row wrap>
         <stats-card
-          flex="md4"
-          icon="layers"
+          icon="mdi-checkbox-multiple-blank"
           color="red"
           :value="machines"
           :unit="$t('stats.units')"
           :label="$t('stats.instances')"
         ></stats-card>
         <stats-card
-          flex="md4"
           icon="mdi-cpu-64-bit"
           color="green"
           :value="vcpus"
@@ -19,30 +17,23 @@
           :label="$t('stats.total_cpu')"
         ></stats-card>
         <stats-card
-          flex="md4"
-          icon="memory"
+          icon="mdi-memory"
           color="blue"
           :value="memory"
           unit="GB"
           :label="$t('stats.total_memory')"
         ></stats-card>
-      </v-layout>
-   </v-container>
-   <v-container grid-list-md>
-      <v-layout>
         <stats-card
-          flex="md6"
           v-if="showDisk"
-          icon="storage"
+          icon="mdi-harddisk"
           color="orange"
           :value="disk"
           unit="GB"
           :label="$t('stats.total_disk')"
         ></stats-card>
         <stats-card
-          flex="md6"
           v-if="showPrice"
-          icon="account_balance"
+          icon="mdi-currency-eur"
           color="purple"
           :value="price"
           unit="€"

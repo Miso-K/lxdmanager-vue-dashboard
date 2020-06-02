@@ -17,91 +17,62 @@
             md="4"
             lg="3"
           >
-          <v-card>
-          <v-app-bar
-            flat
-            height="50px"
-          >
-              <v-icon style="margin-left: -20px;" class="ml-0 mr-1" :color="colorstate(item.status)">{{ iconstate(item.status) }}</v-icon>
-              <v-spacer></v-spacer>
-              <v-btn color="primary" text left :to="'/instance/'+item.id">{{ item.name }}</v-btn>
 
-          </v-app-bar>
+
+
+          <v-card
+            class="mx-auto"
+            color="#26c6da"
+            dark
+            max-width="400"
+          >
+            <v-card-title>
+              <span class="title">{{ item.name }}</span>
+              <v-spacer></v-spacer>
+              <v-icon large style="margin-left: -20px;" class="ml-0 mr-1" :color="colorstate(item.status)">{{ iconstate(item.status) }}</v-icon>
+            </v-card-title>
+
             <v-divider></v-divider>
-            <v-list dense>
-              <v-list-item>
-                <v-list-item-content>Processes:</v-list-item-content>
-                <v-spacer></v-spacer>
-                <v-list-item-content class="align-end">{{ item.state.processes }}</v-list-item-content>
-              </v-list-item>
-              <v-list-item>
-                <v-list-item-content>CPU usage (seconds):</v-list-item-content>
-                <v-spacer></v-spacer>
-                <v-list-item-content class="align-end">{{ (item.state.cpu.usage / (1000 ** 3)).toFixed(0) }}</v-list-item-content>
-              </v-list-item>
-              <v-list-item>
-                <v-list-item-content>{{ $t('instances.config.memory') }}:</v-list-item-content>
-                <!--<v-list-tile-content class="align-end pa-1">
-                  {{ usage(props.item.config.limits_memory_raw, props.item.state.memory ? props.item.state.memory.usage : '') }}
-                </v-list-tile-content>-->
-                <v-list-item-content class="align-end ma-1">
-                <v-progress-circular
-                    :rotate="270"
-                    :width="5"
-                    :size="35"
-                    color="blue"
-                    :value="percentage(item.config.limits_disk_raw, 20)"
-                  >
-                  {{ percentage(item.config.limits_memory_raw, item.state.memory ? item.state.memory.usage : '') }}%
-                </v-progress-circular>
-                </v-list-item-content>
-              </v-list-item>
-              <v-list-item v-if="showDisk">
-                <v-list-item-content>{{ $t('instances.config.disk') }}:</v-list-item-content>
-                <!--<v-list-tile-content class="align-end pa-1">
-                  {{ usage(40000, 20000) }}
-                </v-list-tile-content>-->
-                <v-list-item-content class="align-end pa-1">
-                  <v-progress-circular
-                    :rotate="270"
-                    :width="5"
-                    :size="35"
-                    color="orange"
-                    :value="percentage(item.config.limits_disk_raw, 20)"
-                  >
-                    {{ percentage(item.config.limits_disk_raw, item.state.disk ? item.state.disk.usage : '') }}%
-                  </v-progress-circular>
-                </v-list-item-content>
-              </v-list-item>
-              <v-list-item v-if="showPrice">
-                <v-list-item-content>{{ $t('instances.config.price') }}:</v-list-item-content>
-                <v-list-item-content class="align-end pa-1">
-                    {{ item.config.user_price ? item.config.user_price : '' }}
-                </v-list-item-content>
-              </v-list-item>
-              <v-list-item>
-                <v-list-item-content>IPv4:</v-list-item-content>
-                <v-list-item-content class="align-end">{{ item.ips ? (item.ips[1] ? item.ips[0].address : '-') : '-' }}</v-list-item-content>
-              </v-list-item>
-              <v-list-item>
-                <v-list-item-content>IPv6:</v-list-item-content>
-                <v-list-item-content class="align-end">
-                  <v-menu offset-y left>
-                    <template v-slot:activator="{ on }">
-                      <v-btn v-on="on" icon>
-                        <v-icon large color="grey">expand_more</v-icon>
-                      </v-btn>
-                    </template>
-                    <v-list>
-                      <v-list-item>
-                        <v-list-item-content>{{ item.ips ? (item.ips[1] ? item.ips[1].address : '-') : '-'}}</v-list-item-content>
-                      </v-list-item>
-                    </v-list>
-                </v-menu>
-                </v-list-item-content>
-              </v-list-item>
-            </v-list>
+
+            <v-list-item class="grow">
+            <v-row
+              align="center"
+              justify="space-around"
+            >
+              <v-icon class="mr-1" large>mdi-cpu-64-bit</v-icon>
+              <span class="subheading mr-2">{{item.limits_cpu}}</span>
+              <span class="mr-1">·</span>
+              <v-icon class="mr-1" large>mdi-memory</v-icon>
+              <span class="subheading mr-2">{{item.config.limits_memory}}</span>
+              <span class="mr-1">·</span>
+              <v-icon class="mr-1" large>mdi-harddisk</v-icon>
+              <span class="subheading">{{item.config.limits_disk}}</span>
+              <span class="mr-1" large>·</span>
+              <v-icon class="mr-1">mdi-currency-eur</v-icon>
+              <span class="subheading">{{item.price}}</span>
+            </v-row>
+          </v-list-item>
+            <v-list-item>
+              <v-list-item-icon>
+                <v-icon>mdi-server-network</v-icon>v4
+              </v-list-item-icon>
+              <v-list-item-subtitle class="text-right">{{ item.ips ? (item.ips[1] ? item.ips[0].address : '-') : '-' }}</v-list-item-subtitle>
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-icon>
+                <v-icon>mdi-server-network</v-icon>v6
+              </v-list-item-icon>
+              <v-list-item-subtitle class="text-right">{{ item.ips ? (item.ips[1] ? item.ips[1].address : '-') : '-'}}</v-list-item-subtitle>
+            </v-list-item>
+            <v-divider></v-divider>
+            <v-card-actions>
+              <v-btn class="ma-2" color="primary" left :to="'/instance/'+item.id">Manage
+              <v-icon dark right>mdi-wrench</v-icon>
+              </v-btn>
+            </v-card-actions>
           </v-card>
+
+
         </v-col>
         </v-row>
         </template>

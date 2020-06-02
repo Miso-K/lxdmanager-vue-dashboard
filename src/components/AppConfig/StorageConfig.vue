@@ -28,7 +28,7 @@
                   :disabled="!isEditing"
                   v-model="data.storage.pool_name"
                   label="Storage name (for default instance installation)"
-                  placeholder="lxd"
+                  placeholder="default"
                   required
                 ></v-text-field>
                 </v-card-text>

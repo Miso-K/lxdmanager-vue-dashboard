@@ -25,73 +25,8 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
-      <v-dialog v-model="dialog" max-width="700px">
-        <template v-slot:activator="{ on }">
-          <v-btn
-            color="primary"
-            dark
-            v-on="on"
-          >
-            New group
-          </v-btn>
-        </template>
-      <v-card>
-        <v-form ref="form" v-model="valid" lazy-validation>
-        <v-card-title>
-          <span class="headline">{{ formTitle }}</span>
-        </v-card-title>
-        <v-card-text>
-          <v-container grid-list-md>
-            <v-layout wrap>
-              <v-flex xs12 sm6 md4>
-                <v-text-field label="Group name" :rules="nameRules" v-model="editedItem.name" required></v-text-field>
-              </v-flex>
-              <v-flex xs12 sm12 md12>
-                <v-autocomplete
-                v-model="editedItem.abilities"
-                :disabled="isUpdating"
-                :items="abilitiesId"
-                chips
-                color="blue-grey lighten-2"
-                label="Abilities"
-                item-text="name"
-                item-value="id"
-                multiple
-              >
-                <template
-                  slot="selection"
-                  slot-scope="data"
-                >
-                  <v-chip
-                    :input-value="data.selected"
-                    close
-                    class="chip--select-multi"
-                    @click:close="removeAbility(data.item)"
-                  >
-                    {{ data.item.name }}
-                  </v-chip>
-                </template>
-                <template
-                  slot="item"
-                  slot-scope="data"
-                >
-                  <template >
-                    <v-list-tile-content v-text="data.item.name"></v-list-tile-content>
-                  </template>
-                </template>
-              </v-autocomplete>
-              </v-flex>
-            </v-layout>
-          </v-container>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click.native="close">Cancel</v-btn>
-          <v-btn color="blue darken-1" text @click.native="save" :disabled="!valid" >Save</v-btn>
-        </v-card-actions>
-        </v-form>
-      </v-card>
-    </v-dialog>
+      <groups-edit :itemId="editedItem.id" :itemName="editedItem.name" :abilitiesUserList="editedItem.abilitiesUserList" :editedIndex="editedIndex" v-bind:dialog.sync="dialog"></groups-edit>
+      <v-btn color="primary" dark @click.stop="dialog = true" class="mb-1">New group</v-btn>
     <v-spacer></v-spacer>
       <v-text-field
         append-icon="search"
@@ -128,9 +63,15 @@
 </template>
 
 <script>
+  import AbilitiesColumns from './AbilitiesColumns';
+  import GroupsEdit from './GroupsEdit';
 
   export default {
     name: 'groups',
+    components: {
+      'abilities-columns': AbilitiesColumns,
+      'groups-edit': GroupsEdit
+    },
     data() {
       return {
         search: '',
@@ -142,6 +83,7 @@
         dialogDelete: false,
         show3: false,
         checkbox: false,
+        switchValue: true,
         headers: [
           {
             text: 'id',
@@ -174,7 +116,8 @@
         editedIndex: -1,
         editedItem: {
           id: '',
-          abilities: ''
+          abilities: '',
+          abilitiesUserList: []
         },
         defaultItem: {
           name: '',
@@ -190,15 +133,7 @@
         return this.editedIndex === -1;
       },
       items() {
-        // console.log(this.$store.getters.groupsTableData);
         return this.$store.getters.groupsTableData;
-      },
-      abilitiesId() {
-        const abilities = this.$store.getters.abilitiessTableData;
-        return abilities.map(ability => ({
-          name: ability.name,
-          id: ability.id
-        }));
       }
     },
     watch: {
@@ -220,8 +155,12 @@
         this.editedItem.id = item.id;
         this.editedItem.name = item.name;
         this.editedItem.abilities = item.relationships.abilities.map(ability => ({
-          id: ability.id
+          id: ability.id,
+          name: ability.name
         }));
+        this.editedItem.abilitiesUserList = item.relationships.abilities.map(ability =>
+          (ability.name));
+        // console.log(this.editedItem.abilitiesUserList);
         this.dialog = true;
       },
       deleteDialog(item) {
@@ -253,26 +192,6 @@
           this.editedItem = Object.assign({}, this.defaultItem);
           this.editedIndex = -1;
         }, 300);
-      },
-      save() {
-        if (this.$refs.form.validate()) {
-          if (this.editedIndex > -1) {
-            Object.assign(this.items[this.editedIndex], this.editedItem);
-            console.log(this.editedItem);
-            console.log(this.items);
-            this.$store.dispatch('updateGroup', this.editedItem);
-            setTimeout(() => {
-              this.$store.dispatch('fetchGroups');
-            }, 500);
-          } else {
-            this.items.push(this.editedItem);
-            this.$store.dispatch('createGroup', this.editedItem);
-            setTimeout(() => {
-              this.$store.dispatch('fetchGroups');
-            }, 500);
-          }
-          this.close();
-        }
       },
       refreshData() {
         this.$store.dispatch('fetchGroups');

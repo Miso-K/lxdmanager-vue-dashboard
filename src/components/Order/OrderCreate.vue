@@ -72,6 +72,10 @@
                   <v-select
                     :items=periodes
                     v-model="period"
+                    item-text="text"
+                    item-value="value"
+                    return-object
+                    label="Period"
                   ></v-select>
                 </v-flex>
                 <v-flex xs4>
@@ -79,10 +83,49 @@
                 </v-flex>
                 <v-flex xs2>
                   <v-text-field
-                    :value="price"
+                    v-model="calcPrice"
                     suffix="€"
+                    label="Price per month"
+                    :disabled="!me.admin"
                   ></v-text-field>
                 </v-flex>
+              </template>
+              <template v-if="me.admin">
+                <v-flex xs12 sm12 md6>
+                <v-autocomplete
+                  v-model="owners"
+                  :disabled="!me.admin"
+                  :items="usersId"
+                  chips
+                  color="blue-grey lighten-2"
+                  label="New owners"
+                  item-text="name"
+                  item-value="id"
+                  multiple
+                >
+                  <template
+                    slot="selection"
+                    slot-scope="data"
+                  >
+                    <v-chip
+                      :input-value="data.selected"
+                      close
+                      class="chip--select-multi"
+                      @click:close="removeUsers(data.item)"
+                    >
+                      {{ data.item.name }}
+                    </v-chip>
+                  </template>
+                  <template
+                    slot="item"
+                    slot-scope="data"
+                  >
+                  <template >
+                    <v-list-tile-content v-text="data.item.name"></v-list-tile-content>
+                  </template>
+                </template>
+              </v-autocomplete>
+              </v-flex>
               </template>
             </v-layout>
           </v-container>
@@ -108,7 +151,7 @@
         // showPrice: true,
         showIspconfig: false,
         ispconfig: 'no',
-        period: 1,
+        period: { text: '1 Month', value: 1 },
         name: '',
         os: 'ubuntu',
         cpu: '1',
@@ -120,7 +163,9 @@
           { text: '6 Months', value: 0.95 },
           { text: '12 Months', value: 0.90 },
           { text: '24 Months', value: 0.80 }
-        ]
+        ],
+        owners: '',
+        price: ''
       };
     },
     computed: {
@@ -140,7 +185,9 @@
       },
       templates() {
         const images = this.$store.getters.imagesTableData;
-        const img = images.map(image => ({
+        const img = images.filter(
+          image => image.name !== ''
+        ).map(image => ({
           text: image.alias_description ? image.alias_description : image.name,
           value: image.name }));
         return img;
@@ -149,6 +196,7 @@
         return this.$store.getters.appconfig.price;
       },
       getStorage() {
+        // console.log(this.$store.getters.appconfig.storage);
         return this.$store.getters.appconfig.storage;
       },
       diskEnabled() {
@@ -161,19 +209,36 @@
         return this.$store.getters['auth/me'];
       },
       canCreate() {
-        console.log(this.me.abilities);
         return this.me.abilities.includes('instances_create');
       },
-      price() {
-        const cpu = this.getPrice.cpu * this.cpu; // 1
-        const memory = this.getPrice.memory * this.memory; // 0.048
-        const disk = this.getPrice.disk * this.disk; // 0.150
-        const period = this.period;
-        const cmemory = (cpu + memory + disk) * period;
-        return cmemory.toFixed(2);
+      usersId() {
+        const users = this.$store.getters.usersTableData;
+        return users.map(user => ({
+          name: user.name,
+          id: user.id
+        }));
+      },
+      calcPrice: {
+        get() {
+          const cpu = this.getPrice.cpu * this.cpu; // 1
+          const memory = this.getPrice.memory * this.memory; // 0.048
+          const disk = this.getPrice.disk * this.disk; // 0.150
+          const period = this.period.value;
+          const cmemory = (cpu + memory + disk) * period;
+          this.price = cmemory.toFixed(2);
+          return cmemory.toFixed(2);
+        },
+        set(val) {
+          this.price = parseFloat(val).toFixed(2);
+          return parseFloat(val).toFixed(2);
+        }
       }
     },
     methods: {
+      removeUsers(item) {
+        const index = this.owners.findIndex(x => x === item.id);
+        if (index >= 0) this.owners.splice(index, 1);
+      },
       setVPS(id) {
         switch (id) {
           case 1:
@@ -220,8 +285,11 @@
               memory: `${this.memory}MB`,
               disk: `${this.disk}GB`,
               pool_name: this.getStorage.enabled === 'True' ? this.getStorage.pool_name : '',
-              price: this.price ? this.price : ''
+              period: this.showPrice ? this.period.text : '',
+              price: this.showPrice ? this.price : '',
+              users: this.owners
             };
+            console.log(data);
             this.$store.dispatch('createInstance', data);
             // eslint-disable-next-line max-len
             // this.$store.dispatch('notify', { id: 0, message: 'Your instance is launching', color: '' });

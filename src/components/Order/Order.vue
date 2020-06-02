@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!me.admin">
+  <div>
       <v-container grid-list-md>
         <v-layout row wrap>
           <v-flex md6 sm6 xs12 class="mb-1">
@@ -25,7 +25,7 @@
               @click.native="$store.dispatch('openInstanceUpgradeDialog')"
             >
               {{ $t('instances.actions.upgrade') }}
-              <v-icon large right dark>build</v-icon>
+              <v-icon right dark>mdi-wrench</v-icon>
             </v-btn>
           </v-flex>
         </v-layout>

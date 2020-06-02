@@ -12,11 +12,20 @@
           :value_sub="groupsCount"
         ></admin-stats-card>
         <admin-stats-card
-          icon="layers"
-          color="purple"
+          icon="mdi-checkbox-multiple-blank"
+          color="red"
           :value="machines"
           unit=" units"
           label="Instances"
+          label_sub="Running"
+          :value_sub="runningMachines"
+        ></admin-stats-card>
+        <admin-stats-card
+          icon="mdi-currency-eur"
+          color="purple"
+          :value="machines"
+          unit=" units"
+          label="Price"
           label_sub="Running"
           :value_sub="runningMachines"
         ></admin-stats-card>
@@ -25,7 +34,7 @@
     <v-container grid-list-md>
       <v-layout row wrap>
         <host-stats-card
-          icon="data_usage"
+          icon="mdi-cpu-64-bit"
           color="green"
           :value="totalCpu"
           unit=" cores"
@@ -35,7 +44,7 @@
           label_sub="Allocated CPUs"
         ></host-stats-card>
         <host-stats-card
-          icon="memory"
+          icon="mdi-memory"
           color="blue"
           :value="totalMemory"
           unit=" "
@@ -45,7 +54,7 @@
           label_sub="Allocated Memory"
         ></host-stats-card>
         <host-stats-card
-          icon="storage"
+          icon="mdi-harddisk"
           color="orange"
           :value="totalDisk"
           unit=" GB"

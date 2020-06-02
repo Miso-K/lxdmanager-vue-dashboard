@@ -103,33 +103,33 @@
               </v-flex>
               <v-flex xs12 sm12 md12>
                 <v-autocomplete
-                v-model="editedItem.instances"
-                :disabled="isUpdating"
-                :items="instancesId"
-                chips
-                color="blue-grey lighten-2"
-                label="Instances"
-                item-text="name"
-                item-value="id"
-                multiple
-              >
-                <template
-                  slot="selection"
-                  slot-scope="data"
+                  v-model="editedItem.instances"
+                  :disabled="isUpdating"
+                  :items="instancesId"
+                  chips
+                  color="blue-grey lighten-2"
+                  label="Instances"
+                  item-text="name"
+                  item-value="id"
+                  multiple
                 >
-                  <v-chip
-                    :input-value="data.selected"
-                    close
-                    class="chip--select-multi"
-                    @click:close="removeInstance(data.item)"
+                  <template
+                    slot="selection"
+                    slot-scope="data"
                   >
-                    {{ data.item.name }}
-                  </v-chip>
-                </template>
-                <template
-                  slot="item"
-                  slot-scope="data"
-                >
+                    <v-chip
+                      :input-value="data.selected"
+                      close
+                      class="chip--select-multi"
+                      @click:close="removeInstance(data.item)"
+                    >
+                      {{ data.item.name }}
+                    </v-chip>
+                  </template>
+                  <template
+                    slot="item"
+                    slot-scope="data"
+                  >
                   <template >
                     <v-list-tile-content v-text="data.item.name"></v-list-tile-content>
                   </template>

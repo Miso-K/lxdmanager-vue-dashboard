@@ -120,10 +120,19 @@
             class: 'pa-1'
           },
           {
+            text: 'Price €',
+            align: 'left',
+            value: 'config.user_price',
+            sortable: true,
+            price: false,
+            class: 'pa-1'
+          },
+          {
             text: 'Type',
             align: 'left',
             value: 'type',
             sortable: true,
+            type: false,
             class: 'pa-1'
           }
         ],
@@ -169,7 +178,7 @@
         }
       },
       items() {
-        // console.log(this.$store.getters.instancesTableData);
+        console.log(this.$store.getters.instancesTableData);
         // console.log(this.$store.getters['auth/me']);
         return this.$store.getters.instancesTableData;
       },
@@ -180,13 +189,20 @@
         return this.me.abilities.includes('instances_create');
       },
       computedHeaders() {
-        return this.headers.filter(h => !(h.disk === this.showDisk) && !(h.price === this.showPrice));
+        return this.headers.filter(h =>
+          !(h.disk === this.showDisk) &&
+          !(h.price === this.showPrice) &&
+          !(h.type === this.showType));
       },
       showPrice() {
         return this.$store.getters.appconfig.price.enabled === 'True';
       },
       showDisk() {
         return this.$store.getters.appconfig.storage.enabled === 'True';
+      },
+      showType() {
+        // return this.$store.getters.appconfig.type.enabled === 'True';
+        return false;
       }
     },
     watch: {

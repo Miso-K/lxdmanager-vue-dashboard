@@ -63,6 +63,9 @@
                   <v-select
                     :items=periodes
                     v-model="period"
+                    item-text="text"
+                    item-value="value"
+                    return-object
                     label="Period"
                   ></v-select>
                 </v-flex>
@@ -71,9 +74,10 @@
                 </v-flex>
                 <v-flex xs2>
                   <v-text-field
-                    label="Price"
-                    :value="price"
+                    label="Price per month"
+                    v-model="calcPrice"
                     suffix="€"
+                    :disabled="!me.admin"
                   ></v-text-field>
                 </v-flex>
               </template>
@@ -98,7 +102,7 @@
     data() {
       return {
         notifications: false,
-        period: 1,
+        period: { text: '1 Month', value: 1 },
         name: '',
         cpu: '1',
         memory: '512',
@@ -110,7 +114,8 @@
           { text: '6 Months', value: 0.95 },
           { text: '12 Months', value: 0.90 },
           { text: '24 Months', value: 0.80 }
-        ]
+        ],
+        price: ''
       };
     },
     computed: {
@@ -130,6 +135,9 @@
       getPrice() {
         return this.$store.getters.appconfig.price;
       },
+      getStorage() {
+        return this.$store.getters.appconfig.storage;
+      },
       diskEnabled() {
         return this.$store.getters.appconfig.storage.enabled === 'True';
       },
@@ -137,7 +145,6 @@
         return this.$store.getters['auth/me'];
       },
       canUpdate() {
-        console.log(this.me.abilities);
         return this.me.abilities.includes('instances_update');
       },
       id() {
@@ -160,13 +167,20 @@
       isValid() {
         return !!this.form.name.invalid;
       },
-      price() {
-        const cpu = this.getPrice.cpu * this.cpu; // 1
-        const memory = this.getPrice.memory * this.memory; // 0.048
-        const disk = this.getPrice.disk * this.disk; // 0.150
-        const period = this.period;
-        const cmemory = (cpu + memory + disk) * period;
-        return cmemory.toFixed(2);
+      calcPrice: {
+        get() {
+          const cpu = this.getPrice.cpu * this.cpu; // 1
+          const memory = this.getPrice.memory * this.memory; // 0.048
+          const disk = this.getPrice.disk * this.disk; // 0.150
+          const period = this.period.value;
+          const cmemory = (cpu + memory + disk) * period;
+          this.price = cmemory.toFixed(2);
+          return cmemory.toFixed(2);
+        },
+        set(val) {
+          this.price = parseFloat(val).toFixed(2);
+          return parseFloat(val).toFixed(2);
+        }
       }
     },
     methods: {
@@ -221,12 +235,22 @@
       },
       save() {
         if (this.name) {
-          // console.log(this.memory);
+          console.log(this.price);
           if (!this.canUpdate) {
             // console.log('send request');
             this.sendRequest();
           } else {
-            this.$store.dispatch('upgradeInstance', { id: this.selectedInstance, name: this.name, cpu: this.cpu, memory: `${this.memory}MB`, disk: `${this.disk}GB` });
+            const data = {
+              id: this.selectedInstance,
+              name: this.name,
+              cpu: this.cpu,
+              memory: `${this.memory}MB`,
+              disk: `${this.disk}GB`,
+              pool_name: this.getStorage.enabled === 'True' ? this.getStorage.pool_name : '',
+              period: this.showPrice ? this.period.text : '',
+              price: this.showPrice ? this.price : ''
+            };
+            this.$store.dispatch('upgradeInstance', data);
             this.$store.dispatch('notify', { id: 0, message: `${this.$i18n.t('notifications.instance_upgraded')}`, color: '' });
             this.active = false;
             setTimeout(() => {
@@ -245,8 +269,9 @@
             cpu: this.cpu,
             memory: `${this.memory}MB`,
             disk: `${this.disk}GB`,
-            period: this.period,
-            price: this.price
+            pool_name: this.getStorage.enabled === 'True' ? this.getStorage.pool_name : '',
+            period: this.showPrice ? this.period.text : '',
+            price: this.showPrice ? this.price : ''
           };
           // console.log(data);
           this.$store.dispatch('createRequests', { action: 'upgrade', message: `Upgrade instance ${this.name}`, status: 'waiting', meta_data: data });
