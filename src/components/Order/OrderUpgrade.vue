@@ -50,7 +50,7 @@
                 <v-text-field v-model="memory" type="MB" suffix="MB"></v-text-field>
               </v-flex>
               <v-flex xs10>
-                <v-slider v-if="diskEnabled" min="10" max="160" step="10" v-model="disk" :label="$t('instances.order.disk.label')"></v-slider>
+                <v-slider v-if="diskEnabled" :min="actualDisk" max="160" step="10" v-model="disk" :label="$t('instances.order.disk.label')"></v-slider>
               </v-flex>
               <v-flex xs2>
                 <v-text-field v-if="diskEnabled" v-model="disk" type="Disk" suffix="GB"></v-text-field>
@@ -107,6 +107,7 @@
         cpu: '1',
         memory: '512',
         disk: '10',
+        actualDisk: '10',
         selectedInstance: '',
         periodes: [
           { text: '1 Month', value: 1 },
@@ -227,7 +228,8 @@
         // console.log(config);
         this.cpu = config.limits_cpu > 1 ? config.limits_cpu : 1;
         this.memory = config.limits_memory_mb > 512 ? config.limits_memory_mb : 512;
-        this.disk = config.limits_disk_mb > 10 ? config.limits_disk_mb : 10;
+        this.disk = config.limits_disk_gb > 10 ? config.limits_disk_gb : 10;
+        this.actualDisk = config.limits_disk_gb > 10 ? config.limits_disk_gb : 10;
       },
       closeDialog() {
         this.name = {};

@@ -56,7 +56,7 @@ export default function instance(ct) {
       // eslint-disable-next-line max-len,no-nested-ternary
       limits_disk: diskSize,
       limits_disk_raw: limitsDiskRaw,
-      limits_disk_gb: limitsDiskRaw / (1024 ** 3),
+      limits_disk_gb: limitsDiskRaw / (1000 ** 3),
       user_price: ct.config['user.price']
     }
   };

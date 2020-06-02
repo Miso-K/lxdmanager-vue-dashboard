@@ -63,13 +63,11 @@
 </template>
 
 <script>
-  import AbilitiesColumns from './AbilitiesColumns';
   import GroupsEdit from './GroupsEdit';
 
   export default {
     name: 'groups',
     components: {
-      'abilities-columns': AbilitiesColumns,
       'groups-edit': GroupsEdit
     },
     data() {
