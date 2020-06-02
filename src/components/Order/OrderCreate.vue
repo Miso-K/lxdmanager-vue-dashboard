@@ -2,6 +2,7 @@
   <v-layout row justify-center>
     <v-dialog v-model="active" max-width="800px">
       <v-card>
+         <v-form ref="form" v-model="valid" lazy-validation>
         <v-card-title>
           <span class="headline">{{ $t('instances.order.new') }}</span>
         </v-card-title>
@@ -9,12 +10,14 @@
           <v-container grid-list-md>
             <v-layout wrap>
               <v-flex xs12 sm6>
-                <v-text-field :label="$t('instances.order.instance_name.label')" v-model="name" required></v-text-field>
+                <v-text-field :rules="nameRules" :label="$t('instances.order.instance_name.label')" v-model="name" required></v-text-field>
               </v-flex>
               <v-flex xs12 sm6>
                 <v-select
                   :items=templates
                   v-model="os"
+                  :rules="[v => !!v || 'Item is required']"
+                  required
                   :label="$t('instances.order.os.label')"
                 ></v-select>
               </v-flex>
@@ -133,8 +136,9 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" text @click.native="active = false">{{ $t('actions.close') }}</v-btn>
-          <v-btn color="green darken-1" text @click="save">{{ $t('actions.create') }}</v-btn>
+          <v-btn color="green darken-1" text @click="save" :disabled="!valid">{{ $t('actions.create') }}</v-btn>
         </v-card-actions>
+        </v-form>
       </v-card>
     </v-dialog>
   </v-layout>
@@ -148,12 +152,17 @@
     data() {
       return {
         hasCreated: false,
+        nameRules: [
+          v => !!v || 'Name is required',
+          v => (v && v.length >= 3) || 'Name must be more than 3 characters'
+        ],
+        valid: false,
         // showPrice: true,
         showIspconfig: false,
         ispconfig: 'no',
         period: { text: '1 Month', value: 1 },
-        name: '',
-        os: 'ubuntu',
+        // name: null,
+        os: '',
         cpu: '1',
         memory: '512',
         disk: '10',
@@ -272,34 +281,36 @@
         this.$store.dispatch('closeInstanceCreateDialog');
       },
       save() {
-        if (this.name) {
-          // console.log(this.memory);
-          if (!this.canCreate) {
-            // console.log('send request');
-            this.sendRequest();
-          } else {
-            const data = {
-              name: this.name,
-              os: this.os,
-              cpu: this.cpu,
-              memory: `${this.memory}MB`,
-              disk: `${this.disk}GB`,
-              pool_name: this.getStorage.enabled === 'True' ? this.getStorage.pool_name : '',
-              period: this.showPrice ? this.period.text : '',
-              price: this.showPrice ? this.price : '',
-              users: this.owners
-            };
-            console.log(data);
-            this.$store.dispatch('createInstance', data);
-            // eslint-disable-next-line max-len
-            // this.$store.dispatch('notify', { id: 0, message: 'Your instance is launching', color: '' });
-            setTimeout(() => {
-              this.$store.dispatch('fetchInstances');
-            }, 500);
-            console.log('create instance');
+        if (this.$refs.form.validate()) {
+          if (this.name) {
+            // console.log(this.memory);
+            if (!this.canCreate) {
+              // console.log('send request');
+              this.sendRequest();
+            } else {
+              const data = {
+                name: this.name,
+                os: this.os,
+                cpu: this.cpu,
+                memory: `${this.memory}MB`,
+                disk: `${this.disk}GB`,
+                pool_name: this.getStorage.enabled === 'True' ? this.getStorage.pool_name : '',
+                period: this.showPrice ? this.period.text : '',
+                price: this.showPrice ? this.price : '',
+                users: this.owners
+              };
+              console.log(data);
+              this.$store.dispatch('createInstance', data);
+              // eslint-disable-next-line max-len
+              // this.$store.dispatch('notify', { id: 0, message: 'Your instance is launching', color: '' });
+              setTimeout(() => {
+                this.$store.dispatch('fetchInstances');
+              }, 500);
+              console.log('create instance');
+            }
           }
+          this.active = false;
         }
-        this.active = false;
       },
       sendRequest() {
         if (this.name !== '') {

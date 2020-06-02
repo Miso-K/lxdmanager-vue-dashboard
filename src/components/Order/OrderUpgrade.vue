@@ -2,6 +2,7 @@
   <v-layout row justify-center>
     <v-dialog v-model="active" max-width="800px">
       <v-card>
+        <v-form ref="form" v-model="valid" lazy-validation>
         <v-card-title>
           <span class="headline">{{ $t('instances.order.upgrade') }}</span>
         </v-card-title>
@@ -14,6 +15,7 @@
                   :items=instancesId
                   :label="$t('instances.order.select_instance.label')"
                   @change="getInstanceConfig"
+                  :rules="[v => !!v || 'Item is required']"
                   required
                 ></v-select>
               </v-flex>
@@ -87,8 +89,9 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" text @click.native="active = false">{{ $t('actions.close') }}</v-btn>
-          <v-btn color="green darken-1" text @click="save">{{ $t('actions.create') }}</v-btn>
+          <v-btn color="green darken-1" text @click="save" :disabled="!valid">{{ $t('actions.create') }}</v-btn>
         </v-card-actions>
+        </v-form>
       </v-card>
     </v-dialog>
   </v-layout>
@@ -102,6 +105,7 @@
     data() {
       return {
         notifications: false,
+        valid: false,
         period: { text: '1 Month', value: 1 },
         name: '',
         cpu: '1',
@@ -236,32 +240,38 @@
         this.$store.dispatch('closeInstanceUpgradeDialog');
       },
       save() {
-        if (this.name) {
-          console.log(this.price);
-          if (!this.canUpdate) {
-            // console.log('send request');
-            this.sendRequest();
-          } else {
-            const data = {
-              id: this.selectedInstance,
-              name: this.name,
-              cpu: this.cpu,
-              memory: `${this.memory}MB`,
-              disk: `${this.disk}GB`,
-              pool_name: this.getStorage.enabled === 'True' ? this.getStorage.pool_name : '',
-              period: this.showPrice ? this.period.text : '',
-              price: this.showPrice ? this.price : ''
-            };
-            this.$store.dispatch('upgradeInstance', data);
-            this.$store.dispatch('notify', { id: 0, message: `${this.$i18n.t('notifications.instance_upgraded')}`, color: '' });
-            this.active = false;
-            setTimeout(() => {
-              this.$store.dispatch('fetchInstances');
-            }, 500);
-            console.log('create instance');
+        if (this.$refs.form.validate()) {
+          if (this.name) {
+            console.log(this.price);
+            if (!this.canUpdate) {
+              // console.log('send request');
+              this.sendRequest();
+            } else {
+              const data = {
+                id: this.selectedInstance,
+                name: this.name,
+                cpu: this.cpu,
+                memory: `${this.memory}MB`,
+                disk: `${this.disk}GB`,
+                pool_name: this.getStorage.enabled === 'True' ? this.getStorage.pool_name : '',
+                period: this.showPrice ? this.period.text : '',
+                price: this.showPrice ? this.price : ''
+              };
+              this.$store.dispatch('upgradeInstance', data);
+              this.$store.dispatch('notify', {
+                id: 0,
+                message: `${this.$i18n.t('notifications.instance_upgraded')}`,
+                color: ''
+              });
+              this.active = false;
+              setTimeout(() => {
+                this.$store.dispatch('fetchInstances');
+              }, 500);
+              console.log('create instance');
+            }
           }
+          this.active = false;
         }
-        this.active = false;
       },
       sendRequest() {
         if (this.name !== '') {
