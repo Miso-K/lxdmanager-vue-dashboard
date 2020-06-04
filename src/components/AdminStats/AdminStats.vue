@@ -121,7 +121,6 @@
         return this.host.memory && humanFileSize(this.host.memory.total);
       },
       totalDisk() {
-        console.log(this.$store.getters.appconfig.storage.total_size);
         return this.$store.getters.appconfig.storage.total_size;
       },
       price() {

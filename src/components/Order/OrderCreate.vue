@@ -215,7 +215,7 @@
         return false;
       },
       me() {
-        console.log(this.$store.getters['auth/me']);
+        // console.log(this.$store.getters['auth/me']);
         return this.$store.getters['auth/me'];
       },
       canCreate() {
