@@ -21,13 +21,14 @@
           :value_sub="runningMachines"
         ></admin-stats-card>
         <admin-stats-card
+          v-if="showPrice"
           icon="mdi-currency-eur"
           color="purple"
-          :value="machines"
-          unit=" units"
+          :value="priceTotal"
+          unit=" €"
           label="Price"
-          label_sub="Running"
-          :value_sub="runningMachines"
+          label_sub="Instances with price"
+          :value_sub="price"
         ></admin-stats-card>
       </v-layout>
    </v-container>
@@ -54,6 +55,7 @@
           label_sub="Allocated Memory"
         ></host-stats-card>
         <host-stats-card
+          v-if="showDisk"
           icon="mdi-harddisk"
           color="orange"
           :value="totalDisk"
@@ -121,6 +123,18 @@
       totalDisk() {
         console.log(this.$store.getters.appconfig.storage.total_size);
         return this.$store.getters.appconfig.storage.total_size;
+      },
+      price() {
+        return this.stats.price && this.stats.price.price_count;
+      },
+      priceTotal() {
+        return this.stats.price && this.stats.price.price_total.toFixed(2);
+      },
+      showPrice() {
+        return this.$store.getters.appconfig.price.enabled === 'True';
+      },
+      showDisk() {
+        return this.$store.getters.appconfig.storage.enabled === 'True';
       }
     },
     mounted() {

@@ -1,18 +1,23 @@
 import _map from 'lodash/map';
 import { MeService, UsersService } from '../../services';
 import formatUser from '../../utils/format/user';
+import storage from '../../utils/storage';
 
 export const USERS_REQUEST = 'USERS_REQUEST';
 export const USERS_SUCCESS = 'USERS_SUCCESS';
 export const USERS_FAILURE = 'USERS_FAILURE';
 export const SET_OTP_SECRET = 'SET_OTP_SECRET';
 
+export const STORAGE_USERS_KEY = 'STORAGE_USERS';
+
+const storedUsers = storage.get(STORAGE_USERS_KEY);
 /**
  * Initial state
  * @type {Object}
  */
 const usersState = {
-  users: {},
+  // instances: storedInstances || [],
+  users: storedUsers || [],
   myself: {},
   otp: {},
   loading: false
@@ -42,10 +47,12 @@ const usersMutations = {
   },
   [USERS_SUCCESS]: (state, users) => {
     Object.assign(state, { ...users, loading: false });
+    storage.set(STORAGE_USERS_KEY, users.users);
   },
   [USERS_FAILURE]: (state, err) => {
     console.log(USERS_FAILURE, err);
     Object.assign(state, { loading: false });
+    storage.remove(STORAGE_USERS_KEY);
   },
   [SET_OTP_SECRET]: (state, otp) => {
     Object.assign(state, { otp, loading: false });
