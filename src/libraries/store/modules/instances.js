@@ -275,7 +275,7 @@ const instancesActions = {
         }
       }
     };
-    // console.log(obj);
+    console.log(obj);
     return InstancesService.post(obj).then((res) => {
       // console.log(res);
       dispatch('fetchOperation', res.data.metadata.id);

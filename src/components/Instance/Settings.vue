@@ -80,6 +80,15 @@
               <v-flex xs12>
                 <v-text-field :label="$t('instances.order.instance_clone_name.label')" v-model="instanceClone"></v-text-field>
               </v-flex>
+              <v-flex xs12>
+                <v-text-field
+                  v-if="showPrice"
+                  label="Price"
+                  v-model="calcPrice"
+                  suffix="€"
+                  :disabled="!me.admin"
+                ></v-text-field>
+              </v-flex>
               <!---<v-flex xs12 sm6>
                 <v-select
                   :items="['week', 'month', 'unlimited']"
@@ -263,29 +272,23 @@
         this.actualDisk = config.limits_disk_gb > 10 ? config.limits_disk_gb : 10;
       },
       sendRequestUpgrade() {
+        const data = {
+          id: this.id,
+          name: this.name,
+          cpu: this.cpu,
+          memory: `${this.memory}MB`,
+          disk: `${this.disk}GB`,
+          pool_name: this.getStorage.enabled === 'True' ? this.getStorage.pool_name : '',
+          period: this.showPrice ? this.period.text : '',
+          price: this.showPrice ? this.price : ''
+        };
         if (this.canUpdate) {
-          const data = {
-            id: this.id,
-            name: this.name,
-            cpu: this.cpu,
-            memory: `${this.memory}MB`,
-            disk: `${this.disk}GB`,
-            pool_name: this.getStorage.enabled === 'True' ? this.getStorage.pool_name : '',
-            period: this.showPrice ? this.period.text : '',
-            price: this.showPrice ? this.price : ''
-          };
           this.$store.dispatch('upgradeInstance', data);
           this.$store.dispatch('notify', { id: 0, message: `${this.$i18n.t('notifications.instance_upgraded')}`, color: '' });
         } else {
-          const data = {
-            id: this.id,
-            os: this.os,
-            cpu: this.cpu,
-            memory: `${this.memory}MB`,
-            disk: `${this.disk}GB`,
-            period: this.showPrice ? this.period.text : '',
-            price: this.showPrice ? this.price : ''
-          };
+          const tempdata = data;
+          tempdata.users = [this.me.id];
+          tempdata.users_name = [this.me.username];
           this.$store.dispatch('createRequests', { action: 'upgrade', message: `Upgrade instance ${this.name}`, status: 'waiting', meta_data: data });
           this.$store.dispatch('notify', { id: 0, message: `${this.$i18n.t('notifications.instance_created')}`, color: '' });
           this.active = false;
@@ -297,7 +300,9 @@
           instanceClone: this.instanceClone,
           cpu: this.instance.config.limits_cpu,
           memory: this.instance.config.limits_memory,
-          disk: this.instance.config.limits_disk ? `${this.instance.config.limits_disk}GB` : '0GB'
+          disk: this.instance.config.limits_disk ? `${this.instance.config.limits_disk}GB` : '0GB',
+          users: [this.me.id],
+          users_name: [this.me.username]
         };
         if (this.canClone) {
           this.$store.dispatch('cloneInstance', data);

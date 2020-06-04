@@ -55,7 +55,6 @@ const actions = {
 
     return RequestsService.get()
       .then((res) => {
-        // console.log(res);
         res.requests = res.data.data;
         commit(REQUESTS_SUCCESS, res);
       }).catch((err) => {

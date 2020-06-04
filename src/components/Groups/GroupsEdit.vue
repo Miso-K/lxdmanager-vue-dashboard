@@ -15,7 +15,7 @@
                 <v-row>
                   <v-col cols="12" sm="4" md="4">
                     <v-switch
-                      label="Required abilities"
+                      label="Required abilities for lxdmanager"
                       color="red"
                       readonly
                       v-model="switchValue"

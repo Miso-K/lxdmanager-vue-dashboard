@@ -242,21 +242,20 @@
       save() {
         if (this.$refs.form.validate()) {
           if (this.name) {
-            console.log(this.price);
+            const data = {
+              id: this.selectedInstance,
+              name: this.name,
+              cpu: this.cpu,
+              memory: `${this.memory}MB`,
+              disk: `${this.disk}GB`,
+              pool_name: this.getStorage.enabled === 'True' ? this.getStorage.pool_name : '',
+              period: this.showPrice ? this.period.text : '',
+              price: this.showPrice ? this.price : ''
+            };
             if (!this.canUpdate) {
               // console.log('send request');
-              this.sendRequest();
+              this.sendRequest(data);
             } else {
-              const data = {
-                id: this.selectedInstance,
-                name: this.name,
-                cpu: this.cpu,
-                memory: `${this.memory}MB`,
-                disk: `${this.disk}GB`,
-                pool_name: this.getStorage.enabled === 'True' ? this.getStorage.pool_name : '',
-                period: this.showPrice ? this.period.text : '',
-                price: this.showPrice ? this.price : ''
-              };
               this.$store.dispatch('upgradeInstance', data);
               this.$store.dispatch('notify', {
                 id: 0,
@@ -273,20 +272,12 @@
           this.active = false;
         }
       },
-      sendRequest() {
+      sendRequest(data) {
         if (this.name !== '') {
-          const data = {
-            id: this.selectedInstance,
-            os: this.os,
-            cpu: this.cpu,
-            memory: `${this.memory}MB`,
-            disk: `${this.disk}GB`,
-            pool_name: this.getStorage.enabled === 'True' ? this.getStorage.pool_name : '',
-            period: this.showPrice ? this.period.text : '',
-            price: this.showPrice ? this.price : ''
-          };
-          // console.log(data);
-          this.$store.dispatch('createRequests', { action: 'upgrade', message: `Upgrade instance ${this.name}`, status: 'waiting', meta_data: data });
+          const tempdata = data;
+          tempdata.users = [this.me.id];
+          tempdata.users_name = [this.me.username];
+          this.$store.dispatch('createRequests', { action: 'upgrade', message: `Upgrade instance ${this.name}`, status: 'waiting', meta_data: tempdata });
           this.$store.dispatch('notify', { id: 0, message: `${this.$i18n.t('notifications.request_created')}`, color: '' });
           this.active = false;
         }

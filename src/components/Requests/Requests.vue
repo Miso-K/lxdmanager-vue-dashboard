@@ -277,10 +277,7 @@
       formatMetaData(data) {
         if (data) {
           // console.log(data);
-          const str = data.replace(/'/g, '"');
-          const obj = JSON.parse(str);
-          // console.log(obj);
-          return obj;
+          return data;
         } return '';
       },
       editItem(item) {
@@ -354,24 +351,18 @@
       saveConfirm() {
         // eslint-disable-next-line max-len
         this.$store.dispatch('changeRequests', { id: this.editedItemId, message: this.editedItem.message, status: this.editedItem.status });
-        // console.log(`'${this.editedItem.meta_data}'`);
-        const str = this.editedItem.meta_data.replace(/'/g, '"');
-        // const strparse = JSON.parse(str);
-        // strparse.users = [{ id: 2 }];
-        // console.log(strparse);
-        // console.log(JSON.parse(str));
         if (this.doAction) {
           if (this.editedItem.action === 'create') {
-            this.$store.dispatch('createInstance', JSON.parse(str));
+            this.$store.dispatch('createInstance', this.editedItem.meta_data);
           }
           if (this.editedItem.action === 'upgrade') {
-            this.$store.dispatch('upgradeInstance', JSON.parse(str));
+            this.$store.dispatch('upgradeInstance', this.editedItem.meta_data);
           }
           if (this.editedItem.action === 'clone') {
-            this.$store.dispatch('cloneInstance', JSON.parse(str));
+            this.$store.dispatch('cloneInstance', this.editedItem.meta_data);
           }
           if (this.editedItem.action === 'delete') {
-            this.$store.dispatch('deleteInstance', JSON.parse(str).id);
+            this.$store.dispatch('deleteInstance', this.editedItem.meta_data.id);
           }
         }
         setTimeout(() => {
@@ -385,8 +376,6 @@
     },
     computed: {
       items() {
-        // console.log(this.$store.getters.requestsTableData);
-        // return this.$store.getters.requestsTableData.map(item => item.attributes);
         return this.$store.getters.requestsTableData;
       },
       me() {

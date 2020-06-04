@@ -215,6 +215,7 @@
         return false;
       },
       me() {
+        console.log(this.$store.getters['auth/me']);
         return this.$store.getters['auth/me'];
       },
       canCreate() {
@@ -283,23 +284,21 @@
       save() {
         if (this.$refs.form.validate()) {
           if (this.name) {
-            // console.log(this.memory);
+            const data = {
+              name: this.name,
+              os: this.os,
+              cpu: this.cpu,
+              memory: `${this.memory}MB`,
+              disk: `${this.disk}GB`,
+              pool_name: this.getStorage.enabled === 'True' ? this.getStorage.pool_name : '',
+              period: this.showPrice ? this.period.text : '',
+              price: this.showPrice ? this.price : '',
+              users: this.owners
+            };
             if (!this.canCreate) {
               // console.log('send request');
-              this.sendRequest();
+              this.sendRequest(data);
             } else {
-              const data = {
-                name: this.name,
-                os: this.os,
-                cpu: this.cpu,
-                memory: `${this.memory}MB`,
-                disk: `${this.disk}GB`,
-                pool_name: this.getStorage.enabled === 'True' ? this.getStorage.pool_name : '',
-                period: this.showPrice ? this.period.text : '',
-                price: this.showPrice ? this.price : '',
-                users: this.owners
-              };
-              console.log(data);
               this.$store.dispatch('createInstance', data);
               // eslint-disable-next-line max-len
               // this.$store.dispatch('notify', { id: 0, message: 'Your instance is launching', color: '' });
@@ -312,20 +311,12 @@
           this.active = false;
         }
       },
-      sendRequest() {
+      sendRequest(data) {
         if (this.name !== '') {
-          const data = {
-            name: this.name,
-            os: this.os,
-            cpu: this.cpu,
-            memory: `${this.memory}MB`,
-            disk: `${this.disk}GB`,
-            ispconfig: this.ispconfig,
-            period: this.period,
-            price: this.price
-          };
-          // console.log(data);
-          this.$store.dispatch('createRequests', { action: 'create', message: `Create new instance ${this.name}`, status: 'waiting', meta_data: data });
+          const tempdata = data;
+          tempdata.users = [this.me.id];
+          tempdata.users_name = [this.me.username];
+          this.$store.dispatch('createRequests', { action: 'create', message: `Create new instance ${this.name}`, status: 'waiting', meta_data: tempdata });
           this.$store.dispatch('notify', { id: 0, message: `${this.$i18n.t('notifications.request_created')}`, color: '' });
           this.active = false;
         }
