@@ -31,6 +31,13 @@
                   placeholder="default"
                   required
                 ></v-text-field>
+                <v-text-field
+                  :disabled="!isEditing"
+                  v-model="data.storage.total_size"
+                  label="Storage total size (for default instance installation)"
+                  placeholder="1000 GB"
+                  required
+                ></v-text-field>
                 </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
@@ -127,7 +134,8 @@
           },
           storage: {
             enabled: false,
-            pool_name: ''
+            pool_name: '',
+            total_size: ''
           },
           price: {
             enabled: false,

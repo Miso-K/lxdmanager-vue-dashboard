@@ -57,7 +57,7 @@
           icon="mdi-harddisk"
           color="orange"
           :value="totalDisk"
-          unit=" GB"
+          unit=""
           label="Total Disk"
           :value_sub="disk"
           unit_sub=" GB"
@@ -119,7 +119,8 @@
         return this.host.memory && humanFileSize(this.host.memory.total);
       },
       totalDisk() {
-        return this.host.pool && this.host.pool.space.total;
+        console.log(this.$store.getters.appconfig.storage.total_size);
+        return this.$store.getters.appconfig.storage.total_size;
       }
     },
     mounted() {
