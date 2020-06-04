@@ -186,7 +186,7 @@
       },
       instance() {
         if (this.id) {
-          console.log(this.$store.getters.instanceDataId(this.id));
+          // console.log(this.$store.getters.instanceDataId(this.id));
           // console.log(this.id);
           return this.$store.getters.instanceDataId(this.id);
         }
@@ -202,7 +202,7 @@
       ramUsagePercent() {
         const percent = Math.floor(
           (this.instance.state.memory.usage * 100) / this.config.limits_memory_raw);
-        console.log(percent);
+        // console.log(percent);
         return isNaN(percent) || !isFinite(percent) ? 0 : percent;
       },
       diskUsage() {
@@ -210,7 +210,7 @@
       },
       diskUsagePercent() {
         const percent = Math.floor(this.instance.state.disk.root.usage / this.config.limits_disk_raw);
-        console.log(isFinite(percent));
+        // console.log(isFinite(percent));
         return isNaN(percent) || !isFinite(percent) ? 0 : percent;
       },
       networkCounters() {
@@ -235,7 +235,7 @@
         return this.instance.status;
       },
       running() {
-        console.log(this.instance.status);
+        // console.log(this.instance.status);
         return this.instance.status === 'RUNNING';
       },
       loading() {

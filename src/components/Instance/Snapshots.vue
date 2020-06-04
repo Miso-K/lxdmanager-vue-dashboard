@@ -156,7 +156,7 @@
     },
     methods: {
       initialize() {
-        this.items = this.$store.getters.snapshotsTableData;
+        this.items = this.$store.getters.snapshotsTableData || [];
         // console.log(this.items);
       },
 
