@@ -58,6 +58,7 @@
     "name": "Instances",
     "tabs": {
       "info": "Info",
+      "stats": "Stats",
       "console": "Console",
       "settings": "Settings",
       "snapshots": "Snapshots"

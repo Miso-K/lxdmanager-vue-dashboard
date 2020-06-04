@@ -22,7 +22,7 @@
 
           <v-card
             class="mx-auto"
-            color="#26c6da"
+            color="cyan lighten-1"
             dark
             max-width="400"
           >

@@ -82,7 +82,7 @@
           <v-list-item v-if="showDisk">
             <v-list-item-content>
               <v-list-item-title>{{ $t('instances.config.disk') }}</v-list-item-title>
-                <v-list-item-subtitle v-if="config.limits_disk !== '0'">{{ config.limits_disk }}</v-list-item-subtitle>
+                <v-list-item-subtitle v-if="config.limits_disk !== null">{{ config.limits_disk }}</v-list-item-subtitle>
                 <v-list-item-subtitle v-else>No limit set</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>

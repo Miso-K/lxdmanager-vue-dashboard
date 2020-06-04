@@ -6,14 +6,18 @@
       <v-icon>info</v-icon>
     </v-tab>
     <v-tab href="#tab-2">
+      {{ $t('instances.tabs.stats') }}
+      <v-icon>mdi-chart-donut</v-icon>
+    </v-tab>
+    <v-tab href="#tab-3">
       {{ $t('instances.tabs.console') }}
       <v-icon>code</v-icon>
     </v-tab>
-    <v-tab href="#tab-3">
+    <v-tab href="#tab-4">
       {{ $t('instances.tabs.settings') }}
       <v-icon>settings</v-icon>
     </v-tab>
-    <v-tab v-if="showSnapshots" href="#tab-4">
+    <v-tab v-if="showSnapshots" href="#tab-5">
       {{ $t('instances.tabs.snapshots') }}
       <v-icon>photo_camera</v-icon>
     </v-tab>
@@ -26,12 +30,15 @@
          <tab-info v-bind="$props"></tab-info>
       </v-card>
       <v-card v-if="i === 2" flat>
-        <tab-console v-bind="$props"></tab-console>
+         <tab-stats v-bind="$props"></tab-stats>
       </v-card>
       <v-card v-if="i === 3" flat>
-        <tab-settings v-bind="$props"></tab-settings>
+        <tab-console v-bind="$props"></tab-console>
       </v-card>
       <v-card v-if="i === 4" flat>
+        <tab-settings v-bind="$props"></tab-settings>
+      </v-card>
+      <v-card v-if="i === 5" flat>
         <tab-snapshots v-bind="$props"></tab-snapshots>
       </v-card>
     </v-tab-item>
@@ -41,6 +48,7 @@
 
 <script>
   import TabInfo from './Info';
+  import TabStats from './Stats';
   import TabConsole from './Console';
   import TabSnapshots from './Snapshots';
   import TabSettings from './Settings';
@@ -54,13 +62,14 @@
     },
     components: {
       'tab-info': TabInfo,
+      'tab-stats': TabStats,
       'tab-console': TabConsole,
       'tab-snapshots': TabSnapshots,
       'tab-settings': TabSettings
     },
     computed: {
       tabsLength() {
-        return this.showSnapshots ? 4 : 3;
+        return this.showSnapshots ? 5 : 4;
       },
       showSnapshots() {
         return this.$store.getters.appconfig.storage.enabled === 'True';
