@@ -24,7 +24,9 @@
                   :width="15"
                   color="green"
                   :indeterminate="running"
-                >{{ cpuUsage }}</v-progress-circular>
+                >
+                  {{ cpuUsage }}s
+                </v-progress-circular>
               </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
@@ -56,7 +58,7 @@
                   :value="ramUsagePercent"
                   color="blue"
                 >
-                  {{ ramUsagePercent }}
+                  {{ ramUsagePercent }}%
                 </v-progress-circular>
               </v-list-item-title>
             </v-list-item-content>
@@ -89,7 +91,7 @@
                   :value="diskUsagePercent"
                   color="orange"
                 >
-                  {{ diskUsagePercent }}
+                  {{ diskUsagePercent }}%
                 </v-progress-circular>
               </v-list-item-title>
             </v-list-item-content>
@@ -206,10 +208,11 @@
         return isNaN(percent) || !isFinite(percent) ? 0 : percent;
       },
       diskUsage() {
-        return Math.floor(this.instance.state.disk.root.usage / (1000 ** 3));
+        return (this.instance.state.disk.root.usage / (1000 ** 3)).toFixed(1);
       },
       diskUsagePercent() {
-        const percent = Math.floor(this.instance.state.disk.root.usage / this.config.limits_disk_raw);
+        const percent = (
+          this.instance.state.disk.root.usage / this.config.limits_disk_raw).toFixed(2) * 100;
         // console.log(isFinite(percent));
         return isNaN(percent) || !isFinite(percent) ? 0 : percent;
       },
