@@ -57,7 +57,8 @@ export default function instance(ct) {
       limits_disk: diskSize,
       limits_disk_raw: limitsDiskRaw,
       limits_disk_gb: limitsDiskRaw / (1000 ** 3),
-      user_price: ct.config['user.price']
+      user_price: ct.config['user.price'],
+      user_terminal: ct.config['user.terminal']
     }
   };
 }
