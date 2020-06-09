@@ -16,6 +16,7 @@
     </v-app-bar>
     <v-card-text>
       <v-select
+        v-model="$i18n.locale"
         :disabled="!isEditing"
         :items="lang"
         :label="$t('settings.settings.language')"
@@ -96,8 +97,10 @@
     data() {
       return {
         lang: [
-          { text: 'English' }
+          { text: 'English', value: 'en' },
+          { text: 'Slovensky', value: 'sk' }
         ],
+        langs: ['sk', 'en'],
         isEditing: null,
         model: null,
         dialog: false,

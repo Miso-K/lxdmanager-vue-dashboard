@@ -8,6 +8,7 @@ export default new I18n({
   locale: 'en',
   fallbackLocale: 'en',
   messages: {
-    en: require('../../assets/locales/en')
+    en: require('../../assets/locales/en'),
+    sk: require('../../assets/locales/sk')
   }
 });

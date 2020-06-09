@@ -18,7 +18,7 @@
               <v-icon>{{ item.icon }}</v-icon>
             </v-list-item-action>
             <v-list-item-content>
-              <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+              <v-list-tile-title>{{ $t(item.title) }}</v-list-tile-title>
             </v-list-item-content>
           </v-list-item>
           <v-divider></v-divider>
@@ -88,15 +88,15 @@
       return {
         drawer: true,
         items: [
-          { title: this.$t('menu.dashboard'), icon: 'dashboard', to: { name: 'dashboard' }, user: true },
-          { title: this.$t('menu.instances'), icon: 'storage', to: { name: 'instances' }, user: true },
-          { title: this.$t('menu.images'), icon: 'storage', to: { name: 'images' }, user: false },
-          { title: this.$t('menu.users'), icon: 'group', to: { name: 'users' }, user: false },
-          { title: this.$t('menu.groups'), icon: 'people_outline', to: { name: 'groups' }, user: false },
-          { title: this.$t('menu.requests'), icon: 'list', to: { name: 'requests' }, user: true },
-          { title: this.$t('menu.settings'), icon: 'settings', to: { name: 'settings' }, user: true },
-          { title: this.$t('menu.help'), icon: 'help', to: { name: 'help' }, user: true },
-          { title: this.$t('menu.app_config'), icon: 'settings', to: { name: 'appconfig' }, user: false }
+          { title: 'menu.dashboard', icon: 'dashboard', to: { name: 'dashboard' }, user: true },
+          { title: 'menu.instances', icon: 'storage', to: { name: 'instances' }, user: true },
+          { title: 'menu.images', icon: 'storage', to: { name: 'images' }, user: false },
+          { title: 'menu.users', icon: 'group', to: { name: 'users' }, user: false },
+          { title: 'menu.groups', icon: 'people_outline', to: { name: 'groups' }, user: false },
+          { title: 'menu.requests', icon: 'list', to: { name: 'requests' }, user: true },
+          { title: 'menu.settings', icon: 'settings', to: { name: 'settings' }, user: true },
+          { title: 'menu.help', icon: 'help', to: { name: 'help' }, user: true },
+          { title: 'menu.app_config', icon: 'settings', to: { name: 'appconfig' }, user: false }
         ],
         mini: false,
         showSnack: true,
