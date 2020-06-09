@@ -56,14 +56,14 @@
               this.value = 0;
             }
             this.value += 1;
-            // console.log('interval');
+            console.log('interval');
           }, 1000);
         },
         actionCountDown() {
           this.interval2 = setInterval(() => {
             if (this.countdown === 0) {
-              this.$router.push('logout');
-              this.countdown = 30;
+              this.$router.replace({ path: '/logout' });
+              this.countdown = 60;
             }
             this.value = 0;
             this.countdown -= 1;
