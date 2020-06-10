@@ -2,6 +2,7 @@ import _map from 'lodash/map';
 import { MeService, UsersService } from '../../services';
 import formatUser from '../../utils/format/user';
 import storage from '../../utils/storage';
+import i18n from '../../i18n';
 
 export const USERS_REQUEST = 'USERS_REQUEST';
 export const USERS_SUCCESS = 'USERS_SUCCESS';
@@ -68,8 +69,9 @@ const usersActions = {
     commit(USERS_REQUEST);
 
     MeService.get().then((res) => {
-      // console.log(res.data.data);
+      console.log(res.data.data);
       res.myself = res.data.data;
+      i18n.locale = res.myself.language;
       commit(USERS_SUCCESS, res);
     }).catch((err) => {
       commit(USERS_FAILURE, err);

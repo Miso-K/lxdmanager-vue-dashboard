@@ -52,7 +52,8 @@
     "snapshot_restored": "Váš snapshot bol obnovený",
     "profile_updated": "Váš profil bol zmenený",
     "password_saved": "Vaše heslo bolo zmenené",
-    "password_wrong": "Zadali ste zlé heslo"
+    "password_wrong": "Zadali ste zlé heslo",
+    "language_changed": "Váš jazyk bol zmenený"
   },
   "instances": {
     "name": "Kontajnery",

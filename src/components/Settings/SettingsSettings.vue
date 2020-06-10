@@ -20,7 +20,7 @@
         :disabled="!isEditing"
         :items="lang"
         :label="$t('settings.settings.language')"
-        value="English"
+        :value="data.language"
       ></v-select>
       <v-select
         :disabled="!isEditing"
@@ -151,12 +151,14 @@
     methods: {
       getData() {
         const tmData = this.$store.getters['auth/me'];
-        // console.log(tmData);
+        console.log(tmData);
         this.data.otp_enabled = tmData.otp_enabled;
         this.data.otp_type = tmData.otp_type ? tmData.otp_type : 'none';
         this.data.language = tmData.language;
       },
       save() {
+        this.data.language = this.$i18n.locale;
+        console.log(this.data.language);
         this.isEditing = !this.isEditing;
         this.$store.dispatch('notify', { id: 0, message: `${this.$i18n.t('notifications.language_changed')}`, color: 'info' });
         this.$store.dispatch('updateMe', this.data);

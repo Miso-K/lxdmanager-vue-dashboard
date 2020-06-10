@@ -56,7 +56,7 @@
               this.value = 0;
             }
             this.value += 1;
-            console.log('interval');
+            // console.log('interval');
           }, 1000);
         },
         actionCountDown() {

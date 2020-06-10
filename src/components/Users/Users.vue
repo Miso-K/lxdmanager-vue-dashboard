@@ -76,6 +76,13 @@
               <v-flex xs12 sm6 md4>
                 <v-text-field label="DIC" v-model="editedItem.dic"></v-text-field>
               </v-flex>
+              <v-flex xs12 sm6 md4>
+              <v-select
+                v-model="editedItem.language"
+                :items="lang"
+                :label="$t('settings.settings.language')"
+              ></v-select>
+              </v-flex>
               <v-flex xs12 sm6 md8>
                 <v-text-field
                   :append-icon="show3 ? 'visibility_off' : 'visibility'"
@@ -278,7 +285,8 @@
           groups: '',
           instances: '',
           password: '',
-          otp_type: ''
+          otp_type: '',
+          language: ''
         },
         defaultItem: {
           username: '',
@@ -294,8 +302,13 @@
           groups: '',
           instances: '',
           password: '',
-          otp_type: ''
-        }
+          otp_type: '',
+          language: ''
+        },
+        lang: [
+          { text: 'English', value: 'en' },
+          { text: 'Slovensky', value: 'sk' }
+        ]
       };
     },
     computed: {

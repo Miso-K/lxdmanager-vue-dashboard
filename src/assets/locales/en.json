@@ -52,7 +52,8 @@
     "snapshot_restored": "Your snapshot was restored",
     "profile_updated": "Your profile was updated",
     "password_saved": "Your password has been saved",
-    "password_wrong": "You set wrong password"
+    "password_wrong": "You set wrong password",
+    "language_changed": "Your language was changed"
   },
   "instances": {
     "name": "Instances",
