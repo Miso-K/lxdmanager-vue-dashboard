@@ -47,7 +47,7 @@ const actions = {
     // commit(SNAPSHOTS_REQUEST);
     console.log('operation');
     OperationsService.get(id).then((res) => {
-      console.log(res);
+      // console.log(res);
       const meta = res.data.metadata;
       setTimeout(() => {
         // commit(SNAPSHOT_SUCCESS, { id, attributes: res.snapshots[id].attributes });

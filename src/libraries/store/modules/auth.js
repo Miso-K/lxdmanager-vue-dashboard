@@ -142,7 +142,7 @@ const authActions = {
     // send refresh token as token
     storage.set(STORAGE_TOKEN_KEY, storage.get(STORAGE_REFRESH_TOKEN_KEY));
     return AuthService.refresh({}).then((res) => {
-      console.log(res);
+      // console.log(res);
       commit(TOKEN_SUCCESS, res.data);
     }).catch((err) => {
       commit(TOKEN_FAILURE, err);

@@ -69,7 +69,7 @@ const usersActions = {
     commit(USERS_REQUEST);
 
     MeService.get().then((res) => {
-      console.log(res.data.data);
+      // console.log(res.data.data);
       res.myself = res.data.data;
       i18n.locale = res.myself.language;
       commit(USERS_SUCCESS, res);
@@ -158,8 +158,8 @@ const usersActions = {
 
   updateUser({ commit }, data) {
     commit(USERS_REQUEST);
-    console.log('update log:');
-    console.log(data);
+    // console.log('update log:');
+    // console.log(data);
 
     const obj = {
       data: {

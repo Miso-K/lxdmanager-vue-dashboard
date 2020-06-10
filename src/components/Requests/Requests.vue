@@ -341,7 +341,12 @@
       },
 
       save() {
-        this.$store.dispatch('changeRequests', { id: this.editedItemId, message: this.editedItem.message, status: this.editedItem.status });
+        let meta = '';
+        Object.entries(this.editedItem.meta_data).forEach(
+          ([key, value]) => { meta += `${key}: ${value} <br>`; }
+        );
+        const mail_message = `${this.$i18n.t('requests.mail_message', [this.getProductionName, this.editedItem.action, this.editedItem.status, meta])}`;
+        this.$store.dispatch('changeRequests', { id: this.editedItemId, message: this.editedItem.message, status: this.editedItem.status, mail_message });
         setTimeout(() => {
           this.$store.dispatch('fetchRequests');
         }, 500);
@@ -349,8 +354,12 @@
       },
 
       saveConfirm() {
-        // eslint-disable-next-line max-len
-        this.$store.dispatch('changeRequests', { id: this.editedItemId, message: this.editedItem.message, status: this.editedItem.status });
+        let meta = '';
+        Object.entries(this.editedItem.meta_data).forEach(
+          ([key, value]) => { meta += `${key}: ${value} <br>`; }
+        );
+        const mail_message = `${this.$i18n.t('requests.mail_message', [this.getProductionName, this.editedItem.action, this.editedItem.status, meta])}`;
+        this.$store.dispatch('changeRequests', { id: this.editedItemId, message: this.editedItem.message, status: this.editedItem.status, mail_message });
         if (this.doAction) {
           if (this.editedItem.action === 'create') {
             this.$store.dispatch('createInstance', this.editedItem.meta_data);
@@ -383,6 +392,9 @@
       },
       computedHeaders() {
         return this.headers.filter(h => !(h.user === this.me.admin));
+      },
+      getProductionName() {
+        return this.$store.getters.appconfig.app.production_name;
       }
     },
     created() {

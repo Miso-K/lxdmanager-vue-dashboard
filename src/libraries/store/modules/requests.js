@@ -62,16 +62,17 @@ const actions = {
       });
   },
 
-  createRequests({ commit }, { action, message, status, meta_data }) {
+  createRequests({ commit }, { action, message, status, meta_data, mail_message }) {
     commit(REQUESTS_REQUEST);
-    console.log(action + message + status);
+    // console.log(action + message + status);
     const obj = {
       data: {
         type: 'requests',
         action,
         message,
         status,
-        meta_data
+        meta_data,
+        mail_message
       }
     };
     console.log(obj);
@@ -83,14 +84,15 @@ const actions = {
     });
   },
 
-  changeRequests({ commit }, { id, message, status }) {
+  changeRequests({ commit }, { id, message, status, mail_message }) {
     commit(REQUESTS_REQUEST);
     console.log(message + status);
     const obj = {
       data: {
         type: 'requests',
         message,
-        status
+        status,
+        mail_message
       }
     };
     console.log(obj);

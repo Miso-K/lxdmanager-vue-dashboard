@@ -38,7 +38,8 @@
       "upgrade_instance": "Zmeniť parametre inštancie",
       "clone_instance": "Klonovať inštanciu",
       "delete_instance": "Odstrániť inštanciu"
-    }
+    },
+    "mail_message": "<p>Dobrý deň <br>Tento email bol odoslaný zo servera {0}.<br><br>Typ požiadavky: {1}<br>Info o stave: {2}<br><br>Detail požiadavky: <br>{3}"
   },
   "notifications": {
     "request_created": "Vaša požiadavka bola vytvorená",

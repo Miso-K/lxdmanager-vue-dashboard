@@ -228,6 +228,9 @@
           id: user.id
         }));
       },
+      getProductionName() {
+        return this.$store.getters.appconfig.app.production_name;
+      },
       calcPrice: {
         get() {
           const cpu = this.getPrice.cpu * this.cpu; // 1
@@ -305,7 +308,6 @@
               setTimeout(() => {
                 this.$store.dispatch('fetchInstances');
               }, 500);
-              console.log('create instance');
             }
           }
           this.active = false;
@@ -316,7 +318,12 @@
           const tempdata = data;
           tempdata.users = [this.me.id];
           tempdata.users_name = [this.me.username];
-          this.$store.dispatch('createRequests', { action: 'create', message: `Create new instance ${this.name}`, status: 'waiting', meta_data: tempdata });
+          let meta = '';
+          Object.entries(tempdata).forEach(
+            ([key, value]) => { meta += `${key}: ${value} <br>`; }
+          );
+          const mail_message = `${this.$i18n.t('requests.mail_message', [this.getProductionName, 'create', 'waiting', meta])}`;
+          this.$store.dispatch('createRequests', { action: 'create', message: `Create new instance ${this.name}`, status: 'waiting', meta_data: tempdata, mail_message });
           this.$store.dispatch('notify', { id: 0, message: `${this.$i18n.t('notifications.request_created')}`, color: '' });
           this.active = false;
         }

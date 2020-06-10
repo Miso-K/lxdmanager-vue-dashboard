@@ -245,6 +245,9 @@
       canUpdate() {
         return this.me.abilities.includes('instances_update');
       },
+      getProductionName() {
+        return this.$store.getters.appconfig.app.production_name;
+      },
       calcPrice: {
         get() {
           const cpu = this.getPrice.cpu * this.cpu; // 1
@@ -289,8 +292,13 @@
           const tempdata = data;
           tempdata.users = [this.me.id];
           tempdata.users_name = [this.me.username];
-          this.$store.dispatch('createRequests', { action: 'upgrade', message: `Upgrade instance ${this.name}`, status: 'waiting', meta_data: data });
-          this.$store.dispatch('notify', { id: 0, message: `${this.$i18n.t('notifications.instance_created')}`, color: '' });
+          let meta = '';
+          Object.entries(tempdata).forEach(
+            ([key, value]) => { meta += `${key}: ${value} <br>`; }
+          );
+          const mail_message = `${this.$i18n.t('requests.mail_message', [this.getProductionName, 'upgrade', 'waiting', meta])}`;
+          this.$store.dispatch('createRequests', { action: 'upgrade', message: `Upgrade instance ${this.name}`, status: 'waiting', meta_data: data, mail_message });
+          this.$store.dispatch('notify', { id: 0, message: `${this.$i18n.t('notifications.request_created')}`, color: '' });
           this.active = false;
         }
       },
@@ -308,7 +316,12 @@
           this.$store.dispatch('cloneInstance', data);
           this.$store.dispatch('notify', { id: 0, message: 'Your instance was cloned', color: '' });
         } else {
-          this.$store.dispatch('createRequests', { action: 'clone', message: `Clone instance ${this.name}`, status: 'waiting', meta_data: data });
+          let meta = '';
+          Object.entries(data).forEach(
+            ([key, value]) => { meta += `${key}: ${value} <br>`; }
+          );
+          const mail_message = `${this.$i18n.t('requests.mail_message', [this.getProductionName, 'clone', 'waiting', meta])}`;
+          this.$store.dispatch('createRequests', { action: 'clone', message: `Clone instance ${this.name}`, status: 'waiting', meta_data: data, mail_message });
           this.$store.dispatch('notify', { id: 0, message: `${this.$i18n.t('notifications.request_created')}`, color: '' });
           this.active = false;
         }
@@ -334,7 +347,9 @@
             id: this.id,
             name: this.instanceName
           };
-          this.$store.dispatch('createRequests', { action: 'delete', message: `Delete instance ${this.name}`, status: 'waiting', meta_data: data });
+          const meta = `id: ${this.id}<br>name: ${this.instanceName}<br>`;
+          const mail_message = `${this.$i18n.t('requests.mail_message', [this.getProductionName, 'delete', 'waiting', meta])}`;
+          this.$store.dispatch('createRequests', { action: 'delete', message: `Delete instance ${this.name}`, status: 'waiting', meta_data: data, mail_message });
           this.$store.dispatch('notify', { id: 0, message: `${this.$i18n.t('notifications.request_created')}`, color: '' });
           this.active = false;
         }

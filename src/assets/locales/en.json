@@ -38,7 +38,8 @@
       "upgrade_instance": "Upgrade instance",
       "clone_instance": "Clone instance",
       "delete_instance": "Delete instance"
-    }
+    },
+    "mail_message": "<p>Hi! <br>This email was send from {0}.<br><br>Request type: {1}<br>Status info: {2}<br><br>Request details: <br>{3}"
   },
   "notifications": {
     "request_created": "Your request was created",
