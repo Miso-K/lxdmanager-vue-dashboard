@@ -42,7 +42,7 @@
 
       <v-app-bar app color="deep-purple darken-4" dark extended extension-height="8" height="57px">
         <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-        <v-img :src="require('@/assets/logo_lxd-manager.png')" contain height="30" ></v-img>
+        <v-img src="static/img/logo.png" contain height="30" ></v-img>
         <loader slot="extension"></loader>
       </v-app-bar>
 
