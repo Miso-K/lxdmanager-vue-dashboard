@@ -203,7 +203,7 @@
         editedItem: {
           id: '',
           abilities: '',
-          abilitiesUserList: []
+          abilitiesUserList: [{}]
         },
         defaultItem: {
           name: '',
@@ -218,31 +218,31 @@
           { name: 'users_delete', color: 'blue' }
         ],
         groupsAbilities: [
-          { name: 'groups_infos_all', color: 'red', disabled: true },
+          { name: 'groups_infos_all', color: 'red', disabled: false },
           { name: 'groups_create', color: 'blue' },
           { name: 'groups_infos', color: 'blue' },
           { name: 'groups_update', color: 'blue' },
           { name: 'groups_delete', color: 'blue' }
         ],
         abilitiesAbilities: [
-          { name: 'abilities_infos_all', color: 'red', disabled: true },
+          { name: 'abilities_infos_all', color: 'red', disabled: false },
           { name: 'abilities_infos', color: 'blue' },
           { name: 'abilities_update', color: 'blue' }
         ],
         meAbilities: [
-          { name: 'me_infos', color: 'red', disabled: true },
+          { name: 'me_infos', color: 'red', disabled: false },
           { name: 'me_update', color: 'green' },
           { name: 'me_otp_create', color: 'green' }
         ],
         requestsAbilities: [
-          { name: 'requests_infos_all', color: 'red', disabled: true },
+          { name: 'requests_infos_all', color: 'red', disabled: false },
           { name: 'requests_create', color: 'green' },
           { name: 'requests_infos', color: 'green' },
           { name: 'requests_update', color: 'green' },
           { name: 'requests_delete', color: 'green' }
         ],
         instancesAbilities: [
-          { name: 'instances_infos_all', color: 'red', disabled: true },
+          { name: 'instances_infos_all', color: 'red', disabled: false },
           { name: 'instances_create', color: 'blue' },
           { name: 'instances_infos', color: 'green' },
           { name: 'instances_update', color: 'blue' },
@@ -266,7 +266,7 @@
           { name: 'requests_restore', color: 'green' }
         ],
         imagesAbilities: [
-          { name: 'images_infos_all', color: 'red', disabled: true },
+          { name: 'images_infos_all', color: 'red', disabled: false },
           { name: 'images_create', color: 'blue' },
           { name: 'images_infos', color: 'green' },
           { name: 'images_update', color: 'blue' },
@@ -279,7 +279,7 @@
           { name: 'images_remote_infos_all', color: 'blue' }
         ],
         otherAbilities: [
-          { name: 'operations_infos', color: 'red', disabled: true },
+          { name: 'operations_infos', color: 'red', disabled: false },
           { name: 'lxd_infos', color: 'blue' },
           { name: 'resources_infos', color: 'blue' },
           { name: 'stats_infos', color: 'green' },
