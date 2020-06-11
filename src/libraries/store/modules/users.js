@@ -104,7 +104,10 @@ const usersActions = {
         email: data.email,
         password: data.password,
         relationships: {
-          groups: [
+          groups: data.groups ? data.groups.map(g => ({
+            type: 'groups',
+            id: g
+          })) : [
             {
               type: 'groups',
               id: 2
@@ -169,7 +172,10 @@ const usersActions = {
         name: data.name,
         email: data.email,
         relationships: {
-          groups: [
+          groups: data.groups ? data.groups.map(g => ({
+            type: 'groups',
+            id: g.id ? g.id : g
+          })) : [
             {
               type: 'groups',
               id: 2
@@ -215,7 +221,7 @@ const usersActions = {
     if (data.otp_type !== '' && data.otp_type) {
       obj.data.otp_type = data.otp_type;
     }
-    // console.log(obj);
+    console.log(obj);
     return UsersService.put(data.id, obj).then((res) => {
       // console.log(res);
       commit(USERS_SUCCESS, res.data);

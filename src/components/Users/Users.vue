@@ -110,6 +110,41 @@
               </v-flex>
               <v-flex xs12 sm12 md12>
                 <v-autocomplete
+                  v-model="editedItem.groups"
+                  :disabled="isUpdating"
+                  :items="groupsId"
+                  chips
+                  color="blue-grey lighten-2"
+                  label="Groups"
+                  item-text="name"
+                  item-value="id"
+                  multiple
+                >
+                  <template
+                    slot="selection"
+                    slot-scope="data"
+                  >
+                    <v-chip
+                      :input-value="data.selected"
+                      close
+                      class="chip--select-multi"
+                      @click:close="removeGroup(data.item)"
+                    >
+                      {{ data.item.name }}
+                    </v-chip>
+                  </template>
+                  <template
+                    slot="item"
+                    slot-scope="data"
+                  >
+                  <template >
+                    <v-list-tile-content v-text="data.item.name"></v-list-tile-content>
+                  </template>
+                </template>
+              </v-autocomplete>
+              </v-flex>
+              <v-flex xs12 sm12 md12>
+                <v-autocomplete
                   v-model="editedItem.instances"
                   :disabled="isUpdating"
                   :items="instancesId"
@@ -282,7 +317,7 @@
           ico: '',
           ic_dph: '',
           dic: '',
-          groups: '',
+          groups: { name: 'users', id: 2 },
           instances: '',
           password: '',
           otp_type: '',
@@ -328,6 +363,13 @@
           name: instance.name,
           id: instance.id
         }));
+      },
+      groupsId() {
+        const groups = this.$store.getters.groupsTableData;
+        return groups.map(group => ({
+          name: group.name,
+          id: group.id
+        }));
       }
     },
     watch: {
@@ -341,6 +383,10 @@
         // console.log(index);
         if (index >= 0) this.editedItem.instances.splice(index, 1);
         // console.log(this.editedItem.instances);
+      },
+      removeGroup(item) {
+        const index = this.editedItem.groups.findIndex(x => x.id === item.id);
+        if (index >= 0) this.editedItem.groups.splice(index, 1);
       },
       editItem(item) {
         this.editedIndex = this.items.indexOf(item);
