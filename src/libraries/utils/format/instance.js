@@ -1,7 +1,7 @@
 // import _map from 'lodash/map';
 // import formatMemoryLimit from './memoryLimit';
 // import formatCPUs from './cpus';
-import { KMGBToB } from '../helpers';
+import { KMGBToB, BToGB, BToGiB, BToMB, BToMiB } from '../helpers';
 
 export default function instance(ct) {
   // console.log(ct);
@@ -52,11 +52,13 @@ export default function instance(ct) {
       limits_cpu: ct.expanded_config['limits.cpu'],
       limits_memory: ct.expanded_config['limits.memory'],
       limits_memory_raw: limitsMemoryRaw,
-      limits_memory_mb: limitsMemoryRaw / (1024 ** 2),
+      limits_memory_mb: BToMB(limitsMemoryRaw),
+      limits_memory_mib: BToMiB(limitsMemoryRaw),
       // eslint-disable-next-line max-len,no-nested-ternary
       limits_disk: diskSize,
       limits_disk_raw: limitsDiskRaw,
-      limits_disk_gb: limitsDiskRaw / (1000 ** 3),
+      limits_disk_gb: BToGB(limitsDiskRaw),
+      limits_disk_gib: BToGiB(limitsDiskRaw),
       user_price: ct.config['user.price'],
       user_terminal: ct.config['user.terminal']
     }

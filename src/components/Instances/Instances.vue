@@ -30,6 +30,12 @@
       :headers="computedHeaders"
       :items="items"
       :search="search">
+      <template v-slot:item.config.limits_memory="{ item }">
+        <v-span v-if="item.config.limits_memory">{{ getMemoryConfig(item) }} {{ getMemory.limits_unit_show }}</v-span>
+      </template>
+      <template v-slot:item.config.limits_disk="{ item }">
+        <v-span v-if="item.config.limits_disk">{{ getStorageConfig(item) }} {{ getStorage.limits_unit_show }}</v-span>
+      </template>
       <template v-slot:item.ips[0].address="{ item }">
         <v-span v-if="item.ips[0]">{{ filterIpv6(item.ips[0]) }}</v-span>
       </template>
@@ -178,7 +184,7 @@
         }
       },
       items() {
-        // console.log(this.$store.getters.instancesTableData);
+        console.log(this.$store.getters.instancesTableData);
         // console.log(this.$store.getters['auth/me']);
         return this.$store.getters.instancesTableData;
       },
@@ -193,6 +199,12 @@
           !(h.disk === this.showDisk) &&
           !(h.price === this.showPrice) &&
           !(h.type === this.showType));
+      },
+      getMemory() {
+        return this.$store.getters.appconfig.memory;
+      },
+      getStorage() {
+        return this.$store.getters.appconfig.storage;
       },
       showPrice() {
         return this.$store.getters.appconfig.price.enabled === 'True';
@@ -211,6 +223,18 @@
       }
     },
     methods: {
+      getMemoryConfig(item) {
+        if (this.getMemory.limits_unit === 'MiB') {
+          return item.config.limits_memory_mib;
+        }
+        return item.config.limits_memory_mb;
+      },
+      getStorageConfig(item) {
+        if (this.getStorage.limits_unit === 'GiB') {
+          return item.config.limits_disk_gib;
+        }
+        return item.config.limits_disk_gb;
+      },
       filterIpv6(ip) {
         if (ip.scope === 'link') {
           return '';
@@ -241,79 +265,12 @@
             return 'blue';
         }
       },
-      setVPS(id) {
-        switch (id) {
-          case 1:
-            this.editedItem.cpu = 1;
-            this.editedItem.memory = 512;
-            this.editedItem.disk = 10;
-            break;
-          case 2:
-            this.editedItem.cpu = 1;
-            this.editedItem.memory = 1024;
-            this.editedItem.disk = 30;
-            break;
-          case 3:
-            this.editedItem.cpu = 2;
-            this.editedItem.memory = 2048;
-            this.editedItem.disk = 50;
-            break;
-          case 4:
-            this.editedItem.cpu = 4;
-            this.editedItem.memory = 8172;
-            this.editedItem.disk = 160;
-            break;
-          default:
-            this.editedItem.cpu = 1;
-            this.editedItem.memory = 512;
-            this.editedItem.disk = 10;
-        }
-      },
       close() {
         this.dialog = false;
         setTimeout(() => {
           this.editedItem = Object.assign({}, this.defaultItem);
           this.editedIndex = -1;
         }, 300);
-      },
-      save() {
-        if (this.editedItem.name) {
-          console.log(this.editedItem.memory);
-          this.close();
-          if (!this.canCreate) {
-            console.log('send request');
-            this.sendRequest();
-          } else {
-            this.editedItem.memory = `${this.editedItem.memory}MB`;
-            this.editedItem.disk = `${this.editedItem.disk}GB`;
-            this.$store.dispatch('createInstance', this.editedItem);
-            setTimeout(() => {
-              this.$store.dispatch('fetchInstances');
-            }, 500);
-            console.log('create instance');
-          }
-        }
-      },
-      sendRequest() {
-        console.log(this.me.name);
-        console.log(this.name);
-        console.log(this.cpu);
-        console.log(this.memory);
-        console.log(this.disk);
-
-        if (this.editedItem.name !== '') {
-          const data = {
-            name: this.editedItem.name,
-            os: this.editedItem.os,
-            cpu: this.editedItem.cpu,
-            memory: `${this.editedItem.memory}MB`,
-            disk: `${this.editedItem.disk}GB`
-          };
-          console.log(data);
-          this.$store.dispatch('createRequests', { action: 'create', message: 'Create new instance', status: 'waiting', meta_data: data });
-          this.$store.dispatch('notify', { id: 0, message: 'Your request was created', color: '' });
-          this.active = false;
-        }
       },
       refreshData() {
         this.$store.dispatch('fetchInstances');

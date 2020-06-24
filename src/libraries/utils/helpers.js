@@ -8,14 +8,27 @@ const humanFileSize = (bytes) => {
 const BToMB = (bytes) => {
   if (!bytes) return null;
 
-  return (bytes / 1000 / 1000).toFixed(2);
+  return `${(bytes / 1000 / 1000).toFixed(0)}`;
 };
 
-const MBToB = (bytes) => {
+const BToMiB = (bytes) => {
   if (!bytes) return null;
 
-  return (bytes * 1000 * 1000);
+  return `${(bytes / 1024 / 1024).toFixed(0)}`;
 };
+
+const BToGB = (bytes) => {
+  if (!bytes) return null;
+
+  return `${(bytes / 1000 / 1000 / 1000).toFixed(2)}`;
+};
+
+const BToGiB = (bytes) => {
+  if (!bytes) return null;
+
+  return `${(bytes / 1024 / 1024 / 1024).toFixed(2)}`;
+};
+
 
 const KMGBToB = (value, size) => {
   if (!value) return null;
@@ -43,7 +56,9 @@ const KMGBToB = (value, size) => {
 
 export {
   BToMB,
-  MBToB,
+  BToMiB,
+  BToGB,
+  BToGiB,
   KMGBToB,
   humanFileSize
 };

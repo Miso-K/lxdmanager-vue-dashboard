@@ -66,13 +66,13 @@
           <v-list-item>
             <v-list-item-content>
               <v-list-item-title>RAM usage (current | peak)</v-list-item-title>
-              <v-list-item-subtitle>{{ramUsage[0]}} MB | {{ramUsage[1]}} MB</v-list-item-subtitle>
+              <v-list-item-subtitle>{{ramUsage[0]}} {{ getMemory.limits_unit_show }}| {{ramUsage[1]}} {{ getMemory.limits_unit_show }}</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
           <v-list-item>
             <v-list-item-content>
               <v-list-item-title>RAM limits</v-list-item-title>
-              <v-list-item-subtitle v-if="config.limits_memory">{{ config.limits_memory }}</v-list-item-subtitle>
+              <v-list-item-subtitle v-if="config.limits_memory">{{ getMemoryConfig }} {{ getMemory.limits_unit_show }}</v-list-item-subtitle>
               <v-list-item-subtitle v-else>No limit set</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
@@ -99,13 +99,13 @@
           <v-list-item>
             <v-list-item-content>
               <v-list-item-title>DISK usage</v-list-item-title>
-              <v-list-item-subtitle>{{ diskUsage }} GB</v-list-item-subtitle>
+              <v-list-item-subtitle>{{ diskUsage }} {{ getStorage.limits_unit_show }}</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
           <v-list-item>
             <v-list-item-content>
               <v-list-item-title>DISK limit</v-list-item-title>
-              <v-list-item-subtitle v-if="config.limits_disk !== null">{{ config.limits_disk }}</v-list-item-subtitle>
+              <v-list-item-subtitle v-if="config.limits_disk !== null">{{ getStorageConfig }} {{ getStorage.limits_unit_show }}</v-list-item-subtitle>
               <v-list-item-subtitle v-else>No limit set</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
@@ -153,6 +153,7 @@
 
 <script>
   import { mapActions } from 'vuex';
+  import { BToGB, BToGiB, BToMB, BToMiB } from '../../libraries/utils/helpers';
   // import Loader from '../../components/Loader';
 
   export default {
@@ -199,7 +200,10 @@
       },
       ramUsage() {
         const memory = this.instance.state.memory;
-        return [Math.floor(memory.usage / (1000 ** 2)), Math.floor(memory.usage_peak / (1000 ** 2))];
+        if (this.getMemory.limits_unit === 'MiB') {
+          return [BToMiB(memory.usage), BToMiB(memory.usage_peak)];
+        }
+        return [BToMB(memory.usage), BToMB(memory.usage_peak)];
       },
       ramUsagePercent() {
         const percent = Math.floor(
@@ -208,7 +212,10 @@
         return isNaN(percent) || !isFinite(percent) ? 0 : percent;
       },
       diskUsage() {
-        return (this.instance.state.disk.root.usage / (1000 ** 3)).toFixed(1);
+        if (this.getStorage.limits_unit === 'GiB') {
+          return BToGiB(this.instance.state.disk.root.usage);
+        }
+        return BToGB(this.instance.state.disk.root.usage);
       },
       diskUsagePercent() {
         const percent = (
@@ -243,6 +250,24 @@
       },
       loading() {
         return this.$store.getters.instanceIsLoading(this.id);
+      },
+      getMemoryConfig() {
+        if (this.getMemory.limits_unit === 'MiB') {
+          return this.config.limits_memory_mib;
+        }
+        return this.config.limits_memory_mb;
+      },
+      getStorageConfig() {
+        if (this.getStorage.limits_unit === 'GiB') {
+          return this.config.limits_disk_gib;
+        }
+        return this.config.limits_disk_gb;
+      },
+      getMemory() {
+        return this.$store.getters.appconfig.memory;
+      },
+      getStorage() {
+        return this.$store.getters.appconfig.storage;
       },
       showPrice() {
         return this.$store.getters.appconfig.price.enabled === 'True';

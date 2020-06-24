@@ -75,14 +75,14 @@
           <v-list-item>
             <v-list-item-content>
               <v-list-item-title>{{ $t('instances.config.memory') }}</v-list-item-title>
-                <v-list-item-subtitle v-if="config.limits_memory">{{ config.limits_memory }}</v-list-item-subtitle>
+                <v-list-item-subtitle v-if="config.limits_memory">{{ getMemoryConfig }} {{ getMemory.limits_unit_show }}</v-list-item-subtitle>
                 <v-list-item-subtitle v-else>No limit set</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
           <v-list-item v-if="showDisk">
             <v-list-item-content>
               <v-list-item-title>{{ $t('instances.config.disk') }}</v-list-item-title>
-                <v-list-item-subtitle v-if="config.limits_disk !== null">{{ config.limits_disk }}</v-list-item-subtitle>
+                <v-list-item-subtitle v-if="config.limits_disk !== null">{{ getStorageConfig }} {{ getStorage.limits_unit_show }}</v-list-item-subtitle>
                 <v-list-item-subtitle v-else>No limit set</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
@@ -237,6 +237,24 @@
       },
       loading() {
         return this.$store.getters.instanceIsLoading(this.id);
+      },
+      getMemory() {
+        return this.$store.getters.appconfig.memory;
+      },
+      getStorage() {
+        return this.$store.getters.appconfig.storage;
+      },
+      getMemoryConfig() {
+        if (this.getMemory.limits_unit === 'MiB') {
+          return this.config.limits_memory_mib;
+        }
+        return this.config.limits_memory_mb;
+      },
+      getStorageConfig() {
+        if (this.getStorage.limits_unit === 'GiB') {
+          return this.config.limits_disk_gib;
+        }
+        return this.config.limits_disk_gb;
       },
       showPrice() {
         return this.$store.getters.appconfig.price.enabled === 'True';

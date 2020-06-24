@@ -6,7 +6,7 @@
           icon="groups"
           color="brown"
           :value="usersCount"
-          unit=" users"
+          unit="users"
           label="User accounts"
           label_sub="Groups"
           :value_sub="groupsCount"
@@ -15,7 +15,7 @@
           icon="mdi-checkbox-multiple-blank"
           color="red"
           :value="machines"
-          unit=" units"
+          unit="units"
           label="Instances"
           label_sub="Running"
           :value_sub="runningMachines"
@@ -25,7 +25,7 @@
           icon="mdi-currency-eur"
           color="purple"
           :value="priceTotal"
-          unit=" €"
+          unit="€"
           label="Price"
           label_sub="Instances with price"
           :value_sub="price"
@@ -38,20 +38,20 @@
           icon="mdi-cpu-64-bit"
           color="green"
           :value="totalCpu"
-          unit=" cores"
+          unit="cores"
           label="Host CPU"
           :value_sub="vcpus"
-          unit_sub=" cores"
+          unit_sub="cores"
           label_sub="Allocated CPUs"
         ></host-stats-card>
         <host-stats-card
           icon="mdi-memory"
           color="blue"
           :value="totalMemory"
-          unit=" "
+          :unit="getMemory.limits_unit_show"
           label="Total Memory"
           :value_sub="memory"
-          unit_sub=" GB"
+          :unit_sub="getMemory.limits_unit_show"
           label_sub="Allocated Memory"
         ></host-stats-card>
         <host-stats-card
@@ -62,7 +62,7 @@
           unit=""
           label="Total Disk"
           :value_sub="disk"
-          unit_sub=" GB"
+          :unit_sub="getStorage.limits_unit_show"
           label_sub="Allocated Disk"
         ></host-stats-card>
       </v-layout>
@@ -73,7 +73,7 @@
 <script>
   import AdminStatsCard from './AdminStatsCard';
   import HostStatsCard from './HostStatsCard';
-  import { humanFileSize } from '../../libraries/utils/helpers';
+  import { BToGB, BToGiB } from '../../libraries/utils/helpers';
   // import Host from '../../libraries/store/modules/host';
 
   export default {
@@ -109,16 +109,25 @@
         return this.stats.cpus && this.stats.cpus.cpus_count;
       },
       memory() {
-        return this.stats.memory && this.stats.memory.memory_count;
+        if (this.getMemory.limits_unit === 'MiB') {
+          return this.stats.memory && BToGiB(this.stats.memory.memory_count_bytes);
+        }
+        return this.stats.memory && BToGB(this.stats.memory.memory_count_bytes);
       },
       disk() {
-        return this.stats.disk && this.stats.disk.disk_count;
+        if (this.getStorage.limits_unit === 'GiB') {
+          return this.stats.disk && BToGiB(this.stats.disk.disk_count_bytes);
+        }
+        return this.stats.disk && BToGB(this.stats.disk.disk_count_bytes);
       },
       totalCpu() {
         return this.host.cpu && this.host.cpu.total;
       },
       totalMemory() {
-        return this.host.memory && humanFileSize(this.host.memory.total);
+        if (this.getMemory.limits_unit === 'MiB') {
+          return this.host.memory && BToGiB(this.host.memory.total);
+        }
+        return this.host.memory && BToGB(this.host.memory.total);
       },
       totalDisk() {
         return this.$store.getters.appconfig.storage.total_size;
@@ -128,6 +137,12 @@
       },
       priceTotal() {
         return this.stats.price && this.stats.price.price_total.toFixed(2);
+      },
+      getMemory() {
+        return this.$store.getters.appconfig.memory;
+      },
+      getStorage() {
+        return this.$store.getters.appconfig.storage;
       },
       showPrice() {
         return this.$store.getters.appconfig.price.enabled === 'True';

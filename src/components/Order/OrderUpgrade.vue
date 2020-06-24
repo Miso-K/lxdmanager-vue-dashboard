@@ -49,13 +49,13 @@
                 <v-slider min="512" max="8172" step="512" v-model="memory" :label="$t('instances.order.memory.label')"></v-slider>
               </v-flex>
               <v-flex xs2>
-                <v-text-field v-model="memory" type="MB" suffix="MB"></v-text-field>
+                <v-text-field v-model="memory" type="MB" :suffix="getMemory.limits_unit_show"></v-text-field>
               </v-flex>
               <v-flex xs10>
                 <v-slider v-if="diskEnabled" :min="actualDisk" max="160" step="10" v-model="disk" :label="$t('instances.order.disk.label')"></v-slider>
               </v-flex>
               <v-flex xs2>
-                <v-text-field v-if="diskEnabled" v-model="disk" type="Disk" suffix="GB"></v-text-field>
+                <v-text-field v-if="diskEnabled" v-model="disk" type="Disk" :suffix="getStorage.limits_unit_show"></v-text-field>
               </v-flex>
               <template v-if="showPrice">
                 <v-flex xs3>
@@ -139,6 +139,9 @@
       },
       getPrice() {
         return this.$store.getters.appconfig.price;
+      },
+      getMemory() {
+        return this.$store.getters.appconfig.memory;
       },
       getStorage() {
         return this.$store.getters.appconfig.storage;
@@ -249,8 +252,8 @@
               id: this.selectedInstance,
               name: this.name,
               cpu: this.cpu,
-              memory: `${this.memory}MB`,
-              disk: `${this.disk}GB`,
+              memory: `${this.memory}${this.getMemory.limits_unit}`,
+              disk: `${this.disk}${this.getStorage.limits_unit}`,
               pool_name: this.getStorage.enabled === 'True' ? this.getStorage.pool_name : '',
               period: this.showPrice ? this.period.text : '',
               price: this.showPrice ? this.price : ''

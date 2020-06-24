@@ -14,7 +14,7 @@
       <v-icon>settings</v-icon>
     </v-tab>
     <v-tab href="#tab-4">
-      Storage config
+      Other config
       <v-icon>photo_camera</v-icon>
     </v-tab>
     <v-tab-item
