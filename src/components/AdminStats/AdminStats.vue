@@ -73,7 +73,7 @@
 <script>
   import AdminStatsCard from './AdminStatsCard';
   import HostStatsCard from './HostStatsCard';
-  import { BToGB, BToGiB } from '../../libraries/utils/helpers';
+  import { BToGB, BToGiB, BToMB, BToMiB } from '../../libraries/utils/helpers';
   // import Host from '../../libraries/store/modules/host';
 
   export default {
@@ -110,9 +110,9 @@
       },
       memory() {
         if (this.getMemory.limits_unit === 'MiB') {
-          return this.stats.memory && BToGiB(this.stats.memory.memory_count_bytes);
+          return this.stats.memory && BToMiB(this.stats.memory.memory_count_bytes);
         }
-        return this.stats.memory && BToGB(this.stats.memory.memory_count_bytes);
+        return this.stats.memory && BToMB(this.stats.memory.memory_count_bytes);
       },
       disk() {
         if (this.getStorage.limits_unit === 'GiB') {
@@ -125,9 +125,9 @@
       },
       totalMemory() {
         if (this.getMemory.limits_unit === 'MiB') {
-          return this.host.memory && BToGiB(this.host.memory.total);
+          return this.host.memory && BToMiB(this.host.memory.total);
         }
-        return this.host.memory && BToGB(this.host.memory.total);
+        return this.host.memory && BToMB(this.host.memory.total);
       },
       totalDisk() {
         return this.$store.getters.appconfig.storage.total_size;

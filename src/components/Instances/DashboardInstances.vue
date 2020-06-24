@@ -43,13 +43,17 @@
               <span class="subheading mr-2">{{item.limits_cpu}}</span>
               <span class="mr-1">·</span>
               <v-icon class="mr-1" large>mdi-memory</v-icon>
-              <span class="subheading mr-2">{{item.config.limits_memory}}</span>
-              <span class="mr-1">·</span>
-              <v-icon class="mr-1" large>mdi-harddisk</v-icon>
-              <span class="subheading">{{item.config.limits_disk}}</span>
-              <span class="mr-1" large>·</span>
-              <v-icon class="mr-1">mdi-currency-eur</v-icon>
-              <span class="subheading">{{item.price}}</span>
+              <span class="subheading mr-2">{{getMemoryConfig(item)}}{{getMemory.limits_unit_show}}</span>
+              <div v-if="showDisk">
+                <span class="mr-1">·</span>
+                <v-icon class="mr-1" large>mdi-harddisk</v-icon>
+                <span class="subheading">{{getStorageConfig(item)}}{{getStorage.limits_unit_show}}</span>
+              </div>
+              <div v-if="showPrice">
+                <span class="mr-1" large>·</span>
+                <v-icon class="mr-1">mdi-currency-eur</v-icon>
+                <span class="subheading">{{item.price}}</span>
+              </div>
             </v-row>
           </v-list-item>
             <v-list-item>
@@ -116,6 +120,12 @@
         // console.log(this.$store.getters.instancesTableData);
         return this.$store.getters.instancesTableData;
       },
+      getMemory() {
+        return this.$store.getters.appconfig.memory;
+      },
+      getStorage() {
+        return this.$store.getters.appconfig.storage;
+      },
       showPrice() {
         return this.$store.getters.appconfig.price.enabled === 'True';
       },
@@ -155,6 +165,18 @@
             // code block
             return 'blue';
         }
+      },
+      getMemoryConfig(item) {
+        if (this.getMemory.limits_unit === 'MiB') {
+          return item.config.limits_memory_mib;
+        }
+        return item.config.limits_memory_mb;
+      },
+      getStorageConfig(item) {
+        if (this.getStorage.limits_unit === 'GiB') {
+          return item.config.limits_disk_gib;
+        }
+        return item.config.limits_disk_gb;
       }
     },
     created() {

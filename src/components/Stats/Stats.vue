@@ -20,7 +20,7 @@
           icon="mdi-memory"
           color="blue"
           :value="memory"
-          unit="GB"
+          :unit="getMemory.limits_unit_show"
           :label="$t('stats.total_memory')"
         ></stats-card>
         <stats-card
@@ -28,7 +28,7 @@
           icon="mdi-harddisk"
           color="orange"
           :value="disk"
-          unit="GB"
+          :unit="getStorage.limits_unit_show"
           :label="$t('stats.total_disk')"
         ></stats-card>
         <stats-card
@@ -46,6 +46,7 @@
 
 <script>
   import StatsCard from './StatsCard';
+  import { BToGB, BToGiB, BToMB, BToMiB } from '../../libraries/utils/helpers';
   // import Stats from '../../libraries/store/modules/stats';
 
   export default {
@@ -66,13 +67,25 @@
         return this.stats.cpus && this.stats.cpus.cpus_count;
       },
       memory() {
-        return this.stats.memory && this.stats.memory.memory_count;
+        if (this.getMemory.limits_unit === 'MiB') {
+          return this.stats.memory && BToMiB(this.stats.memory.memory_count_bytes);
+        }
+        return this.stats.memory && BToMB(this.stats.memory.memory_count_bytes);
       },
       disk() {
-        return this.stats.disk && this.stats.disk.disk_count;
+        if (this.getStorage.limits_unit === 'GiB') {
+          return this.stats.disk && BToGiB(this.stats.disk.disk_count_bytes);
+        }
+        return this.stats.disk && BToGB(this.stats.disk.disk_count_bytes);
       },
       price() {
         return this.stats.price && this.stats.price.price_count;
+      },
+      getMemory() {
+        return this.$store.getters.appconfig.memory;
+      },
+      getStorage() {
+        return this.$store.getters.appconfig.storage;
       },
       showPrice() {
         return this.$store.getters.appconfig.price.enabled === 'True';
