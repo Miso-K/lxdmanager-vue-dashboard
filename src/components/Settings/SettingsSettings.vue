@@ -151,7 +151,7 @@
     methods: {
       getData() {
         const tmData = this.$store.getters['auth/me'];
-        console.log(tmData);
+        // console.log(tmData);
         this.data.otp_enabled = tmData.otp_enabled;
         this.data.otp_type = tmData.otp_type ? tmData.otp_type : 'none';
         this.data.language = tmData.language;
@@ -170,7 +170,7 @@
         this.$store.dispatch('otpMe');
         this.dialog = true;
         this.data.otp_enabled = true;
-        console.log(this.$store.state.users);
+        // console.log(this.$store.state.users);
         setTimeout(() => {
           this.otpReady = true;
           this.otpUri = this.$store.state.users.otp.otp_uri;

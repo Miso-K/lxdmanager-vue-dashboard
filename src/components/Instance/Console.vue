@@ -62,11 +62,9 @@
         return this.instance.status;
       },
       isRunning() {
-        console.log(this.instance.config);
         return this.instance.status !== 'RUNNING' || this.consoleDisabled;
       },
       consoleDisabled() {
-        console.log(this.instance);
         return this.instance.config.user_terminal;
       },
       getButtonState() {
@@ -132,7 +130,7 @@
           const ws = new WebSocket(wssurl);
           this.wsocked = ws;
           this.xTerm = xterm;
-          console.log(wssurl);
+          // console.log(wssurl);
 
           ws.binaryType = 'Blob';
           ws.onopen = () => {

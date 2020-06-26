@@ -50,7 +50,7 @@
         <v-btn icon class="mx-0" @click="editItem(item)">
           <v-icon color="teal">edit</v-icon>
         </v-btn>
-        <v-btn icon class="mx-0" @click="deleteDialog(item)">
+        <v-btn v-if="item.name !== 'admin'" icon class="mx-0" @click="deleteDialog(item)">
           <v-icon color="pink">delete</v-icon>
         </v-btn>
       </template>

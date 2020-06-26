@@ -12,5 +12,25 @@ import appconfig from './appconfig';
 import checkconfig from './checkconfig';
 import images from './images';
 import operations from './operations';
+import networks from './networks';
+import profiles from './profiles';
+import projects from './projects';
 
-export default { abilities, auth, instances, groups, notifications, users, stats, host, requests, checkconfig, appconfig, images, operations };
+export default {
+  abilities,
+  auth,
+  instances,
+  groups,
+  notifications,
+  users,
+  stats,
+  host,
+  requests,
+  checkconfig,
+  appconfig,
+  images,
+  operations,
+  networks,
+  profiles,
+  projects
+};

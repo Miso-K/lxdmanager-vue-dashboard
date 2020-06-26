@@ -209,7 +209,7 @@
         const percent = Math.floor(
           (this.instance.state.memory.usage * 100) / this.config.limits_memory_raw);
         // console.log(percent);
-        return isNaN(percent) || !isFinite(percent) ? 0 : percent;
+        return isNaN(percent) || !isFinite(percent) ? 0 : percent.toFixed(0);
       },
       diskUsage() {
         if (this.getStorage.limits_unit === 'GiB') {
@@ -219,9 +219,10 @@
       },
       diskUsagePercent() {
         const percent = (
-          this.instance.state.disk.root.usage / this.config.limits_disk_raw).toFixed(2) * 100;
-        // console.log(isFinite(percent));
-        return isNaN(percent) || !isFinite(percent) ? 0 : percent;
+          this.instance.state.disk.root.usage / this.config.limits_disk_raw
+        ) * 100;
+        console.log((percent));
+        return isNaN(percent) || !isFinite(percent) ? 0 : percent.toFixed(0);
       },
       networkCounters() {
         if (this.instance.state.network) {

@@ -2,36 +2,49 @@
   <v-container fluid>
   <v-layout row>
     <v-flex class="text-md-center mt-3 mb-3">
-    <v-btn
-      color="secondary"
-      :loading="loading"
-      @click.stop="dialog_upgrade = true"
-      :disabled="loading"
-    >
-      {{ $t('instances.actions.upgrade') }}
-    </v-btn>
+      <v-btn
+        v-if="false"
+        color="primary"
+        :loading="loading"
+        @click.stop="dialog_edit = true"
+        @click="getEditConfig"
+        :disabled="loading"
+      >
+        <v-icon left dark>lock</v-icon>
+        Edit instance
+        <v-icon right dark>edit</v-icon>
+      </v-btn>
+      <v-btn
+        color="secondary"
+        :loading="loading"
+        @click.stop="dialog_upgrade = true"
+        :disabled="loading"
+      >
+        {{ $t('instances.actions.upgrade') }}
+        <v-icon right dark>settings</v-icon>
+      </v-btn>
 
-    <v-btn
-      :loading="loading3"
-      @click.stop="dialog_clone = true"
-      :disabled="loading3"
-      color="blue-grey"
-      class="white--text"
-    >
-      {{ $t('instances.actions.clone') }}
-      <v-icon right dark>cloud_upload</v-icon>
-    </v-btn>
-    <v-btn
-      :loading="loading3"
-      @click.stop="dialog_destroy = true"
-      :disabled="loading3"
-      color="red"
-      class="white--text"
-    >
-      {{ $t('instances.actions.destroy') }}
-      <v-icon right dark>delete</v-icon>
-    </v-btn>
-  </v-flex>
+      <v-btn
+        :loading="loading3"
+        @click.stop="dialog_clone = true"
+        :disabled="loading3"
+        color="blue-grey"
+        class="white--text"
+      >
+        {{ $t('instances.actions.clone') }}
+        <v-icon right dark>cloud_upload</v-icon>
+      </v-btn>
+      <v-btn
+        :loading="loading3"
+        @click.stop="dialog_destroy = true"
+        :disabled="loading3"
+        color="red"
+        class="white--text"
+      >
+        {{ $t('instances.actions.destroy') }}
+        <v-icon right dark>delete</v-icon>
+      </v-btn>
+    </v-flex>
   </v-layout>
   <v-layout row justify-center>
     <v-dialog v-model="dialog_destroy" max-width="500">
@@ -64,8 +77,6 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-  </v-layout>
-  <v-layout row justify-center>
     <v-dialog v-model="dialog_clone" max-width="500px">
       <v-card>
         <v-card-title>
@@ -108,8 +119,6 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-  </v-layout>
-  <v-layout row justify-center>
     <v-dialog v-model="dialog_upgrade" max-width="500px">
       <v-card>
         <v-card-title>
@@ -176,11 +185,37 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <v-dialog v-if="false" v-model="dialog_edit" max-width="690px">
+      <v-card>
+        <v-card-title>
+          <span class="headline">Edit instance</span>
+        </v-card-title>
+        <v-card-text>
+            <a href="https://lxd.readthedocs.io/en/latest/instances/" target="_blank">LXD profiles documentation</a>
+            <br>
+            <v-textarea
+              outlined
+              auto-grow
+              background-color="black"
+              dark
+              v-model="yamlString"
+              :error-messages="yamlErrorMessages"
+            ></v-textarea>
+          </v-card-text>
+        <v-card-actions>
+          <v-btn color="blue darken-1" text @click="getEditConfig">Reset</v-btn>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" text @click.native="dialog_edit = false">{{$t('actions.close')}}</v-btn>
+          <v-btn color="blue darken-1" text @click.native="dialog_edit = false" @click="sendRequestUpgrade">SAVE</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-layout>
   </v-container>
 </template>
 
 <script>
+  const yaml = require('js-yaml');
 
   export default {
     name: 'tab-info',
@@ -189,6 +224,9 @@
         dialog_clone: false,
         dialog_destroy: false,
         dialog_upgrade: false,
+        dialog_edit: false,
+        yamlString: '',
+        yamlErrorMessages: '',
         period: { text: '1 Month', value: 1 },
         name: '',
         cpu: '',
@@ -276,6 +314,12 @@
         this.memory = config.limits_memory_mb > 512 ? config.limits_memory_mb : 512;
         this.disk = config.limits_disk_gb > 10 ? config.limits_disk_gb : 10;
         this.actualDisk = config.limits_disk_gb > 10 ? config.limits_disk_gb : 10;
+      },
+      getEditConfig() {
+        const rawinstance = this.$store.getters.instance(this.id);
+        const filteredKeys = ['architecture', 'config', 'devices', 'ephemeral', 'profiles', 'stateful', 'description'];
+        const filtered = Object.assign({}, ...filteredKeys.map(key => ({ [key]: rawinstance[key] })));
+        this.yamlString = yaml.safeDump(filtered);
       },
       sendRequestUpgrade() {
         const data = {

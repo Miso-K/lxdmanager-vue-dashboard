@@ -15,6 +15,9 @@ import AppConfigService from './appconfig';
 import CheckconfigService from './checkconfig';
 import ImagesService from './images';
 import OperationsService from './operations';
+import NetworksService from './networks';
+import ProfilesService from './profiles';
+import ProjectsService from './projects';
 
 export {
   AbilitiesService,
@@ -29,5 +32,8 @@ export {
   AppConfigService,
   CheckconfigService,
   OperationsService,
-  ImagesService
+  ImagesService,
+  NetworksService,
+  ProfilesService,
+  ProjectsService
 };

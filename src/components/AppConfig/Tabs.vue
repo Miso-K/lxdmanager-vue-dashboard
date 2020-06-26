@@ -3,19 +3,19 @@
   <v-tabs icons-and-text fixed-tabs>
     <v-tab href="#tab-1">
       App config
-      <v-icon>info</v-icon>
+      <v-icon>mdi-cogs</v-icon>
     </v-tab>
     <v-tab href="#tab-2">
       Email config
-      <v-icon>code</v-icon>
+      <v-icon>mdi-email-edit</v-icon>
     </v-tab>
     <v-tab href="#tab-3">
       Price config
-      <v-icon>settings</v-icon>
+      <v-icon>mdi-bank</v-icon>
     </v-tab>
     <v-tab href="#tab-4">
       Other config
-      <v-icon>photo_camera</v-icon>
+      <v-icon>settings</v-icon>
     </v-tab>
     <v-tab-item
       v-for="i in 4"

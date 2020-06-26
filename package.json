@@ -17,10 +17,10 @@
   "dependencies": {
     "axios": "^0.18.1",
     "dotenv": "^4.0.0",
+    "js-yaml": "^3.14.0",
     "jwt-decode": "2.2.0",
     "lodash": "^4.17.15",
     "md5": "2.2.1",
-    "nprogress": "0.2.0",
     "redux-object": "0.4.4",
     "store": "2.0.12",
     "vue": "^2.6.11",

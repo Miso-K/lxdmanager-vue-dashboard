@@ -20,6 +20,27 @@ export default [
     meta: { auth: true },
     component: resolve => require.ensure([], () => resolve(require('../../views/pages/Images')), 'images')
   },
+  // - Networks
+  {
+    name: 'networks',
+    path: '/networks',
+    meta: { auth: true },
+    component: resolve => require.ensure([], () => resolve(require('../../views/pages/Networks')), 'networks')
+  },
+  // - Profiles
+  {
+    name: 'profiles',
+    path: '/profiles',
+    meta: { auth: true },
+    component: resolve => require.ensure([], () => resolve(require('../../views/pages/Profiles')), 'profiles')
+  },
+  // - Projects
+  {
+    name: 'projects',
+    path: '/projects',
+    meta: { auth: true },
+    component: resolve => require.ensure([], () => resolve(require('../../views/pages/Projects')), 'projects')
+  },
   // - Users
   {
     name: 'users',

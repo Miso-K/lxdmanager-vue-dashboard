@@ -184,7 +184,7 @@
         }
       },
       items() {
-        console.log(this.$store.getters.instancesTableData);
+        // console.log(this.$store.getters.instancesTableData);
         // console.log(this.$store.getters['auth/me']);
         return this.$store.getters.instancesTableData;
       },
@@ -283,7 +283,7 @@
           this.editedItem = Object.assign({}, this.defaultItem);
           this.editedIndex = -1;
         }, 300);
-        console.log('fetched');
+        // console.log('fetched');
       }
       this.$store.dispatch('fetchInstances');
     }

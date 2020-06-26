@@ -136,7 +136,7 @@
         this.save();
         this.$store.dispatch('createRequests', { action: 'test', message: 'Test email configuration', status: 'cancelled', meta_data: '' });
         this.$store.dispatch('notify', { id: 0, message: 'Test email was sent', color: 'info' });
-        console.log('testemail');
+        // console.log('testemail');
       }
     },
     // created() {
@@ -150,7 +150,7 @@
           this.showStorage = this.data.storage.enabled === 'True';
           this.showEmail = this.data.smtp.enabled === 'True';
         });
-        console.log(this.$store.getters.appconfig);
+        // console.log(this.$store.getters.appconfig);
       }, 500);
     }
   };

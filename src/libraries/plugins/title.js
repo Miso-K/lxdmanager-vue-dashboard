@@ -12,7 +12,7 @@ export default (Vue, options) => {
     items = route.matched
       .map(item => (item.components.default[options.property] || item.components.default.name)) // eslint-disable-line max-len
       .reverse();
-    items[items.length - 1] = store.getters ?
+    items[items.length - 1] = store.getters.appconfig.app ?
       store.getters.appconfig.app.production_name : items[items.length - 1];
     document.title = items.join(options.separator);
   });

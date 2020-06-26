@@ -54,7 +54,10 @@ if (module.hot) {
     './modules/appconfig',
     './modules/checkconfig',
     './modules/images',
-    './modules/operations'
+    './modules/operations',
+    './modules/networks',
+    './modules/profiles',
+    './modules/projects'
   ], () => {
     store.hotUpdate({
       getters: require('./getters'),
@@ -73,6 +76,9 @@ if (module.hot) {
         checkconfig: require('./modules/checkconfig'),
         images: require('./modules/images'),
         operations: require('./modules/operations'),
+        networks: require('./modules/networks'),
+        profiles: require('./modules/profiles'),
+        projects: require('./modules/projects'),
         stats: require('./modules/stats').default
       }
     });
