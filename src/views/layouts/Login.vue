@@ -130,7 +130,7 @@
             // console.log(this.$store.getters['auth/otp_token']);
             // console.log(this.$store.getters['auth/otpConfirmed']);
             if (!this.$store.getters['auth/token']) {
-              this.errors.message = 'Unvalid credentials. Please try again.';
+              this.errors.message = 'Invalid credentials. Please try again.';
               // console.log('⛔️  Unauthorized');
               this.password = '';
               this.username = '';
@@ -146,7 +146,7 @@
                     // console.log('login ok');
                   } else {
                     // unauthorized
-                    this.errors.message = 'Unvalid credentials. Please try again.';
+                    this.errors.message = 'Invalid credentials. Please try again.';
                     console.log('⛔️  Unauthorized');
                     this.password = '';
                     this.username = '';
@@ -165,7 +165,7 @@
 
             switch (err.response && err.response.status) {
               case 401:
-                this.errors.message = 'Unvalid credentials. Please try again.';
+                this.errors.message = 'Invalid credentials. Please try again.';
                 break;
               default:
               case 500:
