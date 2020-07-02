@@ -78,7 +78,7 @@
           </v-list-item>
         </v-list>
       </v-flex>
-      <v-flex xl3 lg3 md3 sm6 xs12>
+      <v-flex v-if="showDisk" xl3 lg3 md3 sm6 xs12>
         <v-list two-line subheader>
           <v-subheader>DISK</v-subheader>
           <v-list-item two-line>
