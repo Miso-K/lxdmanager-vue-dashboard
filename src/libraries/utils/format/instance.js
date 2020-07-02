@@ -60,7 +60,7 @@ export default function instance(ct) {
       limits_disk_gb: BToGB(limitsDiskRaw),
       limits_disk_gib: BToGiB(limitsDiskRaw),
       user_price: ct.config['user.price'],
-      user_terminal: ct.config['user.terminal']
+      user_terminal: ct.expanded_config['user.terminal']
     }
   };
 }
