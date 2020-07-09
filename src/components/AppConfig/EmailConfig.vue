@@ -234,15 +234,12 @@
     // this.initialize();
     // },
     mounted() {
-      setTimeout(() => {
-        this.$store.dispatch('fetchAppConfig').then(() => {
-          this.data = Object.assign({}, this.data, this.$store.getters.appconfig);
-          this.showPrice = this.data.price.enabled === 'True';
-          this.showStorage = this.data.storage.enabled === 'True';
-          this.showEmail = this.data.smtp.enabled === 'True';
-        });
-        // console.log(this.$store.getters.appconfig);
-      }, 500);
+      this.$store.dispatch('fetchAppConfig').then(() => {
+        this.data = Object.assign({}, this.data, this.$store.getters.appconfig);
+        this.showPrice = this.data.price.enabled === 'True';
+        this.showStorage = this.data.storage.enabled === 'True';
+        this.showEmail = this.data.smtp.enabled === 'True';
+      });
     }
   };
 </script>
