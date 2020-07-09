@@ -51,7 +51,8 @@ const storedInstances = storage.get(STORAGE_INSTANCES_KEY);
  * @type {Object}
  */
 const instancesState = {
-  instances: storedInstances || [],
+  instances: [],
+  ins: storedInstances,
   snapshots: {},
   loading: false,
   dialogs: {
@@ -83,6 +84,13 @@ const instancesGetters = {
     // console.log(getters.hostTotalMemory);
     return _map(getters.instances, instance => formatInstance(instance, 1024)); // eslint-disable-line max-len
   },
+  instancesList(state, getters) {
+    if (Object.keys(getters.instances).length === 0) return false;
+    return _map(getters.instances, instance => ({
+      name: instance.name,
+      id: instance.id
+    }));
+  },
   snapshots: state => state.snapshots,
   snapshotsTableData(state, getters) {
     if (Object.keys(getters.snapshots).length === 0) return false;
@@ -101,7 +109,10 @@ const instancesMutations = {
   },
   [INSTANCES_SUCCESS]: (state, instances) => {
     Object.assign(state, { ...instances, loading: false });
-    storage.set(STORAGE_INSTANCES_KEY, instances.instances);
+    storage.set(STORAGE_INSTANCES_KEY, instances.instances.map(instance => ({
+      name: instance.name,
+      id: instance.id
+    })));
   },
   [INSTANCES_FAILURE]: (state, err) => {
     console.log(INSTANCES_FAILURE, err);
@@ -122,7 +133,7 @@ const instancesMutations = {
     //  ...state.instances[index],
     //  ...data
     // };
-    storage.set(STORAGE_INSTANCES_KEY, state.instances);
+    // storage.set(STORAGE_INSTANCES_KEY, state.instances);
   },
   [INSTANCE_FAILURE]: (state, err, id) => {
     console.log(INSTANCE_FAILURE, err);
@@ -131,7 +142,7 @@ const instancesMutations = {
       ...state.instances[id],
       loading: false
     };
-    storage.remove(STORAGE_INSTANCES_KEY);
+    // storage.remove(STORAGE_INSTANCES_KEY);
   },
 
   [INSTANCE_INFO_DIALOG_OPEN]: (state, id) => {
