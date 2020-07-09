@@ -79,7 +79,7 @@
                 </v-flex>
                 <v-flex xs3>
                   <v-select
-                    :items=periodes
+                    :items=getPeriodes
                     v-model="period"
                     item-text="text"
                     item-value="value"
@@ -245,6 +245,16 @@
       },
       getProductionName() {
         return this.$store.getters.appconfig.app.production_name;
+      },
+      getPeriodes() {
+        const pers = this.periodes;
+        const config = this.$store.getters.appconfig;
+        pers[0].value = config.price.discount_month;
+        pers[1].value = config.price.discount_months;
+        pers[2].value = config.price.discount_halfyear;
+        pers[3].value = config.price.discount_year;
+        pers[4].value = config.price.discount_years;
+        return pers;
       },
       calcPrice: {
         get() {
