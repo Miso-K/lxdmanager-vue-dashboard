@@ -7,11 +7,14 @@ import i18n from '../../i18n';
 export const USERS_REQUEST = 'USERS_REQUEST';
 export const USERS_SUCCESS = 'USERS_SUCCESS';
 export const USERS_FAILURE = 'USERS_FAILURE';
+export const ME_SUCCESS = 'ME_SUCCESS';
 export const SET_OTP_SECRET = 'SET_OTP_SECRET';
 
 export const STORAGE_USERS_KEY = 'STORAGE_USERS';
+export const STORAGE_LANGUAGE_KEY = 'STORAGE_LANGUAGE';
 
 const storedUsers = storage.get(STORAGE_USERS_KEY);
+const storedLanguage = storage.get(STORAGE_LANGUAGE_KEY);
 /**
  * Initial state
  * @type {Object}
@@ -20,6 +23,7 @@ const usersState = {
   // instances: storedInstances || [],
   users: storedUsers || [],
   myself: {},
+  language: storedLanguage || 'en',
   otp: {},
   loading: false
 };
@@ -30,6 +34,7 @@ const usersState = {
  */
 const usersGetters = {
   myself: state => state.myself,
+  language: state => state.language,
   users: state => state.users,
   user: state => id => state.users[id],
   usersTableData(state, getters) {
@@ -55,6 +60,11 @@ const usersMutations = {
     Object.assign(state, { loading: false });
     storage.remove(STORAGE_USERS_KEY);
   },
+  [ME_SUCCESS]: (state, myself) => {
+    Object.assign(state, { myself, loading: false });
+    console.log(myself);
+    storage.set(STORAGE_LANGUAGE_KEY, myself.language);
+  },
   [SET_OTP_SECRET]: (state, otp) => {
     Object.assign(state, { otp, loading: false });
   }
@@ -69,10 +79,8 @@ const usersActions = {
     commit(USERS_REQUEST);
 
     MeService.get().then((res) => {
-      // console.log(res.data.data);
-      res.myself = res.data.data;
-      i18n.locale = res.myself.language;
-      commit(USERS_SUCCESS, res);
+      i18n.locale = res.data.data.language;
+      commit(ME_SUCCESS, res.data.data);
     }).catch((err) => {
       commit(USERS_FAILURE, err);
     });
@@ -92,8 +100,6 @@ const usersActions = {
 
   createUser({ commit }, data) {
     commit(USERS_REQUEST);
-    // console.log('create log:');
-    // console.log(data);
 
     const obj = {
       data: {
