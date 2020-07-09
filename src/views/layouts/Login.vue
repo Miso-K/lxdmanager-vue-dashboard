@@ -63,6 +63,8 @@
 
 
 <script>
+  import i18n from '../../libraries/i18n';
+
   export default {
     name: 'login',
     title: 'Login',
@@ -174,6 +176,9 @@
             }
           });
       }
+    },
+    created() {
+      i18n.locale = this.$store.getters.language;
     }
   };
 </script>
