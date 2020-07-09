@@ -354,22 +354,13 @@
         return this.editedIndex === -1;
       },
       items() {
-        // console.log(this.$store.getters.usersTableData);
         return this.$store.getters.usersTableData;
       },
       instancesId() {
-        const instances = this.$store.getters.instancesTableData;
-        return instances.map(instance => ({
-          name: instance.name,
-          id: instance.id
-        }));
+        return this.$store.getters.instancesList;
       },
       groupsId() {
-        const groups = this.$store.getters.groupsTableData;
-        return groups.map(group => ({
-          name: group.name,
-          id: group.id
-        }));
+        return this.$store.getters.groupsList;
       }
     },
     watch: {
@@ -380,9 +371,7 @@
     methods: {
       removeInstance(item) {
         const index = this.editedItem.instances.findIndex(x => x.id === item.id);
-        // console.log(index);
         if (index >= 0) this.editedItem.instances.splice(index, 1);
-        // console.log(this.editedItem.instances);
       },
       removeGroup(item) {
         const index = this.editedItem.groups.findIndex(x => x.id === item.id);
@@ -403,8 +392,8 @@
       deleteItem() {
         if (this.editedIndex > -1) {
           const item = this.editedItem;
-          if (item.username !== 'user' && !item.admin) { // use for demo
-          // if (!item.admin) {                          // use for production
+          // if (item.username !== 'user' && !item.admin) { // use for demo
+          if (!item.admin) { // use for production
             const index = this.items.indexOf(item);
             this.items.splice(index, 1);
             this.$store.dispatch('deleteUser', item.id);
