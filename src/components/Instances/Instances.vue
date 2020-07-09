@@ -225,7 +225,6 @@
     },
     methods: {
       getMemoryConfig(item) {
-        console.log(item);
         return item.config.limits_memory_raw && hBinaryPrefix(
           item.config.limits_memory_raw,
           this.getMemory.limits_unit,
@@ -279,16 +278,12 @@
         this.$store.dispatch('fetchInstances');
       }
     },
-    created() {
-      if (!this.$store.getters.instancesTableData) {
-        this.$store.dispatch('fetchInstances');
-        setTimeout(() => {
-          this.editedItem = Object.assign({}, this.defaultItem);
-          this.editedIndex = -1;
-        }, 300);
-        // console.log('fetched');
-      }
+    mounted() {
       this.$store.dispatch('fetchInstances');
+      setTimeout(() => {
+        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
+      }, 300);
     }
   };
 </script>
