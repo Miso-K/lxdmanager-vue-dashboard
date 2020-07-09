@@ -1,8 +1,12 @@
 import { AppConfigService } from '../../services';
+import storage from '../../utils/storage';
 
 export const APPCONFIG_REQUEST = 'APPCONFIG_REQUEST';
 export const APPCONFIG_SUCCESS = 'APPCONFIG_SUCCESS';
 export const APPCONFIG_FAILURE = 'APPCONFIG_FAILURE';
+
+export const APPCONFIG_KEY = 'APPCONFIG';
+const storedAppConfig = storage.get(APPCONFIG_KEY);
 
 /**
  * Initial state
@@ -10,7 +14,7 @@ export const APPCONFIG_FAILURE = 'APPCONFIG_FAILURE';
  */
 const appconfigState = {
   loading: false,
-  appconfig: {}
+  appconfig: storedAppConfig || {}
 };
 
 /**
@@ -31,10 +35,12 @@ const mutations = {
   },
   [APPCONFIG_SUCCESS]: (state, appconfig) => {
     Object.assign(state, { ...appconfig, loading: false });
+    storage.set(APPCONFIG_KEY, appconfig.appconfig);
   },
   [APPCONFIG_FAILURE]: (state, err) => {
     console.log(APPCONFIG_FAILURE, err);
     Object.assign(state, { loading: false });
+    storage.remove(APPCONFIG_KEY);
   }
 };
 
