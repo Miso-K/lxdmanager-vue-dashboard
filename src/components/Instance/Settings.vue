@@ -119,7 +119,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <v-dialog v-model="dialog_upgrade" max-width="500px">
+    <v-dialog v-model="dialog_upgrade" max-width="600px">
       <v-card>
         <v-card-title>
           <span class="headline">{{$t('instances.actions.upgrade')}}</span>
@@ -131,19 +131,19 @@
                 <v-text-field :label="$t('instances.order.instance_name.label')" disabled :value=instanceName></v-text-field>
               </v-flex>
               <v-flex xs10>
-                <v-slider min="1" max="4" step="1" v-model="cpu" label="CPUs"></v-slider>
+                <v-slider :min="getCPU.limits_min" :max="getCPU.limits_max" :step="getCPU.limits_step" v-model="cpu" :label="$t('instances.order.cpu.label')" tick-size="4" ticks></v-slider>
               </v-flex>
               <v-flex xs2>
                 <v-text-field v-model="cpu" type="CPUs" suffix="CPUs"></v-text-field>
               </v-flex>
               <v-flex xs10>
-                <v-slider min="512" max="8172" step="512" v-model="memory" label="RAM"></v-slider>
+                <v-slider :min="getMemory.limits_min" :max="getMemory.limits_max" :step="getMemory.limits_step" v-model="memory" :label="$t('instances.order.memory.label')" tick-size="4" ticks></v-slider>
               </v-flex>
               <v-flex xs2>
                 <v-text-field v-model="memory" type="MB" :suffix="getMemory.limits_unit_show"></v-text-field>
               </v-flex>
               <v-flex xs10>
-                <v-slider v-if="diskEnabled" :min="actualDisk" max="160" step="10" v-model="disk" label="Disk"></v-slider>
+                <v-slider v-if="diskEnabled" :min="getStorage.limits_min" :max="getStorage.limits_max" :step="getStorage.limits_step" v-model="disk" :label="$t('instances.order.disk.label')" tick-size="4" ticks></v-slider>
               </v-flex>
               <v-flex xs2>
                 <v-text-field v-if="diskEnabled" v-model="disk" type="Disk" :suffix="getStorage.limits_unit_show"></v-text-field>
@@ -267,6 +267,9 @@
       },
       getPrice() {
         return this.$store.getters.appconfig.price;
+      },
+      getCPU() {
+        return this.$store.getters.appconfig.cpu;
       },
       getMemory() {
         return this.$store.getters.appconfig.memory;
