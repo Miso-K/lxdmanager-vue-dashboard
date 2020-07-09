@@ -19,16 +19,16 @@
         <stats-card
           icon="mdi-memory"
           color="blue"
-          :value="memory"
-          :unit="getMemory.limits_unit_show"
+          :value="memory && memory[0]"
+          :unit="memory && memory[1]"
           :label="$t('stats.total_memory')"
         ></stats-card>
         <stats-card
           v-if="showDisk"
           icon="mdi-harddisk"
           color="orange"
-          :value="disk"
-          :unit="getStorage.limits_unit_show"
+          :value="disk && disk[0]"
+          :unit="disk && disk[1]"
           :label="$t('stats.total_disk')"
         ></stats-card>
         <stats-card
