@@ -320,6 +320,15 @@
         const d = new Date(date);
         return d.toDateString();
       }
+    },
+    mounted() {
+      this.interval = setInterval(() => {
+        this.$store.dispatch('fetchInstance', this.id);
+        console.log(this.interval);
+      }, 10000);
+    },
+    beforeDestroy() {
+      clearInterval(this.interval);
     }
   };
 </script>
