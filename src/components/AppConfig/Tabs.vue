@@ -32,7 +32,7 @@
         <price-config></price-config>
       </v-card>
       <v-card v-if="i === 4" flat>
-        <storage-config></storage-config>
+        <other-config></other-config>
       </v-card>
     </v-tab-item>
   </v-tabs>
@@ -43,7 +43,7 @@
   import AppConfig from './AppConfig';
   import EmailConfig from './EmailConfig';
   import PriceConfig from './PriceConfig';
-  import StorageConfig from './StorageConfig';
+  import OtherConfig from './OtherConfig';
 
   export default {
     name: 'tabs',
@@ -55,7 +55,7 @@
       'app-config': AppConfig,
       'email-config': EmailConfig,
       'price-config': PriceConfig,
-      'storage-config': StorageConfig
+      'other-config': OtherConfig
     },
     mounted() {
     }
