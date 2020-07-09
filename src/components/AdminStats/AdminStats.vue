@@ -47,11 +47,11 @@
         <host-stats-card
           icon="mdi-memory"
           color="blue"
-          :value="totalMemory"
-          :unit="getMemory.limits_unit_show"
+          :value="totalMemory[0]"
+          :unit="totalMemory[1]"
           label="Total Memory"
-          :value_sub="memory"
-          :unit_sub="getMemory.limits_unit_show"
+          :value_sub="memory[0]"
+          :unit_sub="memory[1]"
           label_sub="Allocated Memory"
         ></host-stats-card>
         <host-stats-card
@@ -61,8 +61,8 @@
           :value="totalDisk"
           unit=""
           label="Total Disk"
-          :value_sub="disk"
-          :unit_sub="getStorage.limits_unit_show"
+          :value_sub="disk[0]"
+          :unit_sub="disk[1]"
           label_sub="Allocated Disk"
         ></host-stats-card>
       </v-layout>
@@ -73,7 +73,7 @@
 <script>
   import AdminStatsCard from './AdminStatsCard';
   import HostStatsCard from './HostStatsCard';
-  import { BToGB, BToGiB, BToMB, BToMiB } from '../../libraries/utils/helpers';
+  import { hBinaryPrefix } from '../../libraries/utils/helpers';
   // import Host from '../../libraries/store/modules/host';
 
   export default {
@@ -109,25 +109,28 @@
         return this.stats.cpus && this.stats.cpus.cpus_count;
       },
       memory() {
-        if (this.getMemory.limits_unit === 'MiB') {
-          return this.stats.memory && BToMiB(this.stats.memory.memory_count_bytes);
-        }
-        return this.stats.memory && BToMB(this.stats.memory.memory_count_bytes);
+        return this.stats.memory && hBinaryPrefix(
+          this.stats.memory.memory_count_bytes,
+          this.getMemory.limits_unit,
+          this.getMemory.limits_unit_show
+        );
       },
       disk() {
-        if (this.getStorage.limits_unit === 'GiB') {
-          return this.stats.disk && BToGiB(this.stats.disk.disk_count_bytes);
-        }
-        return this.stats.disk && BToGB(this.stats.disk.disk_count_bytes);
+        return this.stats.disk && hBinaryPrefix(
+          this.stats.disk.disk_count_bytes,
+          this.getStorage.limits_unit,
+          this.getStorage.limits_unit_show
+        );
       },
       totalCpu() {
         return this.host.cpu && this.host.cpu.total;
       },
       totalMemory() {
-        if (this.getMemory.limits_unit === 'MiB') {
-          return this.host.memory && BToMiB(this.host.memory.total);
-        }
-        return this.host.memory && BToMB(this.host.memory.total);
+        return this.host.memory && hBinaryPrefix(
+          this.host.memory.total,
+          this.getMemory.limits_unit,
+          this.getMemory.limits_unit_show
+        );
       },
       totalDisk() {
         return this.$store.getters.appconfig.storage.total_size;
