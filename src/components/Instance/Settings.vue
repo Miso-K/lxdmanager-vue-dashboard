@@ -368,9 +368,9 @@
         const data = {
           instanceName: this.instanceName,
           instanceClone: this.instanceClone,
-          cpu: this.instance.config.limits_cpu,
-          memory: this.instance.config.limits_memory,
-          disk: this.instance.config.limits_disk ? `${this.instance.config.limits_disk}` : '0GB',
+          cpu: this.cpuLimit ? this.instance.config.limits_cpu : '',
+          memory: this.memoryLimit ? this.instance.config.limits_memory : '',
+          disk: this.instance.config.limits_disk && this.diskLimit ? `${this.instance.config.limits_disk}` : '0GB',
           users: [this.me.id],
           users_name: [this.me.username]
         };
