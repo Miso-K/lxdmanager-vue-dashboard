@@ -24,6 +24,13 @@ const groupsGetters = {
   groupsTableData(state, getters) {
     if (Object.keys(getters.groups).length === 0) return false;
     return _map(getters.groups, group => group); // eslint-disable-line max-len
+  },
+  groupsList(state, getters) {
+    if (Object.keys(getters.groups).length === 0) return false;
+    return _map(getters.groups, group => ({
+      name: group.name,
+      id: group.id
+    }));
   }
 };
 
