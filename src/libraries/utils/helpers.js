@@ -5,6 +5,25 @@ const humanFileSize = (bytes) => {
   return `${((bytes / (1000 ** i)).toFixed(2) * 1)} ${['B', 'kB', 'MB', 'GB', 'TB', 'PB'][i]}`;
 };
 
+const hBinaryPrefix = (bytes, unit, show) => {
+  if (!bytes) return 0;
+  let i = 0;
+  let value = 0;
+
+  if (unit === 'MiB' || unit === 'GiB') {
+    i = Math.floor(Math.log(bytes) / Math.log(1024));
+    value = ((bytes / (1024 ** i)).toFixed(2) * 1);
+  } else {
+    i = Math.floor(Math.log(bytes) / Math.log(1000));
+    value = ((bytes / (1000 ** i)).toFixed(2) * 1);
+  }
+
+  if (show === 'MiB' || show === 'GiB') {
+    return [value, ['B', 'kiB', 'MiB', 'GiB', 'TiB', 'PiB'][i]];
+  }
+  return [value, ['B', 'kB', 'MB', 'GB', 'TB', 'PB'][i]];
+};
+
 const BToMB = (bytes) => {
   if (!bytes) return null;
 
@@ -60,5 +79,6 @@ export {
   BToGB,
   BToGiB,
   KMGBToB,
-  humanFileSize
+  humanFileSize,
+  hBinaryPrefix
 };
