@@ -47,6 +47,32 @@
                   <v-radio label="Show limits unit as 'GB'" name="data.storage.limits_unit_show" value="GB"></v-radio>
                   <v-radio label="Show limits unit as 'GiB'" name="data.storage.limits_unit_show" value="GiB"></v-radio>
                 </v-radio-group>
+                <v-row>
+                  <v-col cols="12" md="4">
+                    <v-text-field
+                      :disabled="!isEditing"
+                      v-model="data.storage.limits_min"
+                      label="Min disk (GB/GiB)"
+                      required
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" md="4">
+                    <v-text-field
+                      :disabled="!isEditing"
+                      v-model="data.storage.limits_max"
+                      label="Max disk (GB/GiB)"
+                      required
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" md="4">
+                    <v-text-field
+                      :disabled="!isEditing"
+                      v-model="data.storage.limits_step"
+                      label="Step (GB/GiB)"
+                      required
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
                 <v-divider></v-divider>
                 <br>
                 <header>Memory settings</header>
@@ -58,6 +84,60 @@
                   <v-radio label="Show limits unit as 'MB'" name="data.memory.limits_unit_show" value="MB"></v-radio>
                   <v-radio label="Show limits unit as 'MiB'" name="data.memory.limits_unit_show" value="MiB"></v-radio>
                 </v-radio-group>
+                <v-row>
+                  <v-col cols="12" md="4">
+                    <v-text-field
+                      :disabled="!isEditing"
+                      v-model="data.memory.limits_min"
+                      label="Min memory (MB/MiB)"
+                      required
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" md="4">
+                    <v-text-field
+                      :disabled="!isEditing"
+                      v-model="data.memory.limits_max"
+                      label="Max memory (MB/MiB)"
+                      required
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" md="4">
+                    <v-text-field
+                      :disabled="!isEditing"
+                      v-model="data.memory.limits_step"
+                      label="Step (MB/MiB)"
+                      required
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+                <br>
+                <header>CPU settings</header>
+                <v-row>
+                  <v-col cols="12" md="4">
+                    <v-text-field
+                      :disabled="!isEditing"
+                      v-model="data.cpu.limits_min"
+                      label="Min cpu (unit)"
+                      required
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" md="4">
+                    <v-text-field
+                      :disabled="!isEditing"
+                      v-model="data.cpu.limits_max"
+                      label="Max cpu (unit)"
+                      required
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" md="4">
+                    <v-text-field
+                      :disabled="!isEditing"
+                      v-model="data.cpu.limits_step"
+                      label="Step (unit)"
+                      required
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
@@ -90,11 +170,22 @@
             pool_name: '',
             total_size: '',
             limits_unit: 'GB',
-            limits_unit_show: 'GB'
+            limits_unit_show: 'GB',
+            limits_min: '10',
+            limits_max: '200',
+            limits_step: '5'
           },
           memory: {
             limits_unit: 'MB',
-            limits_unit_show: 'MB'
+            limits_unit_show: 'MB',
+            limits_min: '512',
+            limits_max: '2048',
+            limits_step: '256'
+          },
+          cpu: {
+            limits_min: '1',
+            limits_max: '4',
+            limits_step: '1'
           }
         }
       };
@@ -143,15 +234,15 @@
     // this.initialize();
     // },
     mounted() {
-      setTimeout(() => {
-        this.$store.dispatch('fetchAppConfig').then(() => {
-          this.data = Object.assign({}, this.data, this.$store.getters.appconfig);
-          this.showPrice = this.data.price.enabled === 'True';
-          this.showStorage = this.data.storage.enabled === 'True';
-          this.showEmail = this.data.smtp.enabled === 'True';
-        });
-        // console.log(this.$store.getters.appconfig);
-      }, 500);
+      // setTimeout(() => {
+      this.$store.dispatch('fetchAppConfig').then(() => {
+        this.data = Object.assign({}, this.data, this.$store.getters.appconfig);
+        this.showPrice = this.data.price.enabled === 'True';
+        this.showStorage = this.data.storage.enabled === 'True';
+        this.showEmail = this.data.smtp.enabled === 'True';
+      });
+      // console.log(this.$store.getters.appconfig);
+      // }, 500);
     }
   };
 </script>
