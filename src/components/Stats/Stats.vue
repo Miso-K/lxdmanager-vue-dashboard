@@ -46,7 +46,7 @@
 
 <script>
   import StatsCard from './StatsCard';
-  import { BToGB, BToGiB, BToMB, BToMiB } from '../../libraries/utils/helpers';
+  import { hBinaryPrefix } from '../../libraries/utils/helpers';
   // import Stats from '../../libraries/store/modules/stats';
 
   export default {
@@ -67,16 +67,18 @@
         return this.stats.cpus && this.stats.cpus.cpus_count;
       },
       memory() {
-        if (this.getMemory.limits_unit === 'MiB') {
-          return this.stats.memory && BToMiB(this.stats.memory.memory_count_bytes);
-        }
-        return this.stats.memory && BToMB(this.stats.memory.memory_count_bytes);
+        return this.stats.memory && hBinaryPrefix(
+          this.stats.memory.memory_count_bytes,
+          this.getMemory.limits_unit,
+          this.getMemory.limits_unit_show
+        );
       },
       disk() {
-        if (this.getStorage.limits_unit === 'GiB') {
-          return this.stats.disk && BToGiB(this.stats.disk.disk_count_bytes);
-        }
-        return this.stats.disk && BToGB(this.stats.disk.disk_count_bytes);
+        return this.stats.disk && hBinaryPrefix(
+          this.stats.disk.disk_count_bytes,
+          this.getStorage.limits_unit,
+          this.getStorage.limits_unit_show
+        );
       },
       price() {
         return this.stats.price && this.stats.price.price_count;
