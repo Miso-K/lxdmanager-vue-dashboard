@@ -97,12 +97,7 @@
       }
     },
     mounted() {
-      // console.log(this.$store.getters.appconfig);
       this.$store.dispatch('fetchStats');
-      this.$store.dispatch('fetchAppConfig');
-    },
-    created() {
-      // this.$store.registerModule('stats', Stats);
     }
   };
 </script>
