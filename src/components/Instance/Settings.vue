@@ -131,23 +131,29 @@
                 <v-text-field :label="$t('instances.order.instance_name.label')" disabled :value=instanceName></v-text-field>
               </v-flex>
               <v-flex xs10>
-                <v-slider :min="getCPU.limits_min" :max="getCPU.limits_max" :step="getCPU.limits_step" v-model="cpu" :label="$t('instances.order.cpu.label')" tick-size="4" ticks></v-slider>
+                <v-slider :disabled="!cpuLimit" :min="getCPU.limits_min" :max="getCPU.limits_max" :step="getCPU.limits_step" v-model="cpu" :label="$t('instances.order.cpu.label')" tick-size="4" ticks></v-slider>
               </v-flex>
               <v-flex xs2>
-                <v-text-field v-model="cpu" type="CPUs" suffix="CPUs"></v-text-field>
+                <v-text-field v-if="cpuLimit" v-model="cpu" type="CPUs" suffix="CPUs"></v-text-field>
+                <v-text-field v-if="!cpuLimit" value="Unlimited" :disabled="!cpuLimit"></v-text-field>
               </v-flex>
               <v-flex xs10>
-                <v-slider :min="getMemory.limits_min" :max="getMemory.limits_max" :step="getMemory.limits_step" v-model="memory" :label="$t('instances.order.memory.label')" tick-size="4" ticks></v-slider>
+                <v-slider :disabled="!memoryLimit" :min="getMemory.limits_min" :max="getMemory.limits_max" :step="getMemory.limits_step" v-model="memory" :label="$t('instances.order.memory.label')" tick-size="4" ticks></v-slider>
               </v-flex>
               <v-flex xs2>
-                <v-text-field v-model="memory" type="MB" :suffix="getMemory.limits_unit_show"></v-text-field>
+                <v-text-field v-if="memoryLimit" v-model="memory" type="MB" :suffix="getMemory.limits_unit_show"></v-text-field>
+                <v-text-field v-if="!memoryLimit" value="Unlimited" :disabled="!memoryLimit"></v-text-field>
               </v-flex>
               <v-flex xs10>
-                <v-slider v-if="diskEnabled" :min="getStorage.limits_min" :max="getStorage.limits_max" :step="getStorage.limits_step" v-model="disk" :label="$t('instances.order.disk.label')" tick-size="4" ticks></v-slider>
+                <v-slider v-if="diskEnabled" :disabled="!diskLimit" :min="getStorage.limits_min" :max="getStorage.limits_max" :step="getStorage.limits_step" v-model="disk" :label="$t('instances.order.disk.label')" tick-size="4" ticks></v-slider>
               </v-flex>
               <v-flex xs2>
-                <v-text-field v-if="diskEnabled" v-model="disk" type="Disk" :suffix="getStorage.limits_unit_show"></v-text-field>
+                <v-text-field v-if="diskEnabled && diskLimit" v-model="disk" type="Disk" :disabled="!diskLimit" :suffix="getStorage.limits_unit_show"></v-text-field>
+                <v-text-field v-if="diskEnabled && !diskLimit" value="Unlimited" :disabled="!diskLimit"></v-text-field>
               </v-flex>
+              <v-checkbox v-if="me.admin" v-model="cpuLimit" class="mx-2" label="CPU limit"></v-checkbox>
+              <v-checkbox v-if="me.admin" v-model="memoryLimit" class="mx-2" label="Memory limit"></v-checkbox>
+              <v-checkbox v-if="diskEnabled && me.admin" v-model="diskLimit" class="mx-2" label="Disk limit"></v-checkbox>
               <template v-if="showPrice">
                 <v-flex xs3>
                   <v-subheader>{{ $t('instances.order.payment_period.label') }}</v-subheader>
@@ -230,8 +236,11 @@
         period: { text: '1 Month', value: 1 },
         name: '',
         cpu: '',
+        cpuLimit: true,
         memory: '',
+        memoryLimit: true,
         disk: '',
+        diskLimit: true,
         actualDisk: '10',
         instanceClone: '',
         cperiod: '',
@@ -312,11 +321,14 @@
       getInstanceConfig() {
         const config = this.instance.config;
         this.name = this.instanceName;
-        // console.log(config);
+        console.log(config);
         this.cpu = config.limits_cpu > 1 ? config.limits_cpu : 1;
         this.memory = config.limits_memory_mb > 512 ? config.limits_memory_mb : 512;
         this.disk = config.limits_disk_gb > 10 ? config.limits_disk_gb : 10;
         this.actualDisk = config.limits_disk_gb > 10 ? config.limits_disk_gb : 10;
+        this.cpuLimit = !!config.limits_cpu;
+        this.memoryLimit = !!config.limits_memory;
+        this.diskLimit = !!config.limits_disk;
       },
       getEditConfig() {
         const rawinstance = this.$store.getters.instance(this.id);
@@ -328,9 +340,9 @@
         const data = {
           id: this.id,
           name: this.name,
-          cpu: this.cpu,
-          memory: `${this.memory}${this.getMemory.limits_unit}`,
-          disk: `${this.disk}${this.getStorage.limits_unit}`,
+          cpu: this.cpuLimit ? this.cpu : '',
+          memory: this.memoryLimit ? `${this.memory}${this.getMemory.limits_unit}` : '',
+          disk: this.diskLimit ? `${this.disk}${this.getStorage.limits_unit}` : '',
           pool_name: this.getStorage.enabled === 'True' ? this.getStorage.pool_name : '',
           period: this.showPrice ? this.period.text : '',
           price: this.showPrice ? this.price : ''
