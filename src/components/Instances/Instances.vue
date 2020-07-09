@@ -31,7 +31,7 @@
       :items="items"
       :search="search">
       <template v-slot:item.config.limits_memory="{ item }">
-        <v-span v-if="item.config.limits_memory">{{ getMemoryConfig(item) }} {{ getMemory.limits_unit_show }}</v-span>
+        <v-span v-if="item.config.limits_memory">{{ getMemoryConfig(item)[0] }} {{ getMemoryConfig(item)[1] }}</v-span>
       </template>
       <template v-slot:item.config.limits_disk="{ item }">
         <v-span v-if="item.config.limits_disk">{{ getStorageConfig(item) }} {{ getStorage.limits_unit_show }}</v-span>
@@ -55,6 +55,7 @@
 
 <script>
   import OrderCreate from '../../components/Order/OrderCreate';
+  import { hBinaryPrefix } from '../../libraries/utils/helpers';
 
   export default {
     name: 'Instances',
@@ -224,10 +225,12 @@
     },
     methods: {
       getMemoryConfig(item) {
-        if (this.getMemory.limits_unit === 'MiB') {
-          return item.config.limits_memory_mib;
-        }
-        return item.config.limits_memory_mb;
+        console.log(item);
+        return item.config.limits_memory_raw && hBinaryPrefix(
+          item.config.limits_memory_raw,
+          this.getMemory.limits_unit,
+          this.getMemory.limits_unit_show
+        );
       },
       getStorageConfig(item) {
         if (this.getStorage.limits_unit === 'GiB') {
