@@ -17,6 +17,9 @@ export const CHECK_TOKEN_FAILURE = 'CHECK_TOKEN_FAILURE';
 
 export const LOGOUT = 'LOGOUT';
 
+export const APPCONFIG_KEY = 'APPCONFIG';
+export const STORAGE_INSTANCES_KEY = 'STORAGE_INSTANCES';
+
 const storedToken = storage.get(STORAGE_TOKEN_KEY);
 const storedRefreshToken = storage.get(STORAGE_REFRESH_TOKEN_KEY);
 
@@ -77,11 +80,16 @@ const authMutations = {
     Object.assign(state, { token: null, me: null });
     storage.remove(STORAGE_TOKEN_KEY);
     storage.remove(STORAGE_REFRESH_TOKEN_KEY);
+    storage.remove(APPCONFIG_KEY);
+    storage.remove(STORAGE_INSTANCES_KEY);
+    location.reload();
   },
   [LOGOUT]: (state) => {
     Object.assign(state, { token: null, me: null });
     storage.remove(STORAGE_TOKEN_KEY);
     storage.remove(STORAGE_REFRESH_TOKEN_KEY);
+    storage.remove(APPCONFIG_KEY);
+    storage.remove(STORAGE_INSTANCES_KEY);
     location.reload();
   }
 };
