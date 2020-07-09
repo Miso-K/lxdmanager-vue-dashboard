@@ -47,11 +47,11 @@
         <host-stats-card
           icon="mdi-memory"
           color="blue"
-          :value="totalMemory[0]"
-          :unit="totalMemory[1]"
+          :value="totalMemory && totalMemory[0]"
+          :unit="totalMemory && totalMemory[1]"
           label="Total Memory"
-          :value_sub="memory[0]"
-          :unit_sub="memory[1]"
+          :value_sub="memory && memory[0]"
+          :unit_sub="memory && memory[1]"
           label_sub="Allocated Memory"
         ></host-stats-card>
         <host-stats-card
@@ -61,8 +61,8 @@
           :value="totalDisk"
           unit=""
           label="Total Disk"
-          :value_sub="disk[0]"
-          :unit_sub="disk[1]"
+          :value_sub="disk && disk[0]"
+          :unit_sub="disk && disk[1]"
           label_sub="Allocated Disk"
         ></host-stats-card>
       </v-layout>
@@ -157,8 +157,6 @@
     mounted() {
       // console.log(this.$store.getters.stats);
       // console.log(this.$store.getters['auth/me']);
-    },
-    created() {
       // this.$store.registerModule('host', Host);
       this.$store.dispatch('fetchStats');
       this.$store.dispatch('fetchUsers');
