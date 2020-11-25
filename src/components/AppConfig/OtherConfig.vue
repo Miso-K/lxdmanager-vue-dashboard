@@ -196,12 +196,6 @@
       }
     },
     methods: {
-      checkConfig() {
-        setTimeout(() => {
-          this.$store.dispatch('fetchCheckconfig');
-        }, 500);
-        this.dialogTest = true;
-      },
       update_checkboxes() {
         this.$store.commit('update_checkboxes', this.data.storage.enabled);
       },

@@ -127,7 +127,7 @@
             class: 'pa-1'
           },
           {
-            text: 'Price €',
+            text: this.$t('stats.price'),
             align: 'left',
             value: 'config.user_price',
             sortable: true,
@@ -135,11 +135,19 @@
             class: 'pa-1'
           },
           {
-            text: 'Type',
+            text: this.$t('stats.type'),
             align: 'left',
             value: 'type',
             sortable: true,
             type: false,
+            class: 'pa-1'
+          },
+          {
+            text: 'Server',
+            align: 'left',
+            value: 'servers[0].name',
+            sortable: true,
+            servers: false,
             class: 'pa-1'
           }
         ],
@@ -199,7 +207,8 @@
         return this.headers.filter(h =>
           !(h.disk === this.showDisk) &&
           !(h.price === this.showPrice) &&
-          !(h.type === this.showType));
+          !(h.type === this.showType) &&
+          !(h.servers === this.me.admin));
       },
       getMemory() {
         return this.$store.getters.appconfig.memory;
@@ -239,7 +248,7 @@
       },
       filterIpv6(ip) {
         if (ip.scope === 'link') {
-          return '';
+          return '-';
         }
         return ip.address;
       },

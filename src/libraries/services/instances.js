@@ -62,6 +62,10 @@ class InstanceResource extends Resource {
     console.log(this.base);
     return axios.get(`/lxc/operations/${id}`);
   }
+
+  updateState(id, options) {
+    return axios.put(`/${this.base}/${id}/state`, options);
+  }
 }
 
 export default new InstanceResource('lxc/instances');

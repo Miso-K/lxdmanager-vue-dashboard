@@ -221,7 +221,7 @@
         const percent = (
           this.instance.state.disk.root.usage / this.config.limits_disk_raw
         ) * 100;
-        console.log((percent));
+        // console.log((percent));
         return isNaN(percent) || !isFinite(percent) ? 0 : percent.toFixed(0);
       },
       networkCounters() {
@@ -324,7 +324,7 @@
     mounted() {
       this.interval = setInterval(() => {
         this.$store.dispatch('fetchInstance', this.id);
-        console.log(this.interval);
+        // console.log(this.interval);
       }, 10000);
     },
     beforeDestroy() {

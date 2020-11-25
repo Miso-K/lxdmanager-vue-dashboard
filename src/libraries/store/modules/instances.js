@@ -14,6 +14,7 @@ import {
   UNFREEZING
 } from '../../utils/states';
 import formatInstance from '../../utils/format/instance';
+import { updateInstanceState } from '../../utils/helpers';
 import storage from '../../utils/storage';
 
 export const INSTANCES_REQUEST = 'INSTANCES_REQUEST';
@@ -22,6 +23,7 @@ export const INSTANCES_FAILURE = 'INSTANCES_FAILURE';
 
 export const INSTANCE_REQUEST = 'INSTANCE_REQUEST';
 export const INSTANCE_SUCCESS = 'INSTANCE_SUCCESS';
+export const INSTANCE_SUCCESS_STATE = 'INSTANCE_SUCCESS_STATE';
 export const INSTANCE_FAILURE = 'INSTANCE_FAILURE';
 
 export const SNAPSHOTS_REQUEST = 'SNAPSHOTS_REQUEST';
@@ -129,11 +131,11 @@ const instancesMutations = {
     const index = state.instances.findIndex(e => e.id === id);
     state.loading = false;
     Object.assign(state.instances[index], { ...data });
-    // state.instances[index] = {
-    //  ...state.instances[index],
-    //  ...data
-    // };
-    // storage.set(STORAGE_INSTANCES_KEY, state.instances);
+  },
+  [INSTANCE_SUCCESS_STATE]: (state, { id, status }) => {
+    const index = state.instances.findIndex(e => e.id === id);
+    state.loading = false;
+    state.instances[index].status = status;
   },
   [INSTANCE_FAILURE]: (state, err, id) => {
     console.log(INSTANCE_FAILURE, err);
@@ -239,7 +241,7 @@ const instancesActions = {
     commit(INSTANCES_REQUEST);
 
     InstancesService.fetch(id).then((res) => {
-      console.log(res.data.data);
+      // console.log(res.data.data);
       setTimeout(() => {
         const data = res.data.data;
         commit(INSTANCE_SUCCESS, { id, data });
@@ -396,10 +398,11 @@ const instancesActions = {
   startInstance({ commit }, id) {
     commit(INSTANCE_REQUEST, { id, status: STARTING });
 
-    InstancesService.start(id).then(() => {
+    const data = updateInstanceState('start');
+    InstancesService.updateState(id, data).then(() => {
       setTimeout(() => {
-        const data = { status: RUNNING };
-        commit(INSTANCE_SUCCESS, { id, data });
+        // const res = { status: RUNNING };
+        commit(INSTANCE_SUCCESS_STATE, { id, status: RUNNING });
       }, 2000);
     }).catch((err) => {
       commit(INSTANCES_FAILURE, err);
@@ -410,10 +413,10 @@ const instancesActions = {
   stopInstance({ commit }, id) {
     commit(INSTANCE_REQUEST, { id, status: STOPPING });
 
-    InstancesService.stop(id).then(() => {
+    const data = updateInstanceState('stop');
+    InstancesService.updateState(id, data).then(() => {
       setTimeout(() => {
-        const data = { status: STOPPED };
-        commit(INSTANCE_SUCCESS, { id, data });
+        commit(INSTANCE_SUCCESS_STATE, { id, status: STOPPED });
       }, 2000);
     }).catch((err) => {
       commit(INSTANCES_FAILURE, err);
@@ -424,10 +427,10 @@ const instancesActions = {
   freezeInstance({ commit }, id) {
     commit(INSTANCE_REQUEST, { id, status: FREEZING });
 
-    InstancesService.freeze(id).then(() => {
+    const data = updateInstanceState('freeze');
+    InstancesService.updateState(id, data).then(() => {
       setTimeout(() => {
-        const data = { status: FROZEN };
-        commit(INSTANCE_SUCCESS, { id, data });
+        commit(INSTANCE_SUCCESS_STATE, { id, status: FROZEN });
       }, 2000);
     }).catch((err) => {
       commit(INSTANCES_FAILURE, err);
@@ -437,10 +440,10 @@ const instancesActions = {
   unfreezeInstance({ commit }, id) {
     commit(INSTANCE_REQUEST, { id, status: UNFREEZING });
 
-    InstancesService.unfreeze(id).then(() => {
+    const data = updateInstanceState('unfreeze');
+    InstancesService.updateState(id, data).then(() => {
       setTimeout(() => {
-        const data = { status: RUNNING };
-        commit(INSTANCE_SUCCESS, { id, data });
+        commit(INSTANCE_SUCCESS_STATE, { id, status: RUNNING });
       }, 2000);
     }).catch((err) => {
       commit(INSTANCES_FAILURE, err);
@@ -450,10 +453,16 @@ const instancesActions = {
   stopforceInstance({ commit }, id) {
     commit(INSTANCE_REQUEST, { id, status: SHUTTING_DOWN });
 
-    InstancesService.stopforce(id).then(() => {
+    const data = {
+      data: {
+        action: 'stop',
+        timeout: 30,
+        force: true
+      }
+    };
+    InstancesService.updateState(id, data).then(() => {
       setTimeout(() => {
-        const data = { status: STOPPED };
-        commit(INSTANCE_SUCCESS, { id, data });
+        commit(INSTANCE_SUCCESS_STATE, { id, status: STOPPED });
       }, 2000);
     }).catch((err) => {
       commit(INSTANCES_FAILURE, err);
@@ -463,10 +472,10 @@ const instancesActions = {
   restartInstance({ commit }, id) {
     commit(INSTANCE_REQUEST, { id, status: RESTARTING });
 
-    InstancesService.restart(id).then(() => {
+    const data = updateInstanceState('restart');
+    InstancesService.updateState(id, data).then(() => {
       setTimeout(() => {
-        const data = { status: RUNNING };
-        commit(INSTANCE_SUCCESS, { id, data });
+        commit(INSTANCE_SUCCESS_STATE, { id, status: RUNNING });
       }, 2000);
     }).catch((err) => {
       commit(INSTANCES_FAILURE, err);

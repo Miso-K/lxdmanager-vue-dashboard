@@ -281,8 +281,8 @@
         return this.$store.getters.appconfig.cpu;
       },
       getMemory() {
-        console.log(this.$store.getters.appconfig);
-        console.log(this.periodes);
+        // console.log(this.$store.getters.appconfig);
+        // console.log(this.periodes);
         return this.$store.getters.appconfig.memory;
       },
       getStorage() {
@@ -333,7 +333,7 @@
       getInstanceConfig() {
         const config = this.instance.config;
         this.name = this.instanceName;
-        console.log(config);
+        // console.log(config);
         this.cpu = config.limits_cpu > 1 ? config.limits_cpu : 1;
         this.memory = config.limits_memory_mb > 512 ? config.limits_memory_mb : 512;
         this.disk = config.limits_disk_gb > 10 ? config.limits_disk_gb : 10;

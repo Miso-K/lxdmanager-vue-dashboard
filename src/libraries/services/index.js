@@ -18,6 +18,7 @@ import OperationsService from './operations';
 import NetworksService from './networks';
 import ProfilesService from './profiles';
 import ProjectsService from './projects';
+import ServersService from './servers';
 
 export {
   AbilitiesService,
@@ -35,5 +36,6 @@ export {
   ImagesService,
   NetworksService,
   ProfilesService,
-  ProjectsService
+  ProjectsService,
+  ServersService
 };

@@ -185,7 +185,9 @@
     "unlimited": "Unlimited",
     "swap_limit": "Limit swapu",
     "memory_limit": "Limit pamäte",
-    "disk_limit": "Limit disku"
+    "disk_limit": "Disk limit",
+    "price": "Cena €",
+    "type": "Typ"
   },
   "actions": {
     "name": "Akcie",

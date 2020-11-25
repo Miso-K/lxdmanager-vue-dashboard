@@ -111,9 +111,8 @@
               <v-flex xs12 sm12 md12>
                 <v-autocomplete
                   v-model="editedItem.groups"
-                  :disabled="isUpdating"
-                  :items="groupsId"
-                  chips
+                  :items="groupsList"
+
                   color="blue-grey lighten-2"
                   label="Groups"
                   item-text="name"
@@ -124,30 +123,16 @@
                     slot="selection"
                     slot-scope="data"
                   >
-                    <v-chip
-                      :input-value="data.selected"
-                      close
-                      class="chip--select-multi"
-                      @click:close="removeGroup(data.item)"
-                    >
+                    <v-chip>
                       {{ data.item.name }}
                     </v-chip>
                   </template>
-                  <template
-                    slot="item"
-                    slot-scope="data"
-                  >
-                  <template >
-                    <v-list-tile-content v-text="data.item.name"></v-list-tile-content>
-                  </template>
-                </template>
               </v-autocomplete>
               </v-flex>
               <v-flex xs12 sm12 md12>
                 <v-autocomplete
                   v-model="editedItem.instances"
-                  :disabled="isUpdating"
-                  :items="instancesId"
+                  :items="instancesList"
                   chips
                   color="blue-grey lighten-2"
                   label="Instances"
@@ -159,22 +144,9 @@
                     slot="selection"
                     slot-scope="data"
                   >
-                    <v-chip
-                      :input-value="data.selected"
-                      close
-                      class="chip--select-multi"
-                      @click:close="removeInstance(data.item)"
-                    >
+                    <v-chip>
                       {{ data.item.name }}
                     </v-chip>
-                  </template>
-                  <template
-                    slot="item"
-                    slot-scope="data"
-                  >
-                  <template >
-                    <v-list-tile-content v-text="data.item.name"></v-list-tile-content>
-                  </template>
                 </template>
               </v-autocomplete>
               </v-flex>
@@ -182,6 +154,7 @@
           </v-container>
         </v-card-text>
         <v-card-actions>
+          <v-btn color="blue darken-1" text @click="reset">Reset</v-btn>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" text @click.native="close">Cancel</v-btn>
           <v-btn color="blue darken-1" text @click.native="save" :disabled="!valid" >Save</v-btn>
@@ -317,24 +290,27 @@
           ico: '',
           ic_dph: '',
           dic: '',
-          groups: { name: 'users', id: 2 },
+          groups: [{ name: 'users', id: 2 }],
           instances: '',
           password: '',
           otp_type: '',
           language: ''
         },
         defaultItem: {
+          id: '',
+          admin: '',
           username: '',
           email: '',
           name: '',
           phone: '',
+          address: '',
           city: '',
           country: '',
           postal_code: '',
           ico: '',
           ic_dph: '',
           dic: '',
-          groups: '',
+          groups: [{ name: 'users', id: 2 }],
           instances: '',
           password: '',
           otp_type: '',
@@ -356,10 +332,10 @@
       items() {
         return this.$store.getters.usersTableData;
       },
-      instancesId() {
+      instancesList() {
         return this.$store.getters.instancesList;
       },
-      groupsId() {
+      groupsList() {
         return this.$store.getters.groupsList;
       }
     },
@@ -369,14 +345,6 @@
       }
     },
     methods: {
-      removeInstance(item) {
-        const index = this.editedItem.instances.findIndex(x => x.id === item.id);
-        if (index >= 0) this.editedItem.instances.splice(index, 1);
-      },
-      removeGroup(item) {
-        const index = this.editedItem.groups.findIndex(x => x.id === item.id);
-        if (index >= 0) this.editedItem.groups.splice(index, 1);
-      },
       editItem(item) {
         this.editedIndex = this.items.indexOf(item);
         this.editedItem = Object.assign({}, item);
@@ -442,6 +410,9 @@
       },
       refreshData() {
         this.$store.dispatch('fetchUsers');
+      },
+      reset() {
+        this.$refs.form.reset();
       }
     },
     mounted() {

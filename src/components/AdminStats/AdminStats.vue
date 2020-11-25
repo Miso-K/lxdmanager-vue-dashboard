@@ -75,6 +75,7 @@
   import HostStatsCard from './HostStatsCard';
   import { hBinaryPrefix } from '../../libraries/utils/helpers';
   // import Host from '../../libraries/store/modules/host';
+  import formatStats from '../../libraries/utils/format/stats';
 
   export default {
     name: 'AdminStats',
@@ -93,31 +94,31 @@
         return this.$store.getters.groupsTableData.length;
       },
       stats() {
-        // console.log(this.$store.getters.host);
-        return this.$store.getters.stats;
+        return this.$store.getters.instancesTableData
+          && formatStats(this.$store.getters.instancesTableData);
       },
       host() {
         return this.$store.getters.host;
       },
       machines() {
-        return this.stats.instances && this.stats.instances.count;
+        return this.stats.instancesTotal;
       },
       runningMachines() {
-        return this.stats.instances && this.stats.instances.count_running;
+        return this.stats.instancesRunning;
       },
       vcpus() {
-        return this.stats.cpus && this.stats.cpus.cpus_count;
+        return this.stats.cpuTotal;
       },
       memory() {
-        return this.stats.memory && hBinaryPrefix(
-          this.stats.memory.memory_count_bytes,
+        return this.stats.memoryTotalRaw && hBinaryPrefix(
+          this.stats.memoryTotalRaw,
           this.getMemory.limits_unit,
           this.getMemory.limits_unit_show
         );
       },
       disk() {
-        return this.stats.disk && hBinaryPrefix(
-          this.stats.disk.disk_count_bytes,
+        return this.stats.diskTotalRaw && hBinaryPrefix(
+          this.stats.diskTotalRaw,
           this.getStorage.limits_unit,
           this.getStorage.limits_unit_show
         );
@@ -158,7 +159,8 @@
       // console.log(this.$store.getters.stats);
       // console.log(this.$store.getters['auth/me']);
       // this.$store.registerModule('host', Host);
-      this.$store.dispatch('fetchStats');
+      // this.$store.dispatch('fetchStats');
+      this.$store.dispatch('fetchInstances');
       this.$store.dispatch('fetchUsers');
       this.$store.dispatch('fetchHost');
     }

@@ -73,6 +73,17 @@ const KMGBToB = (value, size) => {
   return null;
 };
 
+const updateInstanceState = (action) => {
+  const data = {
+    data: {
+      action,
+      timeout: 30,
+      force: false
+    }
+  };
+  return data;
+};
+
 export {
   BToMB,
   BToMiB,
@@ -80,5 +91,6 @@ export {
   BToGiB,
   KMGBToB,
   humanFileSize,
-  hBinaryPrefix
+  hBinaryPrefix,
+  updateInstanceState
 };

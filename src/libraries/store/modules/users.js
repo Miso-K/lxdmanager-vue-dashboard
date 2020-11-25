@@ -1,6 +1,7 @@
 import _map from 'lodash/map';
 import { MeService, UsersService } from '../../services';
 import formatUser from '../../utils/format/user';
+import { formatCreateUser, formatUpdateUser } from '../../utils/format/userActions';
 import storage from '../../utils/storage';
 import i18n from '../../i18n';
 
@@ -62,7 +63,7 @@ const usersMutations = {
   },
   [ME_SUCCESS]: (state, myself) => {
     Object.assign(state, { myself, loading: false });
-    console.log(myself);
+    // console.log(myself);
     storage.set(STORAGE_LANGUAGE_KEY, myself.language);
   },
   [SET_OTP_SECRET]: (state, otp) => {
@@ -100,62 +101,8 @@ const usersActions = {
 
   createUser({ commit }, data) {
     commit(USERS_REQUEST);
-
-    const obj = {
-      data: {
-        type: 'users',
-        admin: false,
-        username: data.username,
-        name: data.name,
-        email: data.email,
-        password: data.password,
-        relationships: {
-          groups: data.groups ? data.groups.map(g => ({
-            type: 'groups',
-            id: g
-          })) : [
-            {
-              type: 'groups',
-              id: 2
-            }
-          ],
-          instances: data.instances ? data.instances.map(c => ({
-            type: 'instances',
-            id: c
-          })) : []
-        }
-      }
-    };
-    if (data.phone !== '') {
-      obj.data.phone = data.phone;
-    }
-    if (data.address !== '') {
-      obj.data.address = data.address;
-    }
-    if (data.city !== '') {
-      obj.data.city = data.city;
-    }
-    if (data.country !== '') {
-      obj.data.country = data.country;
-    }
-    if (data.postal_code !== '') {
-      obj.data.postal_code = data.postal_code;
-    }
-    if (data.ico !== '') {
-      obj.data.ico = data.ico;
-    }
-    if (data.ic_dph !== '') {
-      obj.data.ic_dph = data.ic_dph;
-    }
-    if (data.dic !== '') {
-      obj.data.dic = data.dic;
-    }
-    if (data.language !== '') {
-      obj.data.language = data.language;
-    }
-    if (data.otp_type !== '' && data.otp_type) {
-      obj.data.otp_type = data.otp_type;
-    }
+    console.log(data);
+    const obj = formatCreateUser(data);
     // console.log(obj);
     return UsersService.post(obj).then((res) => {
       // console.log(res);
@@ -170,63 +117,7 @@ const usersActions = {
     // console.log('update log:');
     // console.log(data);
 
-    const obj = {
-      data: {
-        type: 'users',
-        id: data.id,
-        username: data.username,
-        name: data.name,
-        email: data.email,
-        relationships: {
-          groups: data.groups ? data.groups.map(g => ({
-            type: 'groups',
-            id: g.id ? g.id : g
-          })) : [
-            {
-              type: 'groups',
-              id: 2
-            }
-          ],
-          instances: data.instances ? data.instances.map(c => ({
-            type: 'instances',
-            id: c.id ? c.id : c
-          })) : []
-        }
-      }
-    };
-    if (data.password !== '' && data.password) {
-      obj.data.password = data.password;
-    }
-    if (data.phone !== '' && data.phone) {
-      obj.data.phone = data.phone;
-    }
-    if (data.address !== '' && data.address) {
-      obj.data.address = data.address;
-    }
-    if (data.city !== '' && data.city) {
-      obj.data.city = data.city;
-    }
-    if (data.country !== '' && data.country) {
-      obj.data.country = data.country;
-    }
-    if (data.postal_code !== '' && data.postal_code) {
-      obj.data.postal_code = data.postal_code;
-    }
-    if (data.ico !== '' && data.ico) {
-      obj.data.ico = data.ico;
-    }
-    if (data.ic_dph !== '' && data.ic_dph) {
-      obj.data.ic_dph = data.ic_dph;
-    }
-    if (data.dic !== '' && data.dic) {
-      obj.data.dic = data.dic;
-    }
-    if (data.language !== '' && data.language) {
-      obj.data.language = data.language;
-    }
-    if (data.otp_type !== '' && data.otp_type) {
-      obj.data.otp_type = data.otp_type;
-    }
+    const obj = formatUpdateUser(data);
     console.log(obj);
     return UsersService.put(data.id, obj).then((res) => {
       // console.log(res);

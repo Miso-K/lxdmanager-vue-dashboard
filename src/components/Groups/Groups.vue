@@ -131,6 +131,7 @@
         return this.editedIndex === -1;
       },
       items() {
+        // console.log(this.$store.getters.groupsTableData);
         return this.$store.getters.groupsTableData;
       }
     },

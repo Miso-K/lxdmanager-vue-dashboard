@@ -214,15 +214,13 @@
       id() {
         // return Number(this.$route.params.id);
         // console.log(this.$props);
-        return Number(this.$props.id);
+        return this.$props.id && Number(this.$props.id);
       },
       instance() {
-        if (this.id) {
-          // console.log(this.$store.getters.instanceDataId(this.id));
-          // console.log(this.id);
-          return this.$store.getters.instanceDataId(this.id);
-        }
-        return null;
+        // if (this.id) {
+        // console.log(this.$store.getters.instanceDataId(this.id));
+        // console.log(this.id);
+        return this.id && this.$store.getters.instanceDataId(this.id);
       },
       config() {
         // console.log(this.instance.config);
@@ -233,7 +231,7 @@
         return this.instance.ips ? this.instance.ips : '';
       },
       status() {
-        return this.instance.status;
+        return this.instance ? this.instance.status : '';
       },
       loading() {
         return this.$store.getters.instanceIsLoading(this.id);

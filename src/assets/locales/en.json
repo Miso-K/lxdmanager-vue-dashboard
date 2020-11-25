@@ -185,7 +185,9 @@
     "unlimited": "Unlimited",
     "swap_limit": "Swap limit",
     "memory_limit": "Memory limit",
-    "disk_limit": "Disk limit"
+    "disk_limit": "Disk limit",
+    "price": "Price €",
+    "type": "Type"
   },
   "actions": {
     "name": "Actions",

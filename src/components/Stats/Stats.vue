@@ -47,6 +47,7 @@
 <script>
   import StatsCard from './StatsCard';
   import { hBinaryPrefix } from '../../libraries/utils/helpers';
+  import formatStats from '../../libraries/utils/format/stats';
   // import Stats from '../../libraries/store/modules/stats';
 
   export default {
@@ -58,30 +59,31 @@
         return this.$store.state.loading;
       },
       stats() {
-        return this.$store.getters.stats;
+        return this.$store.getters.instancesTableData
+          && formatStats(this.$store.getters.instancesTableData);
       },
       machines() {
-        return this.stats.instances && this.stats.instances.count;
+        return this.stats.instancesTotal;
       },
       vcpus() {
-        return this.stats.cpus && this.stats.cpus.cpus_count;
+        return this.stats.cpuTotal;
       },
       memory() {
-        return this.stats.memory && hBinaryPrefix(
-          this.stats.memory.memory_count_bytes,
+        return this.stats.memoryTotalRaw && hBinaryPrefix(
+          this.stats.memoryTotalRaw,
           this.getMemory.limits_unit,
           this.getMemory.limits_unit_show
         );
       },
       disk() {
-        return this.stats.disk && hBinaryPrefix(
-          this.stats.disk.disk_count_bytes,
+        return this.stats.diskTotalRaw && hBinaryPrefix(
+          this.stats.diskTotalRaw,
           this.getStorage.limits_unit,
           this.getStorage.limits_unit_show
         );
       },
       price() {
-        return this.stats.price && this.stats.price.price_count;
+        return this.stats.price && this.stats.price.price_total;
       },
       getMemory() {
         return this.$store.getters.appconfig.memory;
@@ -96,8 +98,8 @@
         return this.$store.getters.appconfig.storage.enabled === 'True';
       }
     },
-    mounted() {
-      this.$store.dispatch('fetchStats');
+    created() {
+      this.$store.dispatch('fetchInstances');
     }
   };
 </script>

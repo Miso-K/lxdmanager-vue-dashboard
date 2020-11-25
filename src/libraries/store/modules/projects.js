@@ -60,9 +60,10 @@ const actions = {
       });
   },
 
-  createProject({ commit }, data) {
+  createProject({ commit }, { data, server }) {
     commit(PROJECTS_REQUEST);
     const obj = data;
+    obj.server = server;
     // console.log(obj);
     return ProjectsService.post(obj).then((res) => {
       // console.log(res);
@@ -72,11 +73,11 @@ const actions = {
     });
   },
 
-  updateProject({ commit }, data) {
+  updateProject({ commit }, { data, server }) {
     commit(PROJECTS_REQUEST);
     const obj = data;
     const name = data.data.name;
-    return ProjectsService.put(name, obj).then((res) => {
+    return ProjectsService.put(server, name, obj).then((res) => {
       // console.log(res);
       commit(PROJECTS_SUCCESS, res.data);
     }).catch((err) => {
@@ -84,9 +85,9 @@ const actions = {
     });
   },
 
-  deleteProject({ commit }, name) {
+  deleteProject({ commit }, { server, name }) {
     commit(PROJECTS_REQUEST);
-    return ProjectsService.delete(name).then((res) => {
+    return ProjectsService.delete(server, name).then((res) => {
       commit(PROJECTS_SUCCESS, res.data);
     }).catch((err) => {
       commit(PROJECTS_FAILURE, err);

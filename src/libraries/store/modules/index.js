@@ -15,6 +15,7 @@ import operations from './operations';
 import networks from './networks';
 import profiles from './profiles';
 import projects from './projects';
+import servers from './servers';
 
 export default {
   abilities,
@@ -32,5 +33,6 @@ export default {
   operations,
   networks,
   profiles,
-  projects
+  projects,
+  servers
 };

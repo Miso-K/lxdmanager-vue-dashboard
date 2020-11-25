@@ -13,6 +13,7 @@ export default function images(data) {
     architecture: data.architecture,
     type: data.type,
     size: data.size,
-    uploaded_at: data.uploaded_at
+    uploaded_at: data.uploaded_at,
+    relationships: data.relationships
   };
 }

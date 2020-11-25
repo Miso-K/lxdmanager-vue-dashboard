@@ -4,4 +4,4 @@
 
 import Resource from './resource';
 
-export default new Resource('lxc/checkconfig');
+export default new Resource('lgw/config');

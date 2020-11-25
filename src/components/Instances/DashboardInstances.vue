@@ -40,7 +40,7 @@
               justify="space-around"
             >
               <v-icon class="mr-1" large>mdi-cpu-64-bit</v-icon>
-              <span class="subheading mr-2">{{item.limits_cpu}}</span>
+              <span class="subheading mr-2">{{item.config.limits_cpu}}</span>
               <span class="mr-1">·</span>
               <v-icon class="mr-1" large>mdi-memory</v-icon>
               <span class="subheading mr-2">{{getMemoryConfig(item)}}{{getMemory.limits_unit_show}}</span>
@@ -52,7 +52,7 @@
               <div v-if="showPrice">
                 <span class="mr-1" large>·</span>
                 <v-icon class="mr-1">mdi-currency-eur</v-icon>
-                <span class="subheading">{{item.price}}</span>
+                <span class="subheading">{{item.config.user_price}}</span>
               </div>
             </v-row>
           </v-list-item>
@@ -60,17 +60,17 @@
               <v-list-item-icon>
                 <v-icon>mdi-server-network</v-icon>v4
               </v-list-item-icon>
-              <v-list-item-subtitle class="text-right">{{ item.ips ? (item.ips[1] ? item.ips[0].address : '-') : '-' }}</v-list-item-subtitle>
+              <v-list-item-subtitle class="text-right">{{ item.ips ? filterIpv6(item.ips[0]) : '-' }}</v-list-item-subtitle>
             </v-list-item>
             <v-list-item>
               <v-list-item-icon>
                 <v-icon>mdi-server-network</v-icon>v6
               </v-list-item-icon>
-              <v-list-item-subtitle class="text-right">{{ item.ips ? (item.ips[1] ? item.ips[1].address : '-') : '-'}}</v-list-item-subtitle>
+              <v-list-item-subtitle class="text-right">{{ item.ips ? filterIpv6(item.ips[1]) : '-'}}</v-list-item-subtitle>
             </v-list-item>
             <v-divider></v-divider>
             <v-card-actions>
-              <v-btn class="ma-2" color="primary" left :to="'/instance/'+item.id">Manage
+              <v-btn class="ma-2" color="primary" left :to="'/instance/'+item.id">{{ $t('instances.actions.manage') }}
               <v-icon dark right>mdi-wrench</v-icon>
               </v-btn>
             </v-card-actions>
@@ -177,6 +177,12 @@
           return item.config.limits_disk_gib;
         }
         return item.config.limits_disk_gb;
+      },
+      filterIpv6(ip) {
+        if (ip.scope === 'link') {
+          return '-';
+        }
+        return ip.address;
       }
     },
     created() {

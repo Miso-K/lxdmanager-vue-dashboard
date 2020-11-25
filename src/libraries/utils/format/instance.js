@@ -35,6 +35,15 @@ export default function instance(ct) {
     ips = !ct.state.network.eth0 || status === 'STOPPED' ? '' : ct.state.network.eth0.addresses;
   }
 
+  // const regex = new RegExp('/b?vethb?', 'g');
+  // if (ct.state.network) {
+  // const filtered = Object.entries(ct.state.network)
+  //  .filter(network => network[0].match('eth0'))
+  //  .map(net => { net[0]: net[1] });
+  // const filtered = ct.state.network; // .filter(network => network.match(regex));
+  //  console.log(Object.fromEntries(filtered));
+  // }
+
   return {
     state: ct.state,
     status,
@@ -42,6 +51,7 @@ export default function instance(ct) {
     name: ct.name,
     type: ct.type,
     created_at: ct.created_at,
+    servers: ct.relationships.servers,
     ips,
     config: {
       image_description: ct.expanded_config['image.description'],

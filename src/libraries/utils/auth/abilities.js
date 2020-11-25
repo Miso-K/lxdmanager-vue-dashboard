@@ -4,7 +4,8 @@
 const getUserAbilities = (state) => {
   const user = state.myself;
   const abilities = [];
-  if (user && user.relationships.groups) {
+  // console.log(user);
+  if (Object.keys(user).length !== 0 && user.relationships.groups) {
     const abbs = state.groups[0].relationships.abilities;
     abbs.forEach((ability) => {
       if (ability && ability.name) {

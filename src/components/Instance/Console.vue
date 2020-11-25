@@ -38,7 +38,7 @@
   // import { AttachAddon } from 'xterm-addon-attach';
   // import { FitAddon } from 'xterm-addon-fit';
   import 'xterm/css/xterm.css';
-  import storage from '../../libraries/utils/storage';
+  // import storage from '../../libraries/utils/storage';
 
   export default {
     components: {},
@@ -114,9 +114,10 @@
       },
 
       WebSocketTest(term) {
-        const operationId = term.metadata.id;
-        const secret = term.metadata.metadata.fds[0];
-        const wsUrl = storage.get('API_BASE_WS_URL');
+        // console.log(term.relationships.servers[0].exec_address);
+        const operationId = term.id;
+        const secret = term.metadata.fds[0];
+        const wsUrl = term.relationships.servers[0].exec_address;
         const xterm = new Terminal({
           useStyle: false,
           screenKeys: false,
@@ -138,8 +139,8 @@
             console.log('Open xterm ...');
             xterm.open(document.getElementById('terminal'));
             xterm.onData((data) => {
-              console.log('Send data');
-              console.log(data);
+              // console.log('Send data');
+              // console.log(data);
               ws.send(new Blob([data]));
             });
             //

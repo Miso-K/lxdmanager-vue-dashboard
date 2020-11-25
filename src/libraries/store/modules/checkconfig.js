@@ -43,10 +43,10 @@ const mutations = {
  * @type {Object}
  */
 const actions = {
-  fetchCheckconfig({ commit }) {
+  fetchCheckconfig({ commit }, data) {
     commit(CHECKCONFIG_REQUEST);
-
-    return CheckconfigService.get()
+    console.log(data);
+    return CheckconfigService.get(data)
       .then((res) => {
         console.log(res);
         commit(CHECKCONFIG_SUCCESS, { checkconfig: res.data.data });
