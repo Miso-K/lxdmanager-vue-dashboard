@@ -82,6 +82,7 @@
 <script>
     export default {
       name: 'RemoteImages',
+      props: ['serverName'],
       data: () => ({
         descriptionLimit: 60,
         entries: [],
@@ -121,7 +122,8 @@
           this.$store.dispatch('createImage', {
             fingerprint: this.model.target,
             aliasName: this.aliasName ? this.aliasName : this.model.name,
-            aliasDescription: this.aliasDescription ? this.aliasDescription : this.model.description
+            aliasDescription: this.aliasDescription ? this.aliasDescription : this.model.description,
+            server: this.serverName
           });
           this.dialog = false;
         }

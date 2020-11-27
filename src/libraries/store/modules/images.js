@@ -105,10 +105,10 @@ const imagesActions = {
       }
     };
     console.log(obj);
-    return ImagesService.post(obj).then((res) => {
+    return ImagesService.post(data.server, obj).then((res) => {
       // console.log(res.data);
       // dispatch('notify', { id: 0, message: 'Image was downloaded', color: '' });
-      dispatch('fetchOperation', res.data.metadata.id);
+      dispatch('fetchOperation', { server: data.server, id: res.data.metadata.id });
       dispatch('fetchImages');
       commit(IMAGE_SUCCESS, res);
     }).catch((err) => {
@@ -126,7 +126,7 @@ const imagesActions = {
       }
     };
     // console.log(obj);
-    return ImagesService.aliasCreate(obj).then((res) => {
+    return ImagesService.aliasCreate(data.server, obj).then((res) => {
       console.log(res);
       commit(IMAGE_SUCCESS, res.data);
     }).catch((err) => {
@@ -142,7 +142,7 @@ const imagesActions = {
       }
     };
     console.log(obj);
-    return ImagesService.aliasRename(data.name, obj).then((res) => {
+    return ImagesService.aliasRename(data.server, data.name, obj).then((res) => {
       console.log(res);
       commit(IMAGE_SUCCESS, res.data);
     }).catch((err) => {
@@ -159,7 +159,7 @@ const imagesActions = {
         description: data.alias_description
       }
     };
-    return ImagesService.aliasPatch(data.name, obj).then((res) => {
+    return ImagesService.aliasPatch(data.server, data.name, obj).then((res) => {
       // console.log(res);
       commit(IMAGE_SUCCESS, res.data);
     }).catch((err) => {
@@ -167,9 +167,9 @@ const imagesActions = {
     });
   },
 
-  deleteImage({ commit }, fingerprint) {
+  deleteImage({ commit }, data) {
     commit(IMAGES_REQUEST);
-    ImagesService.delete(fingerprint).then((res) => {
+    ImagesService.delete(data.server, data.fingerprint).then((res) => {
       commit(IMAGE_SUCCESS, res);
     }).catch((err) => {
       commit(IMAGES_FAILURE, err);

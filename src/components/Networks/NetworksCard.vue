@@ -59,7 +59,7 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn color="green darken-1" text @click="dialogDelete = false">Disagree</v-btn>
-            <v-btn color="red darken-1" text @click.native="deleteProfile" @click="dialogDelete = false">Agree</v-btn>
+            <v-btn color="red darken-1" text @click.native="deleteNetwork" @click="dialogDelete = false">Agree</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -176,9 +176,9 @@
           try {
             this.dialogEdit = false;
             if (this.editedIndex === -1) {
-              this.$store.dispatch('createNetwork', { data: yaml.safeLoad(this.yamlString) });
+              this.$store.dispatch('createNetwork', { data: yaml.safeLoad(this.yamlString), server: this.serverName });
             } else {
-              this.$store.dispatch('updateNetwork', { data: yaml.safeLoad(this.yamlString) });
+              this.$store.dispatch('updateNetwork', { data: yaml.safeLoad(this.yamlString), server: this.serverName });
             }
             setTimeout(() => {
               this.$store.dispatch('fetchNetworks');
@@ -197,7 +197,7 @@
       deleteNetwork() {
         // console.log(this.editedName);
         // console.log('delete');
-        this.$store.dispatch('deleteNetwork', this.editedName);
+        this.$store.dispatch('deleteNetwork', { name: this.editedName, server: this.serverName });
         setTimeout(() => {
           this.$store.dispatch('fetchNetworks');
         }, 1000);

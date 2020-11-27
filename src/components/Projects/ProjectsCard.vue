@@ -165,8 +165,8 @@
             console.log(yaml.safeLoad(this.yamlString));
             this.dialogEdit = false;
             if (this.editedIndex === -1) {
-              this.$store.dispatch('createProject',
-                { data: yaml.safeLoad(this.yamlString), server: this.serverName });
+              console.log(this.serverName);
+              this.$store.dispatch('createProject', { data: yaml.safeLoad(this.yamlString), server: this.serverName });
             } else {
               this.$store.dispatch('updateProject',
                 { data: yaml.safeLoad(this.yamlString), server: this.serverName });

@@ -24,7 +24,7 @@
           New image
         </v-btn>
       </template>
-        <remote-images dialog></remote-images>
+        <remote-images :serverName=serverName dialog></remote-images>
       </v-dialog>
       <v-spacer></v-spacer>
       <v-text-field
@@ -182,7 +182,8 @@
         editedItem: {
           name: '',
           new_name: '',
-          alias_description: ''
+          alias_description: '',
+          server: ''
         }
       };
     },
@@ -212,6 +213,7 @@
         // this.editedIndex = this.items.indexOf(item);
         this.editedItem = Object.assign({}, item);
         this.editedItem.new_name = this.editedItem.name;
+        this.editedItem.server = this.serverName;
         console.log(item);
         this.dialogEdit = true;
       },
@@ -224,7 +226,7 @@
       deleteItem() {
         console.log(this.editedItem);
         console.log('delete');
-        this.$store.dispatch('deleteImage', this.editedItem.fingerprint);
+        this.$store.dispatch('deleteImage', { fingerprint: this.editedItem.fingerprint, server: this.serverName });
         setTimeout(() => {
           this.$store.dispatch('fetchImages');
         }, 1000);
@@ -237,11 +239,11 @@
         } else {
           setTimeout(() => {
             this.$store.dispatch('updateImageDescription', this.editedItem);
-          }, 500);
-          setTimeout(() => {
-            if (this.editedItem.new_name !== this.editedItem.name) {
-              this.$store.dispatch('updateImageName', this.editedItem);
-            }
+            setTimeout(() => {
+              if (this.editedItem.new_name !== this.editedItem.name) {
+                this.$store.dispatch('updateImageName', this.editedItem);
+              }
+            }, 300);
           }, 500);
         }
         setTimeout(() => {

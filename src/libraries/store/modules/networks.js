@@ -63,7 +63,7 @@ const actions = {
   createNetwork({ commit }, data) {
     commit(NETWORKS_REQUEST);
     const obj = data;
-    return NetworksService.post(obj).then((res) => {
+    return NetworksService.post(data.server, obj).then((res) => {
       // console.log(res);
       commit(NETWORKS_SUCCESS, res.data);
     }).catch((err) => {
@@ -75,7 +75,7 @@ const actions = {
     commit(NETWORKS_REQUEST);
     const obj = data;
     const name = data.data.name;
-    return NetworksService.put(name, obj).then((res) => {
+    return NetworksService.put(data.server, name, obj).then((res) => {
       // console.log(res);
       commit(NETWORKS_SUCCESS, res.data);
     }).catch((err) => {
@@ -83,9 +83,9 @@ const actions = {
     });
   },
 
-  deleteNetwork({ commit }, name) {
+  deleteNetwork({ commit }, data) {
     commit(NETWORKS_REQUEST);
-    return NetworksService.delete(name).then((res) => {
+    return NetworksService.delete(data.server, data.name).then((res) => {
       commit(NETWORKS_SUCCESS, res.data);
     }).catch((err) => {
       commit(NETWORKS_FAILURE, err);

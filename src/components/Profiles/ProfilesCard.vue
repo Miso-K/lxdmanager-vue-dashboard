@@ -176,9 +176,9 @@
             // console.log(yaml.safeLoad(this.yamlString));
             this.dialogEdit = false;
             if (this.editedIndex === -1) {
-              this.$store.dispatch('createProfile', { data: yaml.safeLoad(this.yamlString) });
+              this.$store.dispatch('createProfile', { data: yaml.safeLoad(this.yamlString), server: this.serverName });
             } else {
-              this.$store.dispatch('updateProfile', { data: yaml.safeLoad(this.yamlString) });
+              this.$store.dispatch('updateProfile', { data: yaml.safeLoad(this.yamlString), server: this.serverName });
             }
             setTimeout(() => {
               this.$store.dispatch('fetchProfiles');
@@ -195,7 +195,7 @@
         this.dialogDelete = true;
       },
       deleteProfile() {
-        this.$store.dispatch('deleteProfile', this.editedName);
+        this.$store.dispatch('deleteProfile', { name: this.editedName, server: this.serverName });
         setTimeout(() => {
           this.$store.dispatch('fetchProfiles');
         }, 1000);

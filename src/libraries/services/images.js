@@ -16,28 +16,38 @@ class Images extends Resource {
 
   getRemote() { // eslint-disable-line class-methods-use-this
     // return axios.get('https://uk.images.linuxcontainers.org/1.0/images/aliases?recursion=1');
-    return axios.get(`/${this.base}/remote`);
+    return axios.get('/lgw/images/remote');
   }
 
-  put(id, options) {
-    const url = `/${this.base}/${id}`;
+  post(server, options) {
+    const url = `/${this.base}/${server}`;
+    return axios.post(url, options);
+  }
+
+  put(server, id, options) {
+    const url = `/${this.base}/${server}/${id}`;
     return axios.put(url, options);
   }
 
-  delete(fingerprint) {
-    return axios.delete(`/${this.base}/${fingerprint}`);
+  patch(server, id, options) {
+    const url = `/${this.base}/${server}/${id}`;
+    return axios.patch(url, options);
   }
 
-  aliasCreate(options) {
-    return axios.post(`/${this.base}/aliases`, options);
+  delete(server, fingerprint) {
+    return axios.delete(`/${this.base}/${server}/${fingerprint}`);
   }
 
-  aliasRename(alias, options) {
-    return axios.post(`/${this.base}/aliases/${alias}`, options);
+  aliasCreate(server, options) {
+    return axios.post(`/${this.base}/aliases/${server}`, options);
   }
 
-  aliasPatch(alias, options) {
-    return axios.patch(`/${this.base}/aliases/${alias}`, options);
+  aliasRename(server, alias, options) {
+    return axios.post(`/${this.base}/aliases/${server}/${alias}`, options);
+  }
+
+  aliasPatch(server, alias, options) {
+    return axios.patch(`/${this.base}/aliases/${server}/${alias}`, options);
   }
 }
 

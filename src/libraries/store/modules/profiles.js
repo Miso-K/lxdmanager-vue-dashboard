@@ -64,7 +64,7 @@ const actions = {
     commit(PROFILES_REQUEST);
     const obj = data;
     // console.log(obj);
-    return ProfilesService.post(obj).then((res) => {
+    return ProfilesService.post(data.server, obj).then((res) => {
       // console.log(res);
       commit(PROFILES_SUCCESS, res.data);
     }).catch((err) => {
@@ -76,7 +76,7 @@ const actions = {
     commit(PROFILES_REQUEST);
     const obj = data;
     const name = data.data.name;
-    return ProfilesService.put(name, obj).then((res) => {
+    return ProfilesService.put(data.server, name, obj).then((res) => {
       // console.log(res);
       commit(PROFILES_SUCCESS, res.data);
     }).catch((err) => {
@@ -84,9 +84,9 @@ const actions = {
     });
   },
 
-  deleteProfile({ commit }, name) {
+  deleteProfile({ commit }, data) {
     commit(PROFILES_REQUEST);
-    return ProfilesService.delete(name).then((res) => {
+    return ProfilesService.delete(data.server, data.name).then((res) => {
       commit(PROFILES_SUCCESS, res.data);
     }).catch((err) => {
       commit(PROFILES_FAILURE, err);

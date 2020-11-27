@@ -2,6 +2,6 @@
  * Profiles service
  */
 
-import Resource from './resource';
+import ServerResource from './serverResource';
 
-export default new Resource('lxc/profiles');
+export default new ServerResource('lxc/profiles');

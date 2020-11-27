@@ -43,18 +43,18 @@ const mutations = {
  * @type {Object}
  */
 const actions = {
-  fetchOperation({ dispatch, commit }, id) {
+  fetchOperation({ dispatch, commit }, data) {
     // commit(SNAPSHOTS_REQUEST);
     console.log('operation');
-    OperationsService.get(id).then((res) => {
-      // console.log(res);
+    OperationsService.get(data.server, data.id).then((res) => {
+      console.log(res);
       const meta = res.data.metadata;
       setTimeout(() => {
         // commit(SNAPSHOT_SUCCESS, { id, attributes: res.snapshots[id].attributes });
         dispatch('notify', { id: 0, message: `${meta.description}-${meta.status}`, color: '' });
       }, 1000);
     }).catch((err) => {
-      commit(OPERATIONS_FAILURE, err, id);
+      commit(OPERATIONS_FAILURE, err, data.id);
     });
   }
 };
