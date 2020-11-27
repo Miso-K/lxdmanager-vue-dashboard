@@ -160,6 +160,38 @@
                 <v-container fluid>
                   <span>Other abilities</span>
                     <v-row>
+                      <v-col v-for="column in numberOfColumns" :key="universalsAbilities.id" cols="12" sm="4" md="4">
+                        <v-switch
+                          v-for="row in rowNum(column, universalsAbilities)" :key="universalsAbilities.id"
+                          :label="row.name"
+                          :color="row.color"
+                          v-model="abilitiesUserList"
+                          :value="row.name"
+                          :disabled="row.disabled"
+                          hide-details
+                        ></v-switch>
+                      </v-col>
+                    </v-row>
+                </v-container>
+                <v-container fluid>
+                  <span>Other abilities</span>
+                    <v-row>
+                      <v-col v-for="column in numberOfColumns" :key="serversAbilities.id" cols="12" sm="4" md="4">
+                        <v-switch
+                          v-for="row in rowNum(column, serversAbilities)" :key="serversAbilities.id"
+                          :label="row.name"
+                          :color="row.color"
+                          v-model="abilitiesUserList"
+                          :value="row.name"
+                          :disabled="row.disabled"
+                          hide-details
+                        ></v-switch>
+                      </v-col>
+                    </v-row>
+                </v-container>
+                <v-container fluid>
+                  <span>Other abilities</span>
+                    <v-row>
                       <v-col v-for="column in numberOfColumns" :key="otherAbilities.id" cols="12" sm="4" md="4">
                         <v-switch
                           v-for="row in rowNum(column, otherAbilities)" :key="otherAbilities.id"
@@ -249,13 +281,7 @@
           { name: 'instances_delete', color: 'blue' },
           { name: 'instances_console', color: 'green' },
           { name: 'instances_state_infos', color: 'green' },
-          { name: 'instances_state_update', color: 'green' },
-          { name: 'instances_start', color: 'green' },
-          { name: 'instances_freeze', color: 'green' },
-          { name: 'instances_unfreeze', color: 'green' },
-          { name: 'instances_stop', color: 'green' },
-          { name: 'instances_stop_force', color: 'green' },
-          { name: 'instances_restart', color: 'green' }
+          { name: 'instances_state_update', color: 'green' }
         ],
         snapshotsAbilities: [
           { name: 'snapshots_infos_all', color: 'green' },
@@ -278,14 +304,27 @@
           { name: 'images_aliases_delete', color: 'blue' },
           { name: 'images_remote_infos_all', color: 'blue' }
         ],
+        universalsAbilities: [
+          { name: 'universals_infos_all', color: 'blue' },
+          { name: 'universals_create', color: 'blue' },
+          { name: 'universals_infos', color: 'blue' },
+          { name: 'universals_update', color: 'blue' },
+          { name: 'universals_rename', color: 'blue' },
+          { name: 'universals_delete', color: 'blue' }
+        ],
+        serversAbilities: [
+          { name: 'servers_infos_all', color: 'blue' },
+          { name: 'servers_create', color: 'blue' },
+          { name: 'servers_infos', color: 'blue' },
+          { name: 'servers_update', color: 'blue' },
+          { name: 'servers_rename', color: 'blue' },
+          { name: 'servers_delete', color: 'blue' }
+        ],
         otherAbilities: [
           { name: 'operations_infos', color: 'red', disabled: false },
-          { name: 'lxd_infos', color: 'blue' },
-          { name: 'resources_infos', color: 'blue' },
-          { name: 'stats_infos', color: 'green' },
+          { name: 'lxd_server_infos', color: 'blue' },
           { name: 'config_infos', color: 'green' },
-          { name: 'config_update', color: 'blue' },
-          { name: 'lxd_cert_create', color: 'blue' }
+          { name: 'config_update', color: 'blue' }
         ]
       };
     },
