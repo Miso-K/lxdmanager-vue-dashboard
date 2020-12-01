@@ -64,7 +64,7 @@
       },
       save() {
         this.hasSent = true;
-        this.$store.dispatch('createRequests', { action: 'help', message: this.subject, status: 'waiting', meta_data: { text: this.message } });
+        this.$store.dispatch('createRequests', { action: 'help', message: this.subject, status: 'waiting', meta_data: '', mail_message: { text: this.message } });
         this.$store.dispatch('notify', { id: 0, message: `${this.$i18n.t('notifications.request_created')}`, color: '' });
         this.active = false;
         this.subject = '';
