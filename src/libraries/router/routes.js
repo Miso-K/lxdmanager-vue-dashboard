@@ -9,13 +9,6 @@ export default [
     meta: { auth: false },
     component: resolve => require.ensure([], () => resolve(require('../../views/layouts/Login')), 'login')
   },
-  // ## login page
-  {
-    name: 'login-otp',
-    path: '/login-otp',
-    meta: { auth: false },
-    component: resolve => require.ensure([], () => resolve(require('../../views/layouts/LoginOtp')), 'login-otp')
-  },
   // ## logout page
   {
     name: 'logout',
