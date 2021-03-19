@@ -1,4 +1,0 @@
-{
-  "API_BASE_URL":"https://api.example.com",
-  "API_BASE_WS_URL":"wss://api.example.com"
-}
