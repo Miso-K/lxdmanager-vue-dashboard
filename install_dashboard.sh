@@ -11,24 +11,12 @@ printf '===============Setup the Application ================== \n'
 git clone https://github.com/Miso-K/lxdmanager-vue-dashboard lxdmanager-vue-dashboard
 
 echo -e "\nPlease install \"lxd-api-gateway\" with nginx proxy before \"lxdmanager-vue-dashboard\""
-echo "Now you can set your \"lxd-api-gateway\" URL"
-echo -e "\nPlease enter API_BASE_URL eg. https://api.example.com [default: http://127.0.0.1:5000]: "
-read API_BASE_URL
-echo "Please enter API_BASE_WS_URL eg. https://api.example.com [default: wss://127.0.0.1:8443]: "
-read API_BASE_WS_URL
 
 cd lxdmanager-vue-dashboard
-# Generate the file
-bash -c "cat > lxdmanager-vue-dashboard/dist/.env <<EOL
-API_BASE_URL=${API_BASE_URL}
-API_BASE_WS_URL=${API_BASE_WS_URL}
-EOL
-"
 
 mkdir -p /var/www/lxdmanager-vue-dashboard
 cp -r lxdmanager-vue-dashboard/dist/* /var/www/lxdmanager-vue-dashboard
 }
-
 
 configureNginx () {
 printf '==================== Configure nginx =================== \n'
@@ -51,7 +39,13 @@ server {
             root /var/www/acme;
         }
 
+#       Uncomment when using SSL
 #        return 301 https://\$server_name\$request_uri;
+
+#       Do not use when using SSL
+        location /api/ {
+             proxy_pass http://api.${NAME}/api/;
+        }
 }
 
 
@@ -68,6 +62,10 @@ server {
 #        ssl_certificate_key /etc/letsencrypt/live/${NAME}/privkey.pem;
 #        include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
 #        ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+#        location /api/ {
+#             proxy_pass https://api.${NAME}/api/;
+#        }
 #}
 EOF
 "
