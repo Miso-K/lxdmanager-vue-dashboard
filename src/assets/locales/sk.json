@@ -1,0 +1,243 @@
+{
+  "sign_in": {
+    "name": "Prihlásenie",
+    "username": "Užívateľské meno",
+    "password": "Heslo",
+    "login": "Prihlásiť"
+  },
+  "menu": {
+    "dashboard": "Štatistiky",
+    "containers": "Kontajnery",
+    "instances": "Inštancie",
+    "images": "Obrazy",
+    "networks": "Siete",
+    "profiles": "Profily",
+    "projects": "Projekty",
+    "requests": "Objednávky",
+    "settings": "Nastavenia",
+    "help": "Pomoc",
+    "users": "Užívatelia",
+    "groups": "Skupiny",
+    "app_config": "Nastavenia aplikácie",
+    "sign_out": "Odhlásiť"
+  },
+  "requests": {
+    "name": "Objednávky",
+    "user": "Užívateľ",
+    "action": "Požadovaná akcia",
+    "status": "Stav",
+    "message": "Správa",
+    "changed": "Dátum zmeny",
+    "actions": "Akcie",
+    "data": {
+      "create": "vytvorenie",
+      "upgrade": "zmena parametrov",
+      "clone": "klonovanie",
+      "help": "pomoc",
+      "waiting": "čakajúca",
+      "answered": "odpovedaná",
+      "cancelled": "zrušená",
+      "create_new_instance": "Vytvoriť novú inštanciu",
+      "upgrade_instance": "Zmeniť parametre inštancie",
+      "clone_instance": "Klonovať inštanciu",
+      "delete_instance": "Odstrániť inštanciu"
+    },
+    "mail_message": "<p>Dobrý deň <br>Tento email bol odoslaný zo servera {0}.<br><br>Typ požiadavky: {1}<br>Info o stave: {2}<br><br>Detail požiadavky: <br>{3}"
+  },
+  "notifications": {
+    "request_created": "Vaša požiadavka bola vytvorená",
+    "instance_created": "Vaša inštancia bola vytvorená",
+    "instance_upgraded": "Vaša inštancia bola zmenená",
+    "instance_deleted": "Vaša inštancia bola odstránená",
+    "instance_cloned": "Vaša inštancia bola naklonovaná",
+    "instance_is_running": "Prosím stopnite inštanciu pred vykonaním akcie",
+    "snapshot_created": "Váš snapshot bol vytvorený",
+    "snapshot_deleted": "Váš snapshot bol odstránený",
+    "snapshot_restored": "Váš snapshot bol obnovený",
+    "profile_updated": "Váš profil bol zmenený",
+    "password_saved": "Vaše heslo bolo zmenené",
+    "password_wrong": "Zadali ste zlé heslo",
+    "language_changed": "Váš jazyk bol zmenený"
+  },
+  "instances": {
+    "name": "Kontajnery",
+    "tabs": {
+      "info": "Informácie",
+      "stats": "Štatistiky",
+      "console": "Konzola",
+      "settings": "Nastavenia",
+      "snapshots": "Snapshoty"
+    },
+    "actions": {
+      "manage": "Spravovať",
+      "clone": "Naklonovať inštanciu",
+      "new": "Nová inštancia",
+      "upgrade": "Aktualizovať inštanciu",
+      "destroy": "Odstrániť inštanciu",
+      "freeze": "Zamraziť",
+      "restart": "Reštartovať",
+      "stopforce": "Zastaviť",
+      "start": "Zapnúť",
+      "stop": "Stopnúť",
+      "unfreeze": "Rozmraziť",
+      "restore": "Obnoviť",
+      "delete": "Zmazať"
+    },
+    "config":{
+      "general": "Obecné",
+      "system": "Systém",
+      "limits": "Limity",
+      "network": "Sieť",
+      "name": "Názov",
+      "created": "Dátum vytvorenia",
+      "status": "Stav",
+      "os": "OS",
+      "os_release": "OS verzia",
+      "os_version": "OS vydanie",
+      "cpu": "Jadrá",
+      "memory": "Pamäť",
+      "disk": "Disk",
+      "price": "Cena"
+    },
+    "snapshots": {
+      "create": "Vytvoriť snapshot",
+      "name": "Názov snapshotu",
+      "date": "Dátum vytvorenia",
+      "action": "Akcia"
+    },
+    "states": {
+      "ALL": "All",
+      "FREEZING": "Freezing...",
+      "FROZEN": "Frozen",
+      "RESTARTING": "Restarting...",
+      "RUNNING": "Running",
+      "SHUTTING_DOWN": "Shutting down...",
+      "STARTING": "Starting...",
+      "STOPPED": "Stoooopped",
+      "STOPPING": "Stopping...",
+      "UNFREEZING": "Unfreezing..."
+    },
+    "order": {
+      "new": "Nová inštancia",
+      "upgrade": "Aktualizovať inštanciu",
+      "select_instance": {
+        "label": "Vybrať inštanciu",
+        "help": "Something to help the user about instance's name."
+      },
+      "instance_name": {
+        "label": "Názov inštancie",
+        "help": "Something to help the user about instance's name."
+      },
+      "instance_clone_name": {
+        "label": "Názov klonu inštancie",
+        "help": "Something to help the user about instance's name."
+      },
+      "destroy_instance": {
+        "label": "Vytvoriť požiadavku na odstránenie inštancie",
+        "help": "Send request for destroying your instance."
+      },
+      "os": {
+        "label": "OS",
+        "help": "Something to help the user about instance's os."
+      },
+      "cpu": {
+        "label": "CPU",
+        "help": "Something to help the user about CPU"
+      },
+      "memory": {
+        "label": "RAM",
+        "help": "Something to help the user about memory and swap."
+      },
+      "disk": {
+        "label": "Disk",
+        "help": "Something to help the user about memory and swap."
+      },
+      "payment_period": {
+        "label": "Platobné obdobie",
+        "help": "Something to help the user about memory and swap."
+      },
+      "calculated_price": {
+        "label": "Cena za vybrané obdobie",
+        "help": "Something to help the user about memory and swap."
+      },
+      "restore_snapshot": {
+        "title": "Restore this snapshot?",
+        "text": "Vykonanie tejto akcie je nezvratné."
+      },
+      "delete_snapshot": {
+        "title": "Delete this snapshot?",
+        "text": "Vykonanie tejto akcie je nezvratné.This action is not reversible."
+      }
+    }
+  },
+  "stats": {
+    "instances": "Počet inštancií",
+    "total_cpu": "Pridelené jadrá",
+    "total_memory": "Pridelená pamäť",
+    "total_disk": "Pridelený diskový priestor",
+    "total_price": "Celková cena za mesiac",
+    "units": "",
+    "cpu": "CPU | CPUs",
+    "status": "Stav",
+    "uptime": "Uptime",
+    "total": "Total",
+    "name": "Názov",
+    "unlimited": "Unlimited",
+    "swap_limit": "Limit swapu",
+    "memory_limit": "Limit pamäte",
+    "disk_limit": "Disk limit",
+    "price": "Cena €",
+    "type": "Typ"
+  },
+  "actions": {
+    "name": "Akcie",
+    "cancel": "Zrušiť",
+    "close": "Zatvoriť",
+    "search": "Hľadať",
+    "confirm": "Potvrdiť",
+    "back": "Späť",
+    "continue": "Pokračovať",
+    "clone": "Vytvoriť kópiu",
+    "create": "Vytvoriť",
+    "save": "Uložiť",
+    "disagree": "Zamietnuť",
+    "agree": "Súhlasiť"
+  },
+  "settings": {
+    "profile": {
+      "title": "Užívateľský profil",
+      "username": "username",
+      "email": "email",
+      "name": "Meno",
+      "phone": "Telefón",
+      "address": "Adresa",
+      "city": "Mesto",
+      "country": "Štát",
+      "postal_code": "PSČ",
+      "ico": "IČO",
+      "icdph": "IČ DPH",
+      "dic": "DIČ"
+    },
+    "password": {
+      "title": "Zmena hesla",
+      "current": "Súčasné heslo",
+      "new": "Nové heslo",
+      "confirm": "Potvrdenie nového hesla"
+    },
+    "settings": {
+      "title": "Nastavenia",
+      "language": "Jazyk",
+      "two_factor": "Dvojfaktorová autorizácia",
+      "hint": "Zapnutie dvojfaktorovej autorizácie je odporúčané pre zvýšenie zabezpečenia",
+      "hint_email": "Toto je základné nastavenie pre dvojfaktorovú autorizáciu. Bezpečnostný kľúč bude zasielaný na Vašu emailovú adresu",
+      "hint_totp": "TOTP autentifikácia vyžaduje použitie smart zariadenia a aplikácie (napr. Authenticator)",
+      "generate": "Generovať bezpečnostný kľúč",
+      "help": "Prosím pripravte si svoje zariadenie. Bezpečnostný kľúč je nutné nastaviť do 90 sekúnd."
+    }
+  },
+  "help": {
+    "title": "Kontakt",
+    "subject": "Subjekt",
+    "message": "Správa"
+  }
+}

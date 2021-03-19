@@ -1,0 +1,29 @@
+@import './variables';
+
+html {
+  box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+.valign-wrapper {
+  display: flex;
+  align-items: center;
+
+  .valign {
+    display: block;
+  }
+}
+
+.secondary--text {
+  color: $lwp_secondary !important;
+}
+
+.v-sheet--offset {
+  top: -24px;
+  position: relative;
+}

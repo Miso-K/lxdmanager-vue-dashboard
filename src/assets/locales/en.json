@@ -1,0 +1,243 @@
+{
+  "sign_in": {
+    "name": "Sign in",
+    "username": "Username",
+    "password": "Password",
+    "login": "Login"
+  },
+  "menu": {
+    "dashboard": "Dashboard",
+    "containers": "Containers",
+    "instances": "Instances",
+    "images": "Images",
+    "networks": "Networks",
+    "profiles": "Profiles",
+    "projects": "Projects",
+    "requests": "Requests",
+    "settings": "Settings",
+    "help": "Help",
+    "users": "Users",
+    "groups": "Groups",
+    "app_config": "App Config",
+    "sign_out": "Sign Out"
+  },
+  "requests": {
+    "name": "Requests",
+    "user": "User",
+    "action": "Requested action",
+    "status": "Status",
+    "message": "Message",
+    "changed": "Changed",
+    "actions": "Actions",
+    "data": {
+      "create": "create",
+      "upgrade": "upgrade",
+      "clone": "clone",
+      "help": "help",
+      "waiting": "waiting",
+      "answered": "answered",
+      "cancelled": "cancelled",
+      "create_new_instance": "Create new instance",
+      "upgrade_instance": "Upgrade instance",
+      "clone_instance": "Clone instance",
+      "delete_instance": "Delete instance"
+    },
+    "mail_message": "<p>Hi! <br>This email was send from {0}.<br><br>Request type: {1}<br>Status info: {2}<br><br>Request details: <br>{3}"
+  },
+  "notifications": {
+    "request_created": "Your request was created",
+    "instance_created": "Your instance was created",
+    "instance_upgraded": "Your instance was upgraded",
+    "instance_deleted": "Your instance was deleted",
+    "instance_cloned": "Your instance was cloned",
+    "instance_is_running": "Please stop your instance before action",
+    "snapshot_created": "Your snapshot was created",
+    "snapshot_deleted": "Your snapshot was deleted",
+    "snapshot_restored": "Your snapshot was restored",
+    "profile_updated": "Your profile was updated",
+    "password_saved": "Your password has been saved",
+    "password_wrong": "You set wrong password",
+    "language_changed": "Your language was changed"
+  },
+  "instances": {
+    "name": "Instances",
+    "tabs": {
+      "info": "Info",
+      "stats": "Stats",
+      "console": "Console",
+      "settings": "Settings",
+      "snapshots": "Snapshots"
+    },
+    "actions": {
+      "manage": "Manage",
+      "clone": "Clone instance",
+      "new": "New instance",
+      "upgrade": "Upgrade instance",
+      "destroy": "Destroy instance",
+      "freeze": "Freeze",
+      "restart": "Restart",
+      "stopforce": "Force stop",
+      "start": "Start",
+      "stop": "Stop",
+      "unfreeze": "Unfreeze",
+      "restore": "Restore",
+      "delete": "Delete"
+    },
+    "config":{
+      "general": "General",
+      "system": "System",
+      "limits": "Limits",
+      "network": "Network",
+      "name": "Name",
+      "created": "Created",
+      "status": "Status",
+      "os": "OS",
+      "os_release": "OS release",
+      "os_version": "OS version",
+      "cpu": "CPU",
+      "memory": "Memory",
+      "disk": "Disk",
+      "price": "Price"
+    },
+    "snapshots": {
+      "create": "Create snapshot",
+      "name": "Snapshot name",
+      "date": "Date created",
+      "action": "Action"
+    },
+    "states": {
+      "ALL": "All",
+      "FREEZING": "Freezing...",
+      "FROZEN": "Frozen",
+      "RESTARTING": "Restarting...",
+      "RUNNING": "Running",
+      "SHUTTING_DOWN": "Shutting down...",
+      "STARTING": "Starting...",
+      "STOPPED": "Stopped",
+      "STOPPING": "Stopping...",
+      "UNFREEZING": "Unfreezing..."
+    },
+    "order": {
+      "new": "New instance",
+      "upgrade": "Upgrade instance",
+      "select_instance": {
+        "label": "Select instance",
+        "help": "Something to help the user about instance's name."
+      },
+      "instance_name": {
+        "label": "Instance name",
+        "help": "Something to help the user about instance's name."
+      },
+      "instance_clone_name": {
+        "label": "Instance clone",
+        "help": "Something to help the user about instance's name."
+      },
+      "destroy_instance": {
+        "label": "Create request to destroy instance",
+        "help": "Send request for destroying your instance."
+      },
+      "os": {
+        "label": "OS",
+        "help": "Something to help the user about instance's os."
+      },
+      "cpu": {
+        "label": "CPU",
+        "help": "Something to help the user about CPU"
+      },
+      "memory": {
+        "label": "RAM",
+        "help": "Something to help the user about memory and swap."
+      },
+      "disk": {
+        "label": "Disk",
+        "help": "Something to help the user about memory and swap."
+      },
+      "payment_period": {
+        "label": "Payment period",
+        "help": "Something to help the user about memory and swap."
+      },
+      "calculated_price": {
+        "label": "Calculated price",
+        "help": "Something to help the user about memory and swap."
+      },
+      "restore_snapshot": {
+        "title": "Restore this snapshot?",
+        "text": "This action is not reversible."
+      },
+      "delete_snapshot": {
+        "title": "Delete this snapshot?",
+        "text": "This action is not reversible."
+      }
+    }
+  },
+  "stats": {
+    "instances": "Instances count",
+    "total_cpu": "Allocated CPUs",
+    "total_memory": "Allocated memory",
+    "total_disk": "Allocated disk space",
+    "total_price": "Total price monthly",
+    "units": "units",
+    "cpu": "CPU | CPUs",
+    "status": "Status",
+    "uptime": "Uptime",
+    "total": "Total",
+    "name": "Name",
+    "unlimited": "Unlimited",
+    "swap_limit": "Swap limit",
+    "memory_limit": "Memory limit",
+    "disk_limit": "Disk limit",
+    "price": "Price €",
+    "type": "Type"
+  },
+  "actions": {
+    "name": "Actions",
+    "cancel": "Cancel",
+    "close": "Close",
+    "search": "Search",
+    "confirm": "Confirm",
+    "back": "Back",
+    "continue": "Continue",
+    "clone": "Clone",
+    "create": "Create",
+    "save": "Save",
+    "disagree": "Disagree",
+    "agree": "Agree"
+  },
+  "settings": {
+    "profile": {
+      "title": "User profile",
+      "username": "username",
+      "email": "email",
+      "name": "Name",
+      "phone": "Phone",
+      "address": "Address",
+      "city": "City",
+      "country": "Country",
+      "postal_code": "Postal code",
+      "ico": "ICO",
+      "icdph": "IC DPH",
+      "dic": "DIC"
+    },
+    "password": {
+      "title": "Change password",
+      "current": "Current password",
+      "new": "New password",
+      "confirm": "Confirm new password"
+    },
+    "settings": {
+      "title": "Settings",
+      "language": "Language",
+      "two_factor": "Two factor authorization",
+      "hint": "It is strongly recomended to use two factor authorization.",
+      "hint_email": "This is default option for two factor authorization.<br>E-mail with secret key will be send to user email.",
+      "hint_totp": "Time based authentication require smart device with application.<br>(eg. Authenticator)",
+      "generate": "Generate secure key",
+      "help": "Please prepare your device. You will have 90 seconds for setting your totp authorization."
+    }
+  },
+  "help": {
+    "title": "Contact",
+    "subject": "Subject",
+    "message": "Message"
+  }
+}
