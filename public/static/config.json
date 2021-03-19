@@ -1,4 +1,3 @@
 {
-  "API_BASE_URL":"http://185.66.200.249:5000",
-  "API_BASE_WS_URL":"wss://127.0.0.1:8443"
+  "API_BASE_URL":"http://127.0.0.1:5000"
 }
