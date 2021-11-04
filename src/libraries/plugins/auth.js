@@ -31,7 +31,6 @@ export const loadAndCheckAuth = auth => store.dispatch('load')
 export default (Vue) => {
   // Authorize
   // Make sure that is the first hook.
-  console.log('BEZI');
   router.beforeHooks.unshift((to, from, next) => { // eslint-disable-line consistent-return
     // don't need authorize
     if (!to.meta.auth) return next();
@@ -51,8 +50,6 @@ export default (Vue) => {
   // Redirect to dashboard if accessing '/login' when authenticated
   router.beforeEach((to, from, next) => { // eslint-disable-line consistent-return
     if (to.name !== 'login') return next();
-
-    console.log('XXX1');
 
     store.dispatch('auth/checkToken')
       .then((valid) => { // eslint-disable-line consistent-return
