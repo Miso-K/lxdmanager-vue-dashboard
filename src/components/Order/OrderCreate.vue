@@ -243,12 +243,17 @@
       },
       templates() {
         const images = this.$store.getters.imagesTableData;
+        if (images) {
         const img = images.filter(
           image => image.name !== ''
         ).map(image => ({
           text: image.alias_description ? image.alias_description : image.name,
           value: image.name }));
         return img;
+        }
+        else {
+          return '';
+        }
       },
       getPrice() {
         return this.$store.getters.appconfig.price;
