@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@mdi/font": "^5.9.55",
+    "ansi-regex": "^6.0.1",
     "babel-loader": "^8.2.2",
     "core-js": "^3.6.5",
     "glob-parent": "^5.1.2",
@@ -25,13 +26,13 @@
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.3.1",
-    "@vue/cli-plugin-eslint": "^4.5.11",
+    "@vue/cli-plugin-eslint": "~4.5.0",
     "@vue/cli-plugin-router": "^4.5.11",
     "@vue/cli-plugin-vuex": "^4.3.1",
     "@vue/cli-service": "^4.3.1",
     "axios": "^0.21.1",
     "babel-eslint": "^10.1.0",
-    "eslint": "^6.7.2",
+    "eslint": "^8.3.0",
     "eslint-plugin-vue": "^6.2.2",
     "node-sass": "^6.0.1",
     "sass": "^1.43.4",
