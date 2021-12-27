@@ -2,7 +2,7 @@ export default [
   // - Dashboard
   {
     name: 'dashboard',
-    path: '/',
+    path: '/dashboard',
     meta: { auth: true },
     component: resolve => require.ensure([], () => resolve(require('../../views/pages/Dashboard')), 'dashboard')
   },

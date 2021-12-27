@@ -23,6 +23,7 @@ export default [
   {
     path: '/',
     meta: { auth: true },
+    redirect: '/dashboard',
     component: resolve => require.ensure([], () => resolve(require('../../views/layouts/Layout')), 'common'),
     children: mainRoutes
   },

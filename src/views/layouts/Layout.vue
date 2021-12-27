@@ -13,7 +13,11 @@
         </v-list>
         <v-list dense>
           <v-divider></v-divider>
-          <v-list-item color="primary" v-for="item in items" v-if="item.user || me.admin" :key="item.title" link :to="item.to">
+          <v-list-item-group
+          v-model="selectedItem"
+          color="primary"
+        >
+          <v-list-item v-for="item in items" v-if="item.user || me.admin" :key="item.title" link :to="item.to">
             <v-list-item-action>
               <v-icon>{{ item.icon }}</v-icon>
             </v-list-item-action>
@@ -21,6 +25,7 @@
               <v-list-item-title>{{ $t(item.title) }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
+          </v-list-item-group>
           <v-divider></v-divider>
           <v-list-item link to="/logout">
             <v-list-item-action>
@@ -87,6 +92,7 @@
     data() {
       return {
         drawer: true,
+        selectedItem: 0,
         items: [
           { title: 'menu.dashboard', icon: 'mdi-view-dashboard', to: { name: 'dashboard' }, user: true },
           { title: 'menu.instances', icon: 'mdi-server', to: { name: 'instances' }, user: true },
